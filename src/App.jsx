@@ -1,0 +1,38 @@
+import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
+import { AuthProvider } from './context/AuthContext'
+import { ConnectionProvider } from './context/ConnectionContext'
+import AppRoutes from './routes'
+import ConnectionStatus from './components/connection/ConnectionStatus'
+import { useEffect } from 'react'
+
+function App() {
+  // Register service worker
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration)
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error)
+        })
+    }
+  }, [])
+
+  return (
+    <BrowserRouter>
+      <ThemeProvider>
+        <AuthProvider>
+          <ConnectionProvider>
+            <AppRoutes />
+            <ConnectionStatus />
+          </ConnectionProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  )
+}
+
+export default App
