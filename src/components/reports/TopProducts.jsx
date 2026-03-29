@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../common'
 import { Trophy, Package, TrendingUp } from 'lucide-react'
 
 const TopProducts = ({ products = [], loading = false }) => {
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
@@ -21,7 +21,7 @@ const TopProducts = ({ products = [], loading = false }) => {
       <CardContent>
         {loading ? (
           <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map((i) => (
+            {[1, 2, 3, 4, 5].map(i => (
               <div key={i} className="flex items-center gap-3 animate-pulse">
                 <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
                 <div className="flex-1">
@@ -44,10 +44,10 @@ const TopProducts = ({ products = [], loading = false }) => {
                     index === 0
                       ? 'bg-yellow-500 text-white'
                       : index === 1
-                      ? 'bg-gray-400 text-white'
-                      : index === 2
-                      ? 'bg-orange-400 text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                        ? 'bg-gray-400 text-white'
+                        : index === 2
+                          ? 'bg-orange-400 text-white'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                   }`}
                 >
                   {index + 1}
@@ -85,9 +85,7 @@ const TopProducts = ({ products = [], loading = false }) => {
                   <p className="text-lg font-bold text-gray-900 dark:text-white">
                     {formatCurrency(product.revenue)}
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Ingresos
-                  </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">Ingresos</p>
                 </div>
               </div>
             ))}

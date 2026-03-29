@@ -13,14 +13,8 @@ import {
 } from 'lucide-react'
 
 const SyncSettingsPage = () => {
-  const {
-    isOnline,
-    isSyncing,
-    pendingSync,
-    lastSyncTime,
-    manualSync,
-    clearPending,
-  } = useConnection()
+  const { isOnline, isSyncing, pendingSync, lastSyncTime, manualSync, clearPending } =
+    useConnection()
 
   const [syncing, setSyncing] = useState(false)
   const [error, setError] = useState(null)
@@ -42,7 +36,11 @@ const SyncSettingsPage = () => {
   }
 
   const handleClear = async () => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar todos los cambios pendientes? Esta acción no se puede deshacer.')) {
+    if (
+      window.confirm(
+        '¿Estás seguro de que quieres eliminar todos los cambios pendientes? Esta acción no se puede deshacer.'
+      )
+    ) {
       try {
         await clearPending()
         addLog('🗑️ Cola de sincronización limpiada')
@@ -52,9 +50,9 @@ const SyncSettingsPage = () => {
     }
   }
 
-  const addLog = (message) => {
+  const addLog = message => {
     const timestamp = new Date().toLocaleTimeString()
-    setSyncLog((prev) => [{ timestamp, message }, ...prev].slice(0, 20))
+    setSyncLog(prev => [{ timestamp, message }, ...prev].slice(0, 20))
   }
 
   const formatLastSync = () => {
@@ -75,9 +73,7 @@ const SyncSettingsPage = () => {
     <div>
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Sincronización
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Sincronización</h1>
         <p className="text-gray-600 dark:text-gray-400">
           Configura y monitorea la sincronización de datos
         </p>
@@ -90,23 +86,33 @@ const SyncSettingsPage = () => {
             <CardTitle>Estado de Conexión</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`p-6 rounded-kawaii flex items-center gap-4 ${
-              isOnline ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'
-            }`}>
+            <div
+              className={`p-6 rounded-kawaii flex items-center gap-4 ${
+                isOnline ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'
+              }`}
+            >
               {isOnline ? (
                 <Wifi className="h-12 w-12 text-green-600 dark:text-green-400" />
               ) : (
                 <WifiOff className="h-12 w-12 text-red-600 dark:text-red-400" />
               )}
               <div>
-                <p className={`text-lg font-semibold ${
-                  isOnline ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
-                }`}>
+                <p
+                  className={`text-lg font-semibold ${
+                    isOnline
+                      ? 'text-green-700 dark:text-green-300'
+                      : 'text-red-700 dark:text-red-300'
+                  }`}
+                >
                   {isOnline ? 'Conectado' : 'Sin conexión'}
                 </p>
-                <p className={`text-sm ${
-                  isOnline ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-                }`}>
+                <p
+                  className={`text-sm ${
+                    isOnline
+                      ? 'text-green-600 dark:text-green-400'
+                      : 'text-red-600 dark:text-red-400'
+                  }`}
+                >
                   {isOnline
                     ? 'Tu aplicación está sincronizada'
                     : 'Los cambios se guardarán localmente'}
@@ -140,9 +146,7 @@ const SyncSettingsPage = () => {
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                     Cambios pendientes
                   </p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {pendingSync}
-                  </p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">{pendingSync}</p>
                 </div>
                 {pendingSync > 0 ? (
                   <Clock className="h-12 w-12 text-yellow-500" />
@@ -179,11 +183,7 @@ const SyncSettingsPage = () => {
                 Sincronizar Ahora
               </Button>
               {pendingSync > 0 && (
-                <Button
-                  variant="danger"
-                  onClick={handleClear}
-                  icon={Trash2}
-                >
+                <Button variant="danger" onClick={handleClear} icon={Trash2}>
                   Limpiar
                 </Button>
               )}
@@ -239,9 +239,7 @@ const SyncSettingsPage = () => {
 
               <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-kawaii">
                 <div className="text-2xl mb-2">💾</div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                  Guardado Local
-                </h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Guardado Local</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Los cambios se guardan en tu dispositivo hasta sincronizar.
                 </p>
@@ -249,9 +247,7 @@ const SyncSettingsPage = () => {
 
               <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-kawaii">
                 <div className="text-2xl mb-2">🔄</div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                  Auto Sync
-                </h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Auto Sync</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Al reconectar, todo se sincroniza automáticamente.
                 </p>

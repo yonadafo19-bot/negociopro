@@ -1,5 +1,4 @@
 import { Card } from '../common'
-import { LucideIcon } from 'lucide-react'
 
 const StatCard = ({
   title,
@@ -29,21 +28,13 @@ const StatCard = ({
     <Card padding="md" hover>
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
-            {title}
-          </p>
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{title}</p>
           {loading ? (
             <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-1"></div>
           ) : (
-            <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-              {value}
-            </p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</p>
           )}
-          {change && (
-            <p className={`text-sm ${changeColors[changeType]}`}>
-              {change}
-            </p>
-          )}
+          {change && <p className={`text-sm ${changeColors[changeType]}`}>{change}</p>}
         </div>
 
         <div className={`${colors[color]} p-3 rounded-kawaii`}>

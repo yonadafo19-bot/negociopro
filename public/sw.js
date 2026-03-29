@@ -1,10 +1,13 @@
-const CACHE_NAME = 'negociopro-v1'
+const CACHE_NAME = 'negociopro-v2'
+const RUNTIME_CACHE = 'negociopro-runtime-v2'
+
+// Archivos estáticos a precachear
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
   '/favicon.ico',
-  // Agregar más assets según sea necesario
+  '/offline.html',
 ]
 
 // Install event - cache assets
@@ -35,39 +38,68 @@ self.addEventListener('activate', (event) => {
   self.clients.claim()
 })
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - Network first, fallback to cache, then offline page
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Cache hit - return response
-      if (response) {
-        return response
-      }
+  const { request } = event
+  const url = new URL(request.url)
 
-      // Clone the request
-      const fetchRequest = event.request.clone()
+  // Ignorar requests a Supabase (siempre red)
+  if (url.hostname.includes('supabase.co')) {
+    event.respondWith(fetch(request))
+    return
+  }
 
-      return fetch(fetchRequest).then((response) => {
-        // Check if valid response
-        if (!response || response.status !== 200 || response.type !== 'basic') {
+  // Estrategia: Network First para HTML, Cache First para assets estáticos
+  if (request.mode === 'navigate') {
+    // Network First para navegación
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          // Cache la respuesta exitosa
+          const clone = response.clone()
+          caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone))
           return response
+        })
+        .catch(() => {
+          // Fallback a cache
+          return caches.match(request).then((cached) => {
+            return cached || caches.match('/offline.html')
+          })
+        })
+    )
+  } else {
+    // Cache First para assets estáticos (JS, CSS, imágenes)
+    event.respondWith(
+      caches.match(request).then((cached) => {
+        if (cached) {
+          // Actualizar en background
+          fetch(request).then((response) => {
+            const clone = response.clone()
+            caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone))
+          })
+          return cached
         }
 
-        // Clone the response
-        const responseToCache = response.clone()
+        return fetch(request)
+          .then((response) => {
+            // Cache respuestas exitosas
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response
+            }
 
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache)
-        })
-
-        return response
-      }).catch((error) => {
-        console.log('Fetch failed:', error)
-        // You could return a custom offline page here
-        return caches.match('/offline.html')
+            const clone = response.clone()
+            caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone))
+            return response
+          })
+          .catch(() => {
+            // Si es una imagen, retornar un placeholder
+            if (request.destination === 'image') {
+              return new Response('Placeholder', { status: 404 })
+            }
+          })
       })
-    })
-  )
+    )
+  }
 })
 
 // Background sync for queued requests

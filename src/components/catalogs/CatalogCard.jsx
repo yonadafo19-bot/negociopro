@@ -1,12 +1,5 @@
 import { Card, CardContent, Button, Badge } from '../common'
-import {
-  Eye,
-  Share2,
-  Edit,
-  Trash2,
-  MoreVertical,
-  Package,
-} from 'lucide-react'
+import { Eye, Share2, Edit, Trash2, MoreVertical, Package } from 'lucide-react'
 import { useState } from 'react'
 
 const CatalogCard = ({ catalog, onEdit, onDelete, onShare, onView }) => {
@@ -15,7 +8,7 @@ const CatalogCard = ({ catalog, onEdit, onDelete, onShare, onView }) => {
   const productCount = catalog.catalog_products?.length || 0
   const viewCount = catalog.view_count || 0
 
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     return new Date(dateString).toLocaleDateString('es-ES', {
       day: 'numeric',
       month: 'short',
@@ -23,7 +16,7 @@ const CatalogCard = ({ catalog, onEdit, onDelete, onShare, onView }) => {
     })
   }
 
-  const getThemeColor = (theme) => {
+  const getThemeColor = theme => {
     switch (theme) {
       case 'blue':
         return 'from-blue-500 to-blue-600'
@@ -56,13 +49,9 @@ const CatalogCard = ({ catalog, onEdit, onDelete, onShare, onView }) => {
           </div>
 
           <div className="absolute bottom-4 left-4 right-4">
-            <h3 className="text-xl font-bold text-white truncate">
-              {catalog.name}
-            </h3>
+            <h3 className="text-xl font-bold text-white truncate">{catalog.name}</h3>
             {catalog.description && (
-              <p className="text-white/80 text-sm truncate mt-1">
-                {catalog.description}
-              </p>
+              <p className="text-white/80 text-sm truncate mt-1">{catalog.description}</p>
             )}
           </div>
         </div>
@@ -99,12 +88,7 @@ const CatalogCard = ({ catalog, onEdit, onDelete, onShare, onView }) => {
             >
               Ver
             </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => onShare(catalog)}
-              icon={Share2}
-            />
+            <Button variant="secondary" size="sm" onClick={() => onShare(catalog)} icon={Share2} />
             <div className="relative">
               <Button
                 variant="ghost"

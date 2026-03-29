@@ -19,7 +19,7 @@ class SyncQueue {
         resolve(this.db)
       }
 
-      request.onupgradeneeded = (event) => {
+      request.onupgradeneeded = event => {
         const db = event.target.result
         if (!db.objectStoreNames.contains(this.storeName)) {
           const store = db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true })
@@ -128,7 +128,7 @@ export const syncQueue = new SyncQueue()
 // Helper functions for common operations
 export const queueOperations = {
   // Queue a product creation
-  queueCreateProduct: async (product) => {
+  queueCreateProduct: async product => {
     return syncQueue.addItem({
       resourceType: 'product',
       operation: 'create',
@@ -147,7 +147,7 @@ export const queueOperations = {
   },
 
   // Queue a product deletion
-  queueDeleteProduct: async (productId) => {
+  queueDeleteProduct: async productId => {
     return syncQueue.addItem({
       resourceType: 'product',
       operation: 'delete',
@@ -165,7 +165,7 @@ export const queueOperations = {
   },
 
   // Queue a contact creation
-  queueCreateContact: async (contact) => {
+  queueCreateContact: async contact => {
     return syncQueue.addItem({
       resourceType: 'contact',
       operation: 'create',

@@ -19,7 +19,7 @@ const LowStockProducts = ({ products = [], loading = false, onViewAll }) => {
       <CardContent>
         {loading ? (
           <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3].map(i => (
               <div key={i} className="flex items-center gap-3 animate-pulse">
                 <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-kawaii"></div>
                 <div className="flex-1">
@@ -31,7 +31,7 @@ const LowStockProducts = ({ products = [], loading = false, onViewAll }) => {
           </div>
         ) : products.length > 0 ? (
           <div className="space-y-3">
-            {products.slice(0, 5).map((product) => (
+            {products.slice(0, 5).map(product => (
               <div
                 key={product.id}
                 className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-kawaii"
@@ -54,9 +54,7 @@ const LowStockProducts = ({ products = [], loading = false, onViewAll }) => {
                   </p>
 
                   {product.category && (
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {product.category}
-                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">{product.category}</p>
                   )}
                 </div>
 
@@ -70,20 +68,13 @@ const LowStockProducts = ({ products = [], loading = false, onViewAll }) => {
                       / {product.min_stock_alert}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    unidades
-                  </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">unidades</p>
                 </div>
               </div>
             ))}
 
             {products.length > 5 && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onViewAll}
-                className="w-full mt-2"
-              >
+              <Button variant="outline" size="sm" onClick={onViewAll} className="w-full mt-2">
                 Ver {products.length - 5} más productos con stock bajo
               </Button>
             )}

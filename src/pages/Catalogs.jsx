@@ -1,17 +1,8 @@
 import { useState } from 'react'
 import { useCatalogs } from '../hooks/useCatalogs'
-import {
-  CatalogList,
-  CatalogForm,
-  ShareDialog,
-  CatalogPreview,
-} from '../components/catalogs'
-import { Card, CardContent } from '../components/common'
-import {
-  BookOpen,
-  Eye,
-  Share2,
-} from 'lucide-react'
+import { CatalogList, CatalogForm, ShareDialog, CatalogPreview } from '../components/catalogs'
+import { Card, CardContent, PageLoader } from '../components/common'
+import { BookOpen, Eye, Share2 } from 'lucide-react'
 
 const CatalogsPage = () => {
   const {
@@ -30,18 +21,23 @@ const CatalogsPage = () => {
   const [sharingCatalog, setSharingCatalog] = useState(null)
   const [viewingCatalog, setViewingCatalog] = useState(null)
 
-  const handleCreate = async (catalogData) => {
+  // Mostrar PageLoader mientras carga inicialmente
+  if (loading && catalogs.length === 0) {
+    return <PageLoader text="Cargando catálogos..." />
+  }
+
+  const handleCreate = async catalogData => {
     await createCatalog(catalogData)
     setShowForm(false)
   }
 
-  const handleEdit = async (catalogData) => {
+  const handleEdit = async catalogData => {
     await updateCatalog(editingCatalog.id, catalogData)
     await updateCatalogProducts(editingCatalog.id, catalogData.product_ids)
     setEditingCatalog(null)
   }
 
-  const handleDelete = async (catalog) => {
+  const handleDelete = async catalog => {
     if (window.confirm(`¿Eliminar el catálogo "${catalog.name}"?`)) {
       await deleteCatalog(catalog.id)
     }
@@ -68,9 +64,7 @@ const CatalogsPage = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Total Catálogos</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.total}
-              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
             </div>
           </div>
         </Card>
@@ -82,9 +76,7 @@ const CatalogsPage = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Públicos</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.public}
-              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.public}</p>
             </div>
           </div>
         </Card>
@@ -96,9 +88,7 @@ const CatalogsPage = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Total Vistas</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {stats.totalViews}
-              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalViews}</p>
             </div>
           </div>
         </Card>
@@ -109,10 +99,10 @@ const CatalogsPage = () => {
         catalogs={catalogs}
         loading={loading}
         onCreate={() => setShowForm(true)}
-        onEdit={(catalog) => setEditingCatalog(catalog)}
+        onEdit={catalog => setEditingCatalog(catalog)}
         onDelete={handleDelete}
-        onShare={(catalog) => setSharingCatalog(catalog)}
-        onView={(catalog) => setViewingCatalog(catalog)}
+        onShare={catalog => setSharingCatalog(catalog)}
+        onView={catalog => setViewingCatalog(catalog)}
       />
 
       {/* Form modal */}
@@ -138,10 +128,7 @@ const CatalogsPage = () => {
 
       {/* Preview modal */}
       {viewingCatalog && (
-        <CatalogPreview
-          catalog={viewingCatalog}
-          onClose={() => setViewingCatalog(null)}
-        />
+        <CatalogPreview catalog={viewingCatalog} onClose={() => setViewingCatalog(null)} />
       )}
     </div>
   )

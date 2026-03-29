@@ -39,13 +39,13 @@ const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) =>
     }
   }, [product])
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData(prev => ({ ...prev, [name]: value }))
 
     // Limpiar error cuando el usuario empieza a escribir
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }))
+      setErrors(prev => ({ ...prev, [name]: '' }))
     }
   }
 
@@ -71,7 +71,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) =>
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault()
 
     if (!validate()) return
@@ -172,7 +172,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) =>
               className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
             >
               <option value="">Seleccionar categoría</option>
-              {categories.map((cat) => (
+              {categories.map(cat => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>
@@ -220,13 +220,10 @@ const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) =>
         {formData.cost_price && formData.selling_price && (
           <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-kawaii">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600 dark:text-gray-400">
-                Margen de ganancia:
-              </span>
+              <span className="text-gray-600 dark:text-gray-400">Margen de ganancia:</span>
               <span className="font-semibold text-green-600 dark:text-green-400">
                 {(
-                  ((parseFloat(formData.selling_price) -
-                    parseFloat(formData.cost_price)) /
+                  ((parseFloat(formData.selling_price) - parseFloat(formData.cost_price)) /
                     parseFloat(formData.cost_price)) *
                   100
                 ).toFixed(1)}
@@ -325,12 +322,7 @@ const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) =>
         >
           Cancelar
         </Button>
-        <Button
-          type="submit"
-          className="flex-1"
-          loading={loading}
-          disabled={loading}
-        >
+        <Button type="submit" className="flex-1" loading={loading} disabled={loading}>
           {isEditing ? 'Actualizar' : 'Crear'} Producto
         </Button>
       </div>

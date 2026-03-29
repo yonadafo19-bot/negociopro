@@ -11,7 +11,7 @@ const ForgotPasswordPage = () => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -37,17 +37,12 @@ const ForgotPasswordPage = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-kawaii-lg mb-4">
             <CheckCircle className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            ¡Correo enviado!
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">¡Correo enviado!</h1>
           <p className="text-gray-600 mb-6">
             Hemos enviado las instrucciones para restablecer tu contraseña a{' '}
             <strong>{email}</strong>
           </p>
-          <Button
-            onClick={() => (window.location.href = '/login')}
-            className="w-full"
-          >
+          <Button onClick={() => (window.location.href = '/login')} className="w-full">
             <ArrowLeft className="h-4 w-4" />
             Volver al inicio de sesión
           </Button>
@@ -63,12 +58,8 @@ const ForgotPasswordPage = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary-500 rounded-kawaii-lg mb-4">
             <KeyRound className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            ¿Olvidaste tu contraseña?
-          </h1>
-          <p className="text-gray-600">
-            Te enviaremos instrucciones para restablecerla
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">¿Olvidaste tu contraseña?</h1>
+          <p className="text-gray-600">Te enviaremos instrucciones para restablecerla</p>
         </div>
 
         {error && (
@@ -83,7 +74,7 @@ const ForgotPasswordPage = () => {
             label="Correo electrónico"
             type="email"
             value={email}
-            onChange={(e) => {
+            onChange={e => {
               setEmail(e.target.value)
               setError('')
             }}
@@ -93,12 +84,7 @@ const ForgotPasswordPage = () => {
             required
           />
 
-          <Button
-            type="submit"
-            className="w-full"
-            loading={loading}
-            icon={Mail}
-          >
+          <Button type="submit" className="w-full" loading={loading} icon={Mail}>
             Enviar Instrucciones
           </Button>
         </form>

@@ -19,8 +19,8 @@ export const authService = {
       email,
       password,
       options: {
-        data: userData
-      }
+        data: userData,
+      },
     })
     return { data, error }
   },
@@ -42,12 +42,15 @@ export const authService = {
 
   // Get current session
   getSession: async () => {
-    const { data: { session }, error } = await supabase.auth.getSession()
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession()
     return { session, error }
   },
 
   // Listen to auth changes
-  onAuthStateChange: (callback) => {
+  onAuthStateChange: callback => {
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       callback(_event, session)
     })
@@ -55,7 +58,7 @@ export const authService = {
   },
 
   // Reset password
-  resetPassword: async (email) => {
+  resetPassword: async email => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/update-password`,
     })
@@ -63,9 +66,9 @@ export const authService = {
   },
 
   // Update password
-  updatePassword: async (newPassword) => {
+  updatePassword: async newPassword => {
     const { data, error } = await supabase.auth.updateUser({
-      password: newPassword
+      password: newPassword,
     })
     return { data, error }
   },
@@ -74,22 +77,14 @@ export const authService = {
 // Profile service
 export const profileService = {
   // Get user profile
-  getProfile: async (userId) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
+  getProfile: async userId => {
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single()
     return { data, error }
   },
 
   // Create profile
-  createProfile: async (profile) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .insert([profile])
-      .select()
-      .single()
+  createProfile: async profile => {
+    const { data, error } = await supabase.from('profiles').insert([profile]).select().single()
     return { data, error }
   },
 
@@ -108,7 +103,7 @@ export const profileService = {
 // Products service
 export const productsService = {
   // Get all products for user
-  getProducts: async (userId) => {
+  getProducts: async userId => {
     const { data, error } = await supabase
       .from('products')
       .select('*')
@@ -119,22 +114,14 @@ export const productsService = {
   },
 
   // Get single product
-  getProduct: async (productId) => {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('id', productId)
-      .single()
+  getProduct: async productId => {
+    const { data, error } = await supabase.from('products').select('*').eq('id', productId).single()
     return { data, error }
   },
 
   // Create product
-  createProduct: async (product) => {
-    const { data, error } = await supabase
-      .from('products')
-      .insert([product])
-      .select()
-      .single()
+  createProduct: async product => {
+    const { data, error } = await supabase.from('products').insert([product]).select().single()
     return { data, error }
   },
 
@@ -150,7 +137,7 @@ export const productsService = {
   },
 
   // Delete product (soft delete)
-  deleteProduct: async (productId) => {
+  deleteProduct: async productId => {
     const { data, error } = await supabase
       .from('products')
       .update({ is_active: false })
@@ -159,13 +146,13 @@ export const productsService = {
   },
 
   // Get low stock products
-  getLowStockProducts: async (userId) => {
+  getLowStockProducts: async userId => {
     const { data, error } = await supabase
       .from('products')
       .select('*')
       .eq('user_id', userId)
       .eq('is_active', true)
-      .lte('stock_quantity', supabase.raw('min_stock_alert'))
+      .filter('stock_quantity', 'lte', 'min_stock_alert')
     return { data, error }
   },
 }
@@ -190,12 +177,8 @@ export const contactsService = {
   },
 
   // Create contact
-  createContact: async (contact) => {
-    const { data, error } = await supabase
-      .from('contacts')
-      .insert([contact])
-      .select()
-      .single()
+  createContact: async contact => {
+    const { data, error } = await supabase.from('contacts').insert([contact]).select().single()
     return { data, error }
   },
 
@@ -211,7 +194,7 @@ export const contactsService = {
   },
 
   // Delete contact (soft delete)
-  deleteContact: async (contactId) => {
+  deleteContact: async contactId => {
     const { data, error } = await supabase
       .from('contacts')
       .update({ is_active: false })
@@ -235,7 +218,8 @@ export const transactionsService = {
     }
 
     if (filters.startDate && filters.endDate) {
-      query = query.gte('transaction_date', filters.startDate)
+      query = query
+        .gte('transaction_date', filters.startDate)
         .lte('transaction_date', filters.endDate)
     }
 
@@ -257,7 +241,7 @@ export const transactionsService = {
     // Then create items
     const itemsWithTxId = items.map(item => ({
       ...item,
-      transaction_id: txData.id
+      transaction_id: txData.id,
     }))
 
     const { data: itemsData, error: itemsError } = await supabase
@@ -270,7 +254,7 @@ export const transactionsService = {
       if (item.product_id && transaction.transaction_type === 'sale') {
         await supabase.rpc('decrement_stock', {
           product_id: item.product_id,
-          quantity: item.quantity
+          quantity: item.quantity,
         })
       }
     }
@@ -282,7 +266,7 @@ export const transactionsService = {
 // Catalogs service
 export const catalogsService = {
   // Get all catalogs for user
-  getCatalogs: async (userId) => {
+  getCatalogs: async userId => {
     const { data, error } = await supabase
       .from('catalogs')
       .select('*, catalog_products(*, products(*))')
@@ -293,7 +277,7 @@ export const catalogsService = {
   },
 
   // Get single catalog by share link
-  getCatalogByShareLink: async (shareLink) => {
+  getCatalogByShareLink: async shareLink => {
     const { data, error } = await supabase
       .from('catalogs')
       .select('*, catalog_products(*, products(*)), profiles(*)')
@@ -317,11 +301,13 @@ export const catalogsService = {
     // First create catalog
     const { data: catalogData, error: catalogError } = await supabase
       .from('catalogs')
-      .insert([{
-        ...catalog,
-        share_link: await generateUniqueShareLink(),
-        view_count: 0,
-      }])
+      .insert([
+        {
+          ...catalog,
+          share_link: await generateUniqueShareLink(),
+          view_count: 0,
+        },
+      ])
       .select()
       .single()
 
@@ -372,9 +358,7 @@ export const catalogsService = {
         product_id: productId,
       }))
 
-      const { error: insertError } = await supabase
-        .from('catalog_products')
-        .insert(catalogProducts)
+      const { error: insertError } = await supabase.from('catalog_products').insert(catalogProducts)
 
       if (insertError) return { data: null, error: insertError }
     }
@@ -383,7 +367,7 @@ export const catalogsService = {
   },
 
   // Delete catalog (soft delete)
-  deleteCatalog: async (catalogId) => {
+  deleteCatalog: async catalogId => {
     const { data, error } = await supabase
       .from('catalogs')
       .update({ is_active: false })
@@ -393,16 +377,29 @@ export const catalogsService = {
 
   // Generate unique share link
   generateUniqueShareLink: async () => {
-    const link = Math.random().toString(36).substring(2, 15) +
-                 Math.random().toString(36).substring(2, 15)
-    return link
+    return generateUniqueShareLink()
   },
 }
 
-// Helper function to generate unique share link
+// Helper function to generate unique share link (cryptographically secure)
 async function generateUniqueShareLink() {
-  return Math.random().toString(36).substring(2, 15) +
-         Math.random().toString(36).substring(2, 15)
+  // Usar crypto.randomUUID() para mayor seguridad
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID().replace(/-/g, '').substring(0, 16)
+  }
+  // Fallback para navegadores antiguos
+  const array = new Uint8Array(16)
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    crypto.getRandomValues(array)
+  } else {
+    // Último fallback - menos seguro pero mejor que nada
+    for (let i = 0; i < array.length; i++) {
+      array[i] = Math.floor(Math.random() * 256)
+    }
+  }
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0'))
+    .join('')
+    .substring(0, 16)
 }
 
 export default supabase

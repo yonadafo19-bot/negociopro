@@ -3,19 +3,13 @@ import { Card, Input, Badge } from '../common'
 import { Search, SlidersHorizontal, Package, AlertTriangle } from 'lucide-react'
 import ProductCard from './ProductCard'
 
-const ProductList = ({
-  products = [],
-  loading = false,
-  onEdit,
-  onDelete,
-  categories = [],
-}) => {
+const ProductList = ({ products = [], loading = false, onEdit, onDelete, categories = [] }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [showLowStockOnly, setShowLowStockOnly] = useState(false)
 
   // Filtrar productos
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = products.filter(product => {
     // Buscar por término
     const matchesSearch =
       !searchTerm ||
@@ -24,20 +18,15 @@ const ProductList = ({
       product.category?.toLowerCase().includes(searchTerm.toLowerCase())
 
     // Filtrar por categoría
-    const matchesCategory =
-      selectedCategory === 'all' || product.category === selectedCategory
+    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory
 
     // Filtrar por stock bajo
-    const matchesLowStock =
-      !showLowStockOnly ||
-      product.stock_quantity <= product.min_stock_alert
+    const matchesLowStock = !showLowStockOnly || product.stock_quantity <= product.min_stock_alert
 
     return matchesSearch && matchesCategory && matchesLowStock
   })
 
-  const lowStockCount = products.filter(
-    (p) => p.stock_quantity <= p.min_stock_alert
-  ).length
+  const lowStockCount = products.filter(p => p.stock_quantity <= p.min_stock_alert).length
 
   return (
     <div className="space-y-6">
@@ -49,7 +38,7 @@ const ProductList = ({
             <Input
               placeholder="Buscar por nombre, SKU o categoría..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               icon={Search}
             />
           </div>
@@ -58,11 +47,11 @@ const ProductList = ({
           <div className="sm:w-48">
             <select
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={e => setSelectedCategory(e.target.value)}
               className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
             >
               <option value="all">Todas las categorías</option>
-              {categories.map((cat) => (
+              {categories.map(cat => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>
@@ -92,9 +81,7 @@ const ProductList = ({
         {/* Active filters */}
         {(searchTerm || selectedCategory !== 'all' || showLowStockOnly) && (
           <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              Filtros activos:
-            </span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">Filtros activos:</span>
 
             {searchTerm && (
               <Badge
@@ -147,10 +134,7 @@ const ProductList = ({
           <span className="font-semibold text-gray-900 dark:text-white">
             {filteredProducts.length}
           </span>{' '}
-          de{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {products.length}
-          </span>{' '}
+          de <span className="font-semibold text-gray-900 dark:text-white">{products.length}</span>{' '}
           productos
         </p>
 
@@ -168,7 +152,7 @@ const ProductList = ({
       {/* Products grid */}
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+          {[1, 2, 3, 4, 5, 6].map(i => (
             <Card key={i} padding="md" className="animate-pulse">
               <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-kawaii mb-3"></div>
               <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
@@ -178,7 +162,7 @@ const ProductList = ({
         </div>
       ) : filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredProducts.map((product) => (
+          {filteredProducts.map(product => (
             <ProductCard
               key={product.id}
               product={product}

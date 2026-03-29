@@ -6,27 +6,27 @@ const ProductSelector = ({ products = [], onAddToCart, cartItems = [] }) => {
   const [searchTerm, setSearchTerm] = useState('')
 
   // Productos que ya están en el carrito
-  const cartProductIds = cartItems.map((item) => item.product_id)
+  const cartProductIds = cartItems.map(item => item.product_id)
 
   // Filtrar productos
   const filteredProducts = products.filter(
-    (p) =>
+    p =>
       p.is_active &&
       p.stock_quantity > 0 &&
       (p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.sku?.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
     }).format(amount)
   }
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = product => {
     // Verificar cuántos de este producto ya están en el carrito
-    const cartItem = cartItems.find((item) => item.product_id === product.id)
+    const cartItem = cartItems.find(item => item.product_id === product.id)
     const quantityInCart = cartItem ? cartItem.quantity : 0
     const availableQuantity = product.stock_quantity - quantityInCart
 
@@ -51,17 +51,15 @@ const ProductSelector = ({ products = [], onAddToCart, cartItems = [] }) => {
       <Input
         placeholder="Buscar productos..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={e => setSearchTerm(e.target.value)}
         icon={Search}
       />
 
       {/* Products grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
         {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => {
-            const cartItem = cartItems.find(
-              (item) => item.product_id === product.id
-            )
+          filteredProducts.map(product => {
+            const cartItem = cartItems.find(item => item.product_id === product.id)
             const quantityInCart = cartItem ? cartItem.quantity : 0
             const availableQuantity = product.stock_quantity - quantityInCart
 
@@ -74,9 +72,7 @@ const ProductSelector = ({ products = [], onAddToCart, cartItems = [] }) => {
                     ? 'opacity-50 cursor-not-allowed'
                     : 'hover:shadow-md cursor-pointer'
                 }`}
-                onClick={() =>
-                  availableQuantity > 0 && handleAddToCart(product)
-                }
+                onClick={() => availableQuantity > 0 && handleAddToCart(product)}
               >
                 <div className="flex items-start gap-3">
                   {product.image_url ? (
@@ -97,9 +93,7 @@ const ProductSelector = ({ products = [], onAddToCart, cartItems = [] }) => {
                     </h4>
 
                     {product.sku && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                        {product.sku}
-                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{product.sku}</p>
                     )}
 
                     <div className="flex items-center justify-between">
@@ -113,8 +107,8 @@ const ProductSelector = ({ products = [], onAddToCart, cartItems = [] }) => {
                             availableQuantity <= product.min_stock_alert
                               ? 'warning'
                               : availableQuantity <= 5
-                              ? 'danger'
-                              : 'success'
+                                ? 'danger'
+                                : 'success'
                           }
                           size="sm"
                         >
@@ -141,9 +135,7 @@ const ProductSelector = ({ products = [], onAddToCart, cartItems = [] }) => {
           <div className="col-span-2 text-center py-8">
             <Package className="h-12 w-12 text-gray-400 mx-auto mb-2" />
             <p className="text-gray-600 dark:text-gray-400">
-              {searchTerm
-                ? 'No se encontraron productos'
-                : 'No hay productos disponibles'}
+              {searchTerm ? 'No se encontraron productos' : 'No hay productos disponibles'}
             </p>
           </div>
         )}

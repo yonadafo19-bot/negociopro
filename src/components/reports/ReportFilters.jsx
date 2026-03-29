@@ -31,7 +31,7 @@ const ReportFilters = ({ onFilter, loading = false }) => {
             <Calendar className="h-4 w-4 text-gray-600 dark:text-gray-400" />
             <select
               value={dateRange}
-              onChange={(e) => setDateRange(e.target.value)}
+              onChange={e => setDateRange(e.target.value)}
               className="px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
             >
               <option value="7days">Últimos 7 días</option>
@@ -46,7 +46,7 @@ const ReportFilters = ({ onFilter, loading = false }) => {
             <Filter className="h-4 w-4 text-gray-600 dark:text-gray-400" />
             <select
               value={transactionType}
-              onChange={(e) => setTransactionType(e.target.value)}
+              onChange={e => setTransactionType(e.target.value)}
               className="px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
             >
               <option value="all">Todo</option>
@@ -57,19 +57,10 @@ const ReportFilters = ({ onFilter, loading = false }) => {
 
           {/* Actions */}
           <div className="flex items-center gap-2 ml-auto">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleReset}
-              disabled={loading}
-            >
+            <Button variant="outline" size="sm" onClick={handleReset} disabled={loading}>
               Limpiar
             </Button>
-            <Button
-              size="sm"
-              onClick={handleApplyFilter}
-              loading={loading}
-            >
+            <Button size="sm" onClick={handleApplyFilter} loading={loading}>
               Aplicar
             </Button>
           </div>

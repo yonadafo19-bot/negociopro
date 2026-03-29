@@ -50,9 +50,7 @@ const Header = () => {
                 <Package className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                  NegociPro
-                </h1>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">NegociPro</h1>
                 <p className="text-xs text-gray-600 dark:text-gray-400">
                   {profile?.business_name || 'Mi Negocio'}
                 </p>
@@ -62,7 +60,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {navigation.map((item) => (
+            {navigation.map(item => (
               <Link
                 key={item.name}
                 to={item.href}
@@ -84,11 +82,7 @@ const Header = () => {
               className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
               title={isDark ? 'Modo claro' : 'Modo oscuro'}
             >
-              {isDark ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
 
             {/* Settings */}
@@ -102,15 +96,11 @@ const Header = () => {
 
             {/* User menu */}
             <div className="relative hidden sm:block">
-              <button
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
-              >
+              <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors">
                 <div className="w-8 h-8 bg-accent-500 rounded-full flex items-center justify-center text-white font-bold">
                   {profile?.full_name?.charAt(0).toUpperCase() || 'U'}
                 </div>
-                <span className="hidden lg:inline">
-                  {profile?.full_name || 'Usuario'}
-                </span>
+                <span className="hidden lg:inline">{profile?.full_name || 'Usuario'}</span>
               </button>
             </div>
 
@@ -119,11 +109,7 @@ const Header = () => {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
             >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
@@ -133,7 +119,7 @@ const Header = () => {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-gray-200 dark:border-gray-700 py-2">
           <div className="px-4 space-y-1">
-            {navigation.map((item) => (
+            {navigation.map(item => (
               <Link
                 key={item.name}
                 to={item.href}

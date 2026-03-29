@@ -50,7 +50,7 @@ const RegisterPage = () => {
     return newErrors
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     const validationErrors = validate()
@@ -61,14 +61,10 @@ const RegisterPage = () => {
 
     setErrors({})
 
-    const { error } = await signUp(
-      formData.email,
-      formData.password,
-      {
-        full_name: formData.fullName,
-        business_name: formData.businessName,
-      }
-    )
+    const { error } = await signUp(formData.email, formData.password, {
+      full_name: formData.fullName,
+      business_name: formData.businessName,
+    })
 
     if (error) {
       setErrors({ general: error.message })
@@ -77,7 +73,7 @@ const RegisterPage = () => {
     }
   }
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
     // Clear error when user starts typing
@@ -93,12 +89,8 @@ const RegisterPage = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-accent-500 rounded-kawaii-lg mb-4">
             <UserPlus className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Crea tu cuenta
-          </h1>
-          <p className="text-gray-600">
-            Empieza a gestionar tu negocio hoy mismo
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Crea tu cuenta</h1>
+          <p className="text-gray-600">Empieza a gestionar tu negocio hoy mismo</p>
         </div>
 
         {errors.general && (
@@ -172,12 +164,7 @@ const RegisterPage = () => {
             required
           />
 
-          <Button
-            type="submit"
-            className="w-full"
-            loading={loading}
-            icon={UserPlus}
-          >
+          <Button type="submit" className="w-full" loading={loading} icon={UserPlus}>
             Crear Cuenta
           </Button>
         </form>
@@ -185,10 +172,7 @@ const RegisterPage = () => {
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             ¿Ya tienes cuenta?{' '}
-            <Link
-              to="/login"
-              className="text-primary-600 hover:text-primary-700 font-medium"
-            >
+            <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
               Inicia sesión
             </Link>
           </p>

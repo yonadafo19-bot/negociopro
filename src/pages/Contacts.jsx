@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useContacts } from '../hooks/useContacts'
-import { Card, Button, Modal, Input, Badge } from '../components/common'
+import { Card, Button, Modal, Input, Badge, PageLoader } from '../components/common'
 import { User, UserPlus, Mail, Phone, Building, AlertCircle } from 'lucide-react'
 
 const ContactsPage = () => {
@@ -23,21 +23,24 @@ const ContactsPage = () => {
   const [filterType, setFilterType] = useState('all')
 
   const filteredContacts =
-    filterType === 'all'
-      ? contacts
-      : contacts.filter((c) => c.contact_type === filterType)
+    filterType === 'all' ? contacts : contacts.filter(c => c.contact_type === filterType)
+
+  // Mostrar PageLoader mientras carga inicialmente
+  if (loading && contacts.length === 0) {
+    return <PageLoader text="Cargando contactos..." />
+  }
 
   const handleCreate = () => {
     setEditingContact(null)
     setShowModal(true)
   }
 
-  const handleEdit = (contact) => {
+  const handleEdit = contact => {
     setEditingContact(contact)
     setShowModal(true)
   }
 
-  const handleDelete = (contact) => {
+  const handleDelete = contact => {
     setDeletingContact(contact)
   }
 
@@ -63,7 +66,7 @@ const ContactsPage = () => {
     setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
-  const handleSubmit = async (contactData) => {
+  const handleSubmit = async contactData => {
     setModalLoading(true)
     setMessage({ type: '', text: '' })
 
@@ -93,7 +96,7 @@ const ContactsPage = () => {
     setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
-  const getContactTypeLabel = (type) => {
+  const getContactTypeLabel = type => {
     const labels = {
       customer: 'Cliente',
       supplier: 'Proveedor',
@@ -102,7 +105,7 @@ const ContactsPage = () => {
     return labels[type] || type
   }
 
-  const getContactTypeColor = (type) => {
+  const getContactTypeColor = type => {
     const colors = {
       customer: 'success',
       supplier: 'warning',
@@ -116,9 +119,7 @@ const ContactsPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Contactos
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Contactos</h1>
           <p className="text-gray-600 dark:text-gray-400">
             Gestiona tus clientes, proveedores y empleados
           </p>
@@ -138,9 +139,7 @@ const ContactsPage = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Clientes</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {customersCount}
-              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{customersCount}</p>
             </div>
           </div>
         </Card>
@@ -151,12 +150,8 @@ const ContactsPage = () => {
               <Building className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Proveedores
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {suppliersCount}
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Proveedores</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{suppliersCount}</p>
             </div>
           </div>
         </Card>
@@ -168,9 +163,7 @@ const ContactsPage = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Empleados</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {employeesCount}
-              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{employeesCount}</p>
             </div>
           </div>
         </Card>
@@ -179,9 +172,7 @@ const ContactsPage = () => {
       {/* Filters */}
       <Card padding="md" className="mb-6">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Filtrar por:
-          </span>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filtrar por:</span>
 
           <div className="flex gap-2">
             <button
@@ -250,9 +241,7 @@ const ContactsPage = () => {
         {loading ? (
           <div className="text-center py-8">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-500 border-r-transparent"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Cargando contactos...
-            </p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Cargando contactos...</p>
           </div>
         ) : filteredContacts.length > 0 ? (
           <div className="overflow-x-auto">
@@ -277,7 +266,7 @@ const ContactsPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredContacts.map((contact) => (
+                {filteredContacts.map(contact => (
                   <tr
                     key={contact.id}
                     className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50"
@@ -312,11 +301,7 @@ const ContactsPage = () => {
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEdit(contact)}
-                        >
+                        <Button variant="ghost" size="sm" onClick={() => handleEdit(contact)}>
                           Editar
                         </Button>
                         <Button
@@ -375,9 +360,7 @@ const ContactsPage = () => {
         />
 
         {message.text && (
-          <div className="mt-4 p-3 rounded-kawaii text-sm text-center">
-            {message.text}
-          </div>
+          <div className="mt-4 p-3 rounded-kawaii text-sm text-center">{message.text}</div>
         )}
       </Modal>
 
@@ -395,9 +378,7 @@ const ContactsPage = () => {
             ¿Estás seguro?
           </h3>
 
-          <p className="text-gray-600 dark:text-gray-400 mb-2">
-            Vas a eliminar el contacto:
-          </p>
+          <p className="text-gray-600 dark:text-gray-400 mb-2">Vas a eliminar el contacto:</p>
 
           <p className="font-semibold text-gray-900 dark:text-white mb-6">
             {deletingContact?.name}
@@ -459,13 +440,13 @@ const ContactForm = ({ contact, onSubmit, onCancel, loading = false }) => {
     }
   }, [contact])
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData(prev => ({ ...prev, [name]: value }))
 
     // Limpiar error cuando el usuario empieza a escribir
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }))
+      setErrors(prev => ({ ...prev, [name]: '' }))
     }
   }
 
@@ -484,7 +465,7 @@ const ContactForm = ({ contact, onSubmit, onCancel, loading = false }) => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault()
 
     if (!validate()) return
@@ -590,12 +571,7 @@ const ContactForm = ({ contact, onSubmit, onCancel, loading = false }) => {
         >
           Cancelar
         </Button>
-        <Button
-          type="submit"
-          className="flex-1"
-          loading={loading}
-          disabled={loading}
-        >
+        <Button type="submit" className="flex-1" loading={loading} disabled={loading}>
           {contact ? 'Actualizar' : 'Crear'} Contacto
         </Button>
       </div>

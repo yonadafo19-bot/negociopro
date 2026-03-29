@@ -5,9 +5,9 @@ import { X, Mail, MessageCircle, Phone } from 'lucide-react'
 const CatalogPreview = ({ catalog, onClose }) => {
   const [selectedProduct, setSelectedProduct] = useState(null)
 
-  const products = catalog.catalog_products?.map((cp) => cp.products).filter(Boolean) || []
+  const products = catalog.catalog_products?.map(cp => cp.products).filter(Boolean) || []
 
-  const getThemeGradient = (theme) => {
+  const getThemeGradient = theme => {
     switch (theme) {
       case 'blue':
         return 'from-blue-500 to-blue-600'
@@ -22,7 +22,7 @@ const CatalogPreview = ({ catalog, onClose }) => {
     }
   }
 
-  const contactViaWhatsApp = (product) => {
+  const contactViaWhatsApp = product => {
     const businessName = catalog.profiles?.business_name || 'Negocio'
     const message = `Hola ${businessName}, me interesa el producto "${product.name}" que vi en tu catálogo.`
     const phone = catalog.profiles?.phone || ''
@@ -32,7 +32,7 @@ const CatalogPreview = ({ catalog, onClose }) => {
     window.open(url, '_blank')
   }
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
@@ -53,16 +53,10 @@ const CatalogPreview = ({ catalog, onClose }) => {
 
           <div className="text-center text-white">
             <h2 className="text-3xl font-bold mb-2">{catalog.name}</h2>
-            {catalog.description && (
-              <p className="text-white/90">{catalog.description}</p>
-            )}
+            {catalog.description && <p className="text-white/90">{catalog.description}</p>}
             <div className="flex items-center justify-center gap-4 mt-4 text-sm">
-              <span className="flex items-center gap-1">
-                📦 {products.length} productos
-              </span>
-              <span className="flex items-center gap-1">
-                👁️ {catalog.view_count || 0} vistas
-              </span>
+              <span className="flex items-center gap-1">📦 {products.length} productos</span>
+              <span className="flex items-center gap-1">👁️ {catalog.view_count || 0} vistas</span>
             </div>
           </div>
         </div>
@@ -78,9 +72,10 @@ const CatalogPreview = ({ catalog, onClose }) => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.map((product) => {
+              {products.map(product => {
                 const isOutOfStock = product.stock_quantity <= 0
-                const isLowStock = product.stock_quantity <= product.min_stock_alert && !isOutOfStock
+                const isLowStock =
+                  product.stock_quantity <= product.min_stock_alert && !isOutOfStock
 
                 return (
                   <div
@@ -173,14 +168,10 @@ const CatalogPreview = ({ catalog, onClose }) => {
                 {catalog.profiles?.business_name || 'Negocio'}
               </p>
               {catalog.profiles?.phone && (
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {catalog.profiles.phone}
-                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{catalog.profiles.phone}</p>
               )}
             </div>
-            <Button onClick={onClose}>
-              Cerrar Vista Previa
-            </Button>
+            <Button onClick={onClose}>Cerrar Vista Previa</Button>
           </div>
         </div>
       </div>

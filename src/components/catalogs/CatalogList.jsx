@@ -1,22 +1,14 @@
 import { useState } from 'react'
-import { CatalogCard } from './CatalogCard'
+import { CatalogCard } from '.'
 import { Button } from '../common'
 import { Plus, Search, Filter } from 'lucide-react'
 import { Input } from '../common'
 
-const CatalogList = ({
-  catalogs,
-  loading,
-  onEdit,
-  onDelete,
-  onShare,
-  onView,
-  onCreate,
-}) => {
+const CatalogList = ({ catalogs, loading, onEdit, onDelete, onShare, onView, onCreate }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all') // all, public, private
 
-  const filteredCatalogs = catalogs.filter((catalog) => {
+  const filteredCatalogs = catalogs.filter(catalog => {
     const matchesSearch =
       catalog.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (catalog.description?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
@@ -42,9 +34,7 @@ const CatalogList = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Mis Catálogos
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Mis Catálogos</h2>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Gestiona tus catálogos compartibles
           </p>
@@ -64,7 +54,7 @@ const CatalogList = ({
               <Input
                 placeholder="Buscar catálogos..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -75,7 +65,7 @@ const CatalogList = ({
             <Filter className="h-5 w-5 text-gray-400" />
             <select
               value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
+              onChange={e => setFilterStatus(e.target.value)}
               className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-kawaii text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">Todos</option>
@@ -150,7 +140,7 @@ const CatalogList = ({
       ) : (
         /* Grid */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCatalogs.map((catalog) => (
+          {filteredCatalogs.map(catalog => (
             <CatalogCard
               key={catalog.id}
               catalog={catalog}

@@ -1,14 +1,8 @@
 import { Card, Badge, Button } from '../common'
-import {
-  Package,
-  Edit,
-  Trash2,
-  TrendingUp,
-  AlertTriangle,
-} from 'lucide-react'
+import { Package, Edit, Trash2, TrendingUp, AlertTriangle } from 'lucide-react'
 
 const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
@@ -47,9 +41,7 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
           </h3>
 
           {product.sku && (
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              SKU: {product.sku}
-            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">SKU: {product.sku}</p>
           )}
 
           {product.category && (
@@ -61,12 +53,7 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
 
         {/* Actions */}
         <div className="flex gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onEdit(product)}
-            title="Editar"
-          >
+          <Button variant="ghost" size="sm" onClick={() => onEdit(product)} title="Editar">
             <Edit className="h-4 w-4" />
           </Button>
           <Button
@@ -87,9 +74,7 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
           <span className="text-gray-600 dark:text-gray-400">Stock:</span>
           <span
             className={`font-semibold ${
-              isLowStock
-                ? 'text-yellow-600 dark:text-yellow-400'
-                : 'text-gray-900 dark:text-white'
+              isLowStock ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-900 dark:text-white'
             }`}
           >
             {product.stock_quantity} unidades
@@ -110,8 +95,8 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
               isLowStock
                 ? 'bg-yellow-500'
                 : product.stock_quantity > product.min_stock_alert * 2
-                ? 'bg-green-500'
-                : 'bg-blue-500'
+                  ? 'bg-green-500'
+                  : 'bg-blue-500'
             }`}
             style={{
               width: `${Math.min(
@@ -146,11 +131,7 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
           <TrendingUp className="h-3 w-3" />
           <span>
             Margen:{' '}
-            {(
-              ((product.selling_price - product.cost_price) /
-                product.cost_price) *
-              100
-            ).toFixed(0)}
+            {(((product.selling_price - product.cost_price) / product.cost_price) * 100).toFixed(0)}
             %
           </span>
         </div>

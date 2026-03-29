@@ -37,7 +37,7 @@ export const useCatalogs = () => {
   }, [loadCatalogs])
 
   // Create catalog
-  const createCatalog = async (catalogData) => {
+  const createCatalog = async catalogData => {
     if (!user) {
       throw new Error('Usuario no autenticado')
     }
@@ -56,7 +56,7 @@ export const useCatalogs = () => {
 
       if (error) throw error
 
-      setCatalogs((prev) => [data, ...prev])
+      setCatalogs(prev => [data, ...prev])
       return data
     } catch (err) {
       console.error('Error creating catalog:', err)
@@ -71,9 +71,7 @@ export const useCatalogs = () => {
 
       if (error) throw error
 
-      setCatalogs((prev) =>
-        prev.map((cat) => (cat.id === catalogId ? { ...cat, ...data } : cat))
-      )
+      setCatalogs(prev => prev.map(cat => (cat.id === catalogId ? { ...cat, ...data } : cat)))
 
       return data
     } catch (err) {
@@ -100,13 +98,13 @@ export const useCatalogs = () => {
   }
 
   // Delete catalog
-  const deleteCatalog = async (catalogId) => {
+  const deleteCatalog = async catalogId => {
     try {
       const { error } = await catalogsService.deleteCatalog(catalogId)
 
       if (error) throw error
 
-      setCatalogs((prev) => prev.filter((cat) => cat.id !== catalogId))
+      setCatalogs(prev => prev.filter(cat => cat.id !== catalogId))
     } catch (err) {
       console.error('Error deleting catalog:', err)
       throw err
@@ -114,7 +112,7 @@ export const useCatalogs = () => {
   }
 
   // Get catalog by share link (public)
-  const getPublicCatalog = async (shareLink) => {
+  const getPublicCatalog = async shareLink => {
     try {
       const { data, error } = await catalogsService.getCatalogByShareLink(shareLink)
 
@@ -128,19 +126,19 @@ export const useCatalogs = () => {
   }
 
   // Get share URL
-  const getShareUrl = (shareLink) => {
+  const getShareUrl = shareLink => {
     return `${window.location.origin}/catalog/${shareLink}`
   }
 
   // Get catalog by ID
-  const getCatalogById = (catalogId) => {
-    return catalogs.find((cat) => cat.id === catalogId)
+  const getCatalogById = catalogId => {
+    return catalogs.find(cat => cat.id === catalogId)
   }
 
   // Stats
   const stats = {
     total: catalogs.length,
-    public: catalogs.filter((cat) => cat.is_public).length,
+    public: catalogs.filter(cat => cat.is_public).length,
     totalViews: catalogs.reduce((sum, cat) => sum + (cat.view_count || 0), 0),
   }
 

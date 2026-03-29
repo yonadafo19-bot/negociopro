@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useInventory } from '../hooks/useInventory'
-import { Card, Button, Modal } from '../components/common'
+import { Card, Button, Modal, PageLoader } from '../components/common'
 import { ProductList, ProductForm, StockAlert } from '../components/inventory'
 import { Plus, Package, AlertCircle } from 'lucide-react'
 
@@ -28,6 +28,34 @@ const InventoryPage = () => {
 
   const categories = getCategories()
 
+  // Mostrar PageLoader mientras carga inicialmente
+  if (loading && products.length === 0) {
+    return <PageLoader text="Cargando inventario..." />
+  }
+
+  // Mostrar error si hay un error de carga
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Error al cargar el inventario
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            {error.message || 'Por favor, intenta recargar la página'}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-primary-500 text-white rounded-kawaii hover:bg-primary-600"
+          >
+            Recargar
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   // Cargar productos con stock bajo
   useState(() => {
     const loadLowStock = async () => {
@@ -42,12 +70,12 @@ const InventoryPage = () => {
     setShowModal(true)
   }
 
-  const handleEdit = (product) => {
+  const handleEdit = product => {
     setEditingProduct(product)
     setShowModal(true)
   }
 
-  const handleDelete = (product) => {
+  const handleDelete = product => {
     setDeletingProduct(product)
   }
 
@@ -76,7 +104,7 @@ const InventoryPage = () => {
     setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
-  const handleSubmit = async (productData) => {
+  const handleSubmit = async productData => {
     setModalLoading(true)
     setMessage({ type: '', text: '' })
 
@@ -115,9 +143,7 @@ const InventoryPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Inventario
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Inventario</h1>
           <p className="text-gray-600 dark:text-gray-400">
             Gestiona tus productos y controla tu stock
           </p>
@@ -136,12 +162,8 @@ const InventoryPage = () => {
               <Package className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Total de productos
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {totalProducts}
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Total de productos</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalProducts}</p>
             </div>
           </div>
         </Card>
@@ -152,11 +174,9 @@ const InventoryPage = () => {
               <Package className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                En stock
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">En stock</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {products.filter((p) => p.stock_quantity > 0).length}
+                {products.filter(p => p.stock_quantity > 0).length}
               </p>
             </div>
           </div>
@@ -168,12 +188,8 @@ const InventoryPage = () => {
               <AlertCircle className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Stock bajo
-              </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {lowStockCount}
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Stock bajo</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{lowStockCount}</p>
             </div>
           </div>
         </Card>
@@ -185,9 +201,7 @@ const InventoryPage = () => {
           products={lowStockProducts}
           onViewAll={() => {
             // Filter products to show only low stock
-            document
-              .querySelector('[data-filter="low-stock"]')
-              ?.click()
+            document.querySelector('[data-filter="low-stock"]')?.click()
           }}
         />
       </div>
@@ -237,9 +251,7 @@ const InventoryPage = () => {
         />
 
         {message.text && (
-          <div className="mt-4 p-3 rounded-kawaii text-sm text-center">
-            {message.text}
-          </div>
+          <div className="mt-4 p-3 rounded-kawaii text-sm text-center">{message.text}</div>
         )}
       </Modal>
 
@@ -257,9 +269,7 @@ const InventoryPage = () => {
             ¿Estás seguro?
           </h3>
 
-          <p className="text-gray-600 dark:text-gray-400 mb-2">
-            Vas a eliminar el producto:
-          </p>
+          <p className="text-gray-600 dark:text-gray-400 mb-2">Vas a eliminar el producto:</p>
 
           <p className="font-semibold text-gray-900 dark:text-white mb-6">
             {deletingProduct?.name}

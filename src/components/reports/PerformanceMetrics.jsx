@@ -2,14 +2,14 @@ import { Card, CardHeader, CardTitle, CardContent, Button } from '../common'
 import { FileSpreadsheet, Download } from 'lucide-react'
 
 const PerformanceMetrics = ({ metrics = {}, comparisons = {}, loading = false }) => {
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
     }).format(amount)
   }
 
-  const formatPercent = (value) => {
+  const formatPercent = value => {
     return `${value >= 0 ? '+' : ''}${value.toFixed(1)}%`
   }
 
@@ -79,19 +79,15 @@ const PerformanceMetrics = ({ metrics = {}, comparisons = {}, loading = false })
               item.color === 'green'
                 ? 'border-l-green-500'
                 : item.color === 'red'
-                ? 'border-l-red-500'
-                : 'border-l-blue-500'
+                  ? 'border-l-red-500'
+                  : 'border-l-blue-500'
             }`}
           >
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">{item.icon}</span>
-              <p className="text-xs text-gray-600 dark:text-gray-400">
-                {item.title}
-              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">{item.title}</p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {item.value}
-            </p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{item.value}</p>
           </Card>
         ))}
       </div>
@@ -115,9 +111,7 @@ const PerformanceMetrics = ({ metrics = {}, comparisons = {}, loading = false })
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xl">{item.icon}</span>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {item.title}
-                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{item.title}</p>
                 </div>
                 <p
                   className={`text-2xl font-bold ${
@@ -138,9 +132,7 @@ const PerformanceMetrics = ({ metrics = {}, comparisons = {}, loading = false })
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card padding="md">
           <div className="text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-              Ventas Hoy
-            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ventas Hoy</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
               {formatCurrency(metrics.todayRevenue || 0)}
             </p>
@@ -152,9 +144,7 @@ const PerformanceMetrics = ({ metrics = {}, comparisons = {}, loading = false })
 
         <Card padding="md">
           <div className="text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-              Ventas Esta Semana
-            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ventas Esta Semana</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
               {formatCurrency(metrics.weekRevenue || 0)}
             </p>
@@ -166,9 +156,7 @@ const PerformanceMetrics = ({ metrics = {}, comparisons = {}, loading = false })
 
         <Card padding="md">
           <div className="text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-              Ventas Este Mes
-            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ventas Este Mes</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
               {formatCurrency(metrics.monthRevenue || 0)}
             </p>

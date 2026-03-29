@@ -1,12 +1,6 @@
 import { useState } from 'react'
 import { useReports } from '../hooks/useReports'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  Button,
-} from '../components/common'
+import { Card, CardHeader, CardTitle, CardContent, Button, PageLoader } from '../components/common'
 import {
   BarChart,
   Bar,
@@ -19,12 +13,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts'
-import {
-  FileSpreadsheet,
-  TrendingUp,
-  Calendar,
-  Download,
-} from 'lucide-react'
+import { FileSpreadsheet, TrendingUp, Calendar, Download } from 'lucide-react'
 import {
   ReportFilters,
   TopProducts,
@@ -47,7 +36,12 @@ const ReportsPage = () => {
 
   const [loadingExport, setLoadingExport] = useState(false)
 
-  const formatCurrency = (value) => {
+  // Mostrar PageLoader mientras carga inicialmente
+  if (!hasData && !topProducts.length && !salesByPeriod.length) {
+    return <PageLoader text="Cargando reportes..." />
+  }
+
+  const formatCurrency = value => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
@@ -67,7 +61,7 @@ const ReportsPage = () => {
   }
 
   // Preparar datos para gráfico de línea (ventas por periodo)
-  const salesTrendData = salesByPeriod.slice(-30).map((item) => ({
+  const salesTrendData = salesByPeriod.slice(-30).map(item => ({
     name: new Date(item.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
     amount: item.amount,
     count: item.count,
@@ -81,9 +75,7 @@ const ReportsPage = () => {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Reportes y Analytics
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Análisis detallado de tu negocio
-          </p>
+          <p className="text-gray-600 dark:text-gray-400">Análisis detallado de tu negocio</p>
         </div>
 
         <Button
@@ -106,9 +98,7 @@ const ReportsPage = () => {
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               Registra algunas ventas para poder ver los reportes
             </p>
-            <Button onClick={() => (window.location.href = '/sales')}>
-              Ir a Ventas
-            </Button>
+            <Button onClick={() => (window.location.href = '/sales')}>Ir a Ventas</Button>
           </div>
         </Card>
       ) : (
@@ -118,10 +108,7 @@ const ReportsPage = () => {
 
           {/* Performance Metrics */}
           <div className="mb-6">
-            <PerformanceMetrics
-              metrics={performanceMetrics}
-              comparisons={comparisons}
-            />
+            <PerformanceMetrics metrics={performanceMetrics} comparisons={comparisons} />
           </div>
 
           {/* Charts and Lists */}
@@ -150,7 +137,7 @@ const ReportsPage = () => {
                         />
                         <YAxis
                           className="text-sm text-gray-600 dark:text-gray-400"
-                          tickFormatter={(value) => `$${value}`}
+                          tickFormatter={value => `$${value}`}
                         />
                         <Tooltip
                           contentStyle={{
@@ -159,7 +146,7 @@ const ReportsPage = () => {
                             borderRadius: '8px',
                             color: '#fff',
                           }}
-                          formatter={(value) => formatCurrency(value)}
+                          formatter={value => formatCurrency(value)}
                           labelStyle={{ color: '#fff' }}
                         />
                         <Legend />

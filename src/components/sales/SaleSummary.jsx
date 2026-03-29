@@ -1,14 +1,8 @@
 import { Card, CardContent } from '../common'
 import { DollarSign, ShoppingCart, Percent } from 'lucide-react'
 
-const SaleSummary = ({
-  items = [],
-  subtotal = 0,
-  tax = 0,
-  discount = 0,
-  total = 0,
-}) => {
-  const formatCurrency = (amount) => {
+const SaleSummary = ({ items = [], subtotal = 0, tax = 0, discount = 0, total = 0 }) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
@@ -39,9 +33,7 @@ const SaleSummary = ({
                 <span>
                   {item.quantity}x {item.name}
                 </span>
-                <span>
-                  {formatCurrency(item.quantity * item.unit_price)}
-                </span>
+                <span>{formatCurrency(item.quantity * item.unit_price)}</span>
               </div>
             ))}
             {items.length > 3 && (
@@ -87,9 +79,7 @@ const SaleSummary = ({
               <DollarSign className="h-5 w-5" />
               Total
             </span>
-            <span className="text-primary-600 dark:text-primary-400">
-              {formatCurrency(total)}
-            </span>
+            <span className="text-primary-600 dark:text-primary-400">{formatCurrency(total)}</span>
           </div>
         </div>
       </CardContent>

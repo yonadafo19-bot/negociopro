@@ -1,12 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from '../common'
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Legend,
-  Tooltip,
-} from 'recharts'
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
 import { PieChart as PieChartIcon } from 'lucide-react'
 
 const COLORS = [
@@ -21,7 +14,7 @@ const COLORS = [
 ]
 
 const SalesByCategory = ({ data = [], loading = false }) => {
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
@@ -34,15 +27,11 @@ const SalesByCategory = ({ data = [], loading = false }) => {
       const data = payload[0].payload
       return (
         <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-          <p className="font-medium text-gray-900 dark:text-white mb-1">
-            {data.category}
-          </p>
+          <p className="font-medium text-gray-900 dark:text-white mb-1">{data.category}</p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Ventas: {formatCurrency(data.amount)}
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-500">
-            {data.count} productos
-          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-500">{data.count} productos</p>
         </div>
       )
     }
@@ -72,15 +61,10 @@ const SalesByCategory = ({ data = [], loading = false }) => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ category, percent }) =>
-                    `${category} ${(percent * 100).toFixed(0)}%`
-                  }
+                  label={({ category, percent }) => `${category} ${(percent * 100).toFixed(0)}%`}
                 >
                   {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />

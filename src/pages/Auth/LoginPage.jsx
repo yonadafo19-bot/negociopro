@@ -31,7 +31,7 @@ const LoginPage = () => {
     return newErrors
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     const validationErrors = validate()
@@ -51,7 +51,7 @@ const LoginPage = () => {
     }
   }
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
     // Clear error when user starts typing
@@ -67,12 +67,8 @@ const LoginPage = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500 rounded-kawaii-lg mb-4">
             <LogIn className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Bienvenido a NegociPro
-          </h1>
-          <p className="text-gray-600">
-            Gestiona tu negocio de forma simple y eficiente
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Bienvenido a NegociPro</h1>
+          <p className="text-gray-600">Gestiona tu negocio de forma simple y eficiente</p>
         </div>
 
         {errors.general && (
@@ -126,12 +122,7 @@ const LoginPage = () => {
             </Link>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            loading={loading}
-            icon={LogIn}
-          >
+          <Button type="submit" className="w-full" loading={loading} icon={LogIn}>
             Iniciar Sesión
           </Button>
         </form>
@@ -139,10 +130,7 @@ const LoginPage = () => {
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             ¿No tienes cuenta?{' '}
-            <Link
-              to="/register"
-              className="text-primary-600 hover:text-primary-700 font-medium"
-            >
+            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
               Regístrate gratis
             </Link>
           </p>

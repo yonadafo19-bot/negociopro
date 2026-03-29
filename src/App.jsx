@@ -12,10 +12,10 @@ function App() {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('/sw.js')
-        .then((registration) => {
+        .then(registration => {
           console.log('Service Worker registered:', registration)
         })
-        .catch((error) => {
+        .catch(error => {
           console.log('Service Worker registration failed:', error)
         })
     }

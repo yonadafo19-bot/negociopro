@@ -1,8 +1,18 @@
 import { useState } from 'react'
 import { useSales } from '../hooks/useSales'
-import { Card, Button, Modal, Badge } from '../components/common'
-import { Plus, DollarSign, TrendingUp, TrendingDown, Calendar } from 'lucide-react'
-import { SaleForm } from '../components/sales'
+import { Card, Button, Modal, Badge, PageLoader } from '../components/common'
+import {
+  Plus,
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Calendar,
+  Calculator,
+  Mail,
+  AlertCircle,
+} from 'lucide-react'
+import { SaleForm, ExpenseForm, CashRegisterClosing } from '../components/sales'
+import { EmailButton } from '../components/common'
 
 const SalesPage = () => {
   const {
@@ -17,17 +27,18 @@ const SalesPage = () => {
 
   const [showSaleModal, setShowSaleModal] = useState(false)
   const [showExpenseModal, setShowExpenseModal] = useState(false)
+  const [showClosingModal, setShowClosingModal] = useState(false)
   const [modalLoading, setModalLoading] = useState(false)
   const [message, setMessage] = useState({ type: '', text: '' })
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
     }).format(amount)
   }
 
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     return new Date(dateString).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'short',
@@ -37,7 +48,12 @@ const SalesPage = () => {
     })
   }
 
-  const handleSaleSubmit = async (saleData) => {
+  // Mostrar PageLoader mientras carga inicialmente
+  if (loading && transactions.length === 0) {
+    return <PageLoader text="Cargando ventas..." />
+  }
+
+  const handleSaleSubmit = async saleData => {
     setModalLoading(true)
     setMessage({ type: '', text: '' })
 
@@ -58,7 +74,7 @@ const SalesPage = () => {
     setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
-  const handleExpenseSubmit = async (expenseData) => {
+  const handleExpenseSubmit = async expenseData => {
     setModalLoading(true)
     setMessage({ type: '', text: '' })
 
@@ -84,20 +100,15 @@ const SalesPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Ventas y Gastos
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Registra y gestiona tus transacciones
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Ventas y Gastos</h1>
+          <p className="text-gray-600 dark:text-gray-400">Registra y gestiona tus transacciones</p>
         </div>
 
         <div className="flex gap-3">
-          <Button
-            variant="outline"
-            onClick={() => setShowExpenseModal(true)}
-            icon={TrendingDown}
-          >
+          <Button variant="outline" onClick={() => setShowClosingModal(true)} icon={Calculator}>
+            Cierre de Caja
+          </Button>
+          <Button variant="outline" onClick={() => setShowExpenseModal(true)} icon={TrendingDown}>
             Registrar Gasto
           </Button>
           <Button onClick={() => setShowSaleModal(true)} icon={Plus}>
@@ -114,9 +125,7 @@ const SalesPage = () => {
               <TrendingUp className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Ventas totales
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Ventas totales</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {formatCurrency(totalSales)}
               </p>
@@ -130,9 +139,7 @@ const SalesPage = () => {
               <TrendingDown className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Gastos totales
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Gastos totales</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {formatCurrency(totalExpenses)}
               </p>
@@ -146,9 +153,7 @@ const SalesPage = () => {
               <DollarSign className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Balance
-              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Balance</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {formatCurrency(totalSales - totalExpenses)}
               </p>
@@ -183,9 +188,7 @@ const SalesPage = () => {
         {loading ? (
           <div className="text-center py-8">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-500 border-r-transparent"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Cargando transacciones...
-            </p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Cargando transacciones...</p>
           </div>
         ) : transactions.length > 0 ? (
           <div className="overflow-x-auto">
@@ -207,10 +210,13 @@ const SalesPage = () => {
                   <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Estado
                   </th>
+                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {transactions.slice(0, 10).map((transaction) => (
+                {transactions.slice(0, 10).map(transaction => (
                   <tr
                     key={transaction.id}
                     className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50"
@@ -224,16 +230,16 @@ const SalesPage = () => {
                           transaction.transaction_type === 'sale'
                             ? 'success'
                             : transaction.transaction_type === 'expense'
-                            ? 'danger'
-                            : 'primary'
+                              ? 'danger'
+                              : 'primary'
                         }
                         size="sm"
                       >
                         {transaction.transaction_type === 'sale'
                           ? 'Venta'
                           : transaction.transaction_type === 'expense'
-                          ? 'Gasto'
-                          : 'Ingreso'}
+                            ? 'Gasto'
+                            : 'Ingreso'}
                       </Badge>
                     </td>
                     <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">
@@ -248,17 +254,33 @@ const SalesPage = () => {
                           transaction.status === 'completed'
                             ? 'success'
                             : transaction.status === 'pending'
-                            ? 'warning'
-                            : 'danger'
+                              ? 'warning'
+                              : 'danger'
                         }
                         size="sm"
                       >
                         {transaction.status === 'completed'
                           ? 'Completado'
                           : transaction.status === 'pending'
-                          ? 'Pendiente'
-                          : 'Cancelado'}
+                            ? 'Pendiente'
+                            : 'Cancelado'}
                       </Badge>
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      {transaction.transaction_type === 'sale' && transaction.contacts?.email ? (
+                        <EmailButton
+                          type="sale-receipt"
+                          data={{ transaction, items: transaction.transaction_items || [] }}
+                          emailAddress={transaction.contacts.email}
+                          variant="email"
+                          size="sm"
+                          showIcon={true}
+                        >
+                          <Mail className="h-4 w-4" />
+                        </EmailButton>
+                      ) : (
+                        <span className="text-gray-400 dark:text-gray-600 text-xs">-</span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -301,34 +323,42 @@ const SalesPage = () => {
         />
 
         {message.text && (
-          <div className="mt-4 p-3 rounded-kawaii text-sm text-center">
-            {message.text}
-          </div>
+          <div className="mt-4 p-3 rounded-kawaii text-sm text-center">{message.text}</div>
         )}
       </Modal>
 
-      {/* Expense modal placeholder */}
+      {/* Expense modal */}
       <Modal
         isOpen={showExpenseModal}
-        onClose={() => setShowExpenseModal(false)}
-        title="Registrar Gasto"
+        onClose={() => {
+          setShowExpenseModal(false)
+          setMessage({ type: '', text: '' })
+        }}
+        title="Registrar Gasto de Caja Chica"
         size="lg"
       >
-        <div className="text-center py-8">
-          <TrendingDown className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            Registro de Gastos
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Próximamente... Podrás registrar gastos operativos
-          </p>
-          <Button
-            onClick={() => setShowExpenseModal(false)}
-            variant="outline"
-          >
-            Cerrar
-          </Button>
-        </div>
+        <ExpenseForm
+          onSubmit={handleExpenseSubmit}
+          onCancel={() => {
+            setShowExpenseModal(false)
+            setMessage({ type: '', text: '' })
+          }}
+          loading={modalLoading}
+        />
+      </Modal>
+
+      {/* Cash register closing modal */}
+      <Modal
+        isOpen={showClosingModal}
+        onClose={() => setShowClosingModal(false)}
+        title=""
+        size="xl"
+        showCloseButton={false}
+      >
+        <CashRegisterClosing
+          transactions={transactions}
+          onClose={() => setShowClosingModal(false)}
+        />
       </Modal>
     </div>
   )

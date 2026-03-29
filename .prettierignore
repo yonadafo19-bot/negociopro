@@ -1,0 +1,39 @@
+# Dependencies
+node_modules
+npm-dist
+dist
+build
+
+# Cache
+.cache
+.vite
+.turbo
+
+# Production
+*.min.js
+*.min.css
+
+# Generated
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+logs
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,13 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from '../common'
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { TrendingUp } from 'lucide-react'
 
 const SalesChart = ({ data = [], loading = false }) => {
@@ -30,7 +22,7 @@ const SalesChart = ({ data = [], loading = false }) => {
     )
   }
 
-  const formatCurrency = (value) => {
+  const formatCurrency = value => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
@@ -51,14 +43,14 @@ const SalesChart = ({ data = [], loading = false }) => {
         {data.length > 0 ? (
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
-              <XAxis
-                dataKey="name"
-                className="text-sm text-gray-600 dark:text-gray-400"
+              <CartesianGrid
+                strokeDasharray="3 3"
+                className="stroke-gray-200 dark:stroke-gray-700"
               />
+              <XAxis dataKey="name" className="text-sm text-gray-600 dark:text-gray-400" />
               <YAxis
                 className="text-sm text-gray-600 dark:text-gray-400"
-                tickFormatter={(value) => `$${value}`}
+                tickFormatter={value => `$${value}`}
               />
               <Tooltip
                 contentStyle={{
@@ -67,7 +59,7 @@ const SalesChart = ({ data = [], loading = false }) => {
                   borderRadius: '8px',
                   color: '#fff',
                 }}
-                formatter={(value) => formatCurrency(value)}
+                formatter={value => formatCurrency(value)}
                 labelStyle={{ color: '#fff' }}
               />
               <Bar

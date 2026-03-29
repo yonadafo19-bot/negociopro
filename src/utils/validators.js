@@ -5,7 +5,7 @@
 /**
  * Valida un correo electrónico
  */
-export const validateEmail = (email) => {
+export const validateEmail = email => {
   if (!email) {
     return 'El correo es requerido'
   }
@@ -21,7 +21,7 @@ export const validateEmail = (email) => {
 /**
  * Valida una contraseña
  */
-export const validatePassword = (password) => {
+export const validatePassword = password => {
   if (!password) {
     return 'La contraseña es requerida'
   }
@@ -62,7 +62,7 @@ export const validateRequired = (value, fieldName = 'Este campo') => {
 /**
  * Valida un número de teléfono
  */
-export const validatePhone = (phone) => {
+export const validatePhone = phone => {
   if (!phone) {
     return null // El teléfono es opcional
   }
@@ -113,7 +113,7 @@ export const validateStock = (stock, fieldName = 'Stock') => {
 export const validateForm = (formData, validationRules) => {
   const errors = {}
 
-  Object.keys(validationRules).forEach((field) => {
+  Object.keys(validationRules).forEach(field => {
     const validator = validationRules[field]
     const error = validator(formData[field])
     if (error) {

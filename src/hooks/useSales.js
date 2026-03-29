@@ -22,10 +22,7 @@ export const useSales = (filters = {}) => {
     setError(null)
 
     try {
-      const { data, error } = await transactionsService.getTransactions(
-        user.id,
-        filters
-      )
+      const { data, error } = await transactionsService.getTransactions(user.id, filters)
 
       if (error) throw error
 
@@ -39,7 +36,7 @@ export const useSales = (filters = {}) => {
   }
 
   // Crear venta
-  const createSale = async (saleData) => {
+  const createSale = async saleData => {
     if (!user) return { error: new Error('No autenticado') }
 
     setLoading(true)
@@ -55,7 +52,7 @@ export const useSales = (filters = {}) => {
           notes: saleData.notes || null,
           transaction_date: new Date().toISOString(),
         },
-        saleData.items.map((item) => ({
+        saleData.items.map(item => ({
           product_id: item.product_id,
           quantity: item.quantity,
           unit_price: item.unit_price,
@@ -66,7 +63,7 @@ export const useSales = (filters = {}) => {
       if (error) throw error
 
       // Actualizar lista localmente
-      setTransactions((prev) => [data, ...prev])
+      setTransactions(prev => [data, ...prev])
 
       return { data, error: null }
     } catch (err) {
@@ -78,7 +75,7 @@ export const useSales = (filters = {}) => {
   }
 
   // Crear gasto
-  const createExpense = async (expenseData) => {
+  const createExpense = async expenseData => {
     if (!user) return { error: new Error('No autenticado') }
 
     setLoading(true)
@@ -100,7 +97,7 @@ export const useSales = (filters = {}) => {
       if (error) throw error
 
       // Actualizar lista localmente
-      setTransactions((prev) => [data, ...prev])
+      setTransactions(prev => [data, ...prev])
 
       return { data, error: null }
     } catch (err) {
@@ -112,7 +109,7 @@ export const useSales = (filters = {}) => {
   }
 
   // Crear ingreso (no relacionado con productos)
-  const createIncome = async (incomeData) => {
+  const createIncome = async incomeData => {
     if (!user) return { error: new Error('No autenticado') }
 
     setLoading(true)
@@ -133,7 +130,7 @@ export const useSales = (filters = {}) => {
       if (error) throw error
 
       // Actualizar lista localmente
-      setTransactions((prev) => [data, ...prev])
+      setTransactions(prev => [data, ...prev])
 
       return { data, error: null }
     } catch (err) {
@@ -172,12 +169,12 @@ export const useSales = (filters = {}) => {
     isEmpty: transactions.length === 0,
     totalTransactions: transactions.length,
     totalSales: transactions
-      .filter((t) => t.transaction_type === 'sale')
+      .filter(t => t.transaction_type === 'sale')
       .reduce((sum, t) => sum + parseFloat(t.total_amount), 0),
     totalExpenses: transactions
-      .filter((t) => t.transaction_type === 'expense')
+      .filter(t => t.transaction_type === 'expense')
       .reduce((sum, t) => sum + parseFloat(t.total_amount), 0),
-    salesCount: transactions.filter((t) => t.transaction_type === 'sale').length,
+    salesCount: transactions.filter(t => t.transaction_type === 'sale').length,
   }
 }
 

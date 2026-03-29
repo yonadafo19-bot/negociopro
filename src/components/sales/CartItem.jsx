@@ -5,7 +5,7 @@ import { Minus, Plus, Trash2, Package } from 'lucide-react'
 const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
   const [quantity, setQuantity] = useState(item.quantity)
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
@@ -32,7 +32,7 @@ const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
     }
   }
 
-  const handleQuantityChange = (e) => {
+  const handleQuantityChange = e => {
     const value = parseInt(e.target.value) || 1
 
     if (value < 1) return
@@ -68,14 +68,10 @@ const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
           )}
 
           <div className="flex-1">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
-              {item.name}
-            </h4>
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{item.name}</h4>
 
             {item.sku && (
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                SKU: {item.sku}
-              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">SKU: {item.sku}</p>
             )}
 
             <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -126,9 +122,7 @@ const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
       {/* Subtotal and remove */}
       <div className="flex items-center gap-4">
         <div className="text-right w-24">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Subtotal
-          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Subtotal</p>
           <p className="text-lg font-bold text-gray-900 dark:text-white">
             {formatCurrency(subtotal)}
           </p>

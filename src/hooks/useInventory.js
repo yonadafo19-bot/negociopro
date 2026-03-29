@@ -36,7 +36,7 @@ export const useInventory = () => {
   }
 
   // Crear producto
-  const createProduct = async (productData) => {
+  const createProduct = async productData => {
     if (!user) return { error: new Error('No autenticado') }
 
     setLoading(true)
@@ -51,7 +51,7 @@ export const useInventory = () => {
       if (error) throw error
 
       // Actualizar lista localmente
-      setProducts((prev) => [data, ...prev])
+      setProducts(prev => [data, ...prev])
 
       return { data, error: null }
     } catch (err) {
@@ -73,9 +73,7 @@ export const useInventory = () => {
       if (error) throw error
 
       // Actualizar lista localmente
-      setProducts((prev) =>
-        prev.map((p) => (p.id === productId ? data : p))
-      )
+      setProducts(prev => prev.map(p => (p.id === productId ? data : p)))
 
       return { data, error: null }
     } catch (err) {
@@ -87,7 +85,7 @@ export const useInventory = () => {
   }
 
   // Eliminar producto (soft delete)
-  const deleteProduct = async (productId) => {
+  const deleteProduct = async productId => {
     setLoading(true)
     setError(null)
 
@@ -97,7 +95,7 @@ export const useInventory = () => {
       if (error) throw error
 
       // Remover de la lista localmente
-      setProducts((prev) => prev.filter((p) => p.id !== productId))
+      setProducts(prev => prev.filter(p => p.id !== productId))
 
       return { error: null }
     } catch (err) {
@@ -125,12 +123,12 @@ export const useInventory = () => {
   }
 
   // Buscar productos
-  const searchProducts = (searchTerm) => {
+  const searchProducts = searchTerm => {
     if (!searchTerm) return products
 
     const term = searchTerm.toLowerCase()
     return products.filter(
-      (p) =>
+      p =>
         p.name?.toLowerCase().includes(term) ||
         p.sku?.toLowerCase().includes(term) ||
         p.category?.toLowerCase().includes(term)
@@ -138,17 +136,15 @@ export const useInventory = () => {
   }
 
   // Filtrar por categoría
-  const filterByCategory = (category) => {
+  const filterByCategory = category => {
     if (!category || category === 'all') return products
 
-    return products.filter((p) => p.category === category)
+    return products.filter(p => p.category === category)
   }
 
   // Obtener categorías únicas
   const getCategories = () => {
-    const categories = new Set(
-      products.map((p) => p.category).filter(Boolean)
-    )
+    const categories = new Set(products.map(p => p.category).filter(Boolean))
     return Array.from(categories)
   }
 
@@ -176,7 +172,7 @@ export const useInventory = () => {
     // Helpers
     isEmpty: products.length === 0,
     totalProducts: products.length,
-    lowStockCount: products.filter((p) => p.stock_quantity <= p.min_stock_alert).length,
+    lowStockCount: products.filter(p => p.stock_quantity <= p.min_stock_alert).length,
   }
 }
 

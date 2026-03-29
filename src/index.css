@@ -1,3 +1,6 @@
+/* Design System Animations */
+@import './theme/animations.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

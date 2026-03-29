@@ -33,19 +33,23 @@ const ShareDialog = ({ catalog, shareUrl, onClose }) => {
       <div className="space-y-6">
         {/* Preview */}
         <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-kawaii">
-          <div className={`w-16 h-16 bg-gradient-to-br ${
-            catalog.theme === 'blue' ? 'from-blue-500 to-blue-600' :
-            catalog.theme === 'green' ? 'from-green-500 to-green-600' :
-            catalog.theme === 'purple' ? 'from-purple-500 to-purple-600' :
-            catalog.theme === 'orange' ? 'from-orange-500 to-orange-600' :
-            'from-primary-500 to-primary-600'
-          } rounded-kawaii flex items-center justify-center`}>
+          <div
+            className={`w-16 h-16 bg-gradient-to-br ${
+              catalog.theme === 'blue'
+                ? 'from-blue-500 to-blue-600'
+                : catalog.theme === 'green'
+                  ? 'from-green-500 to-green-600'
+                  : catalog.theme === 'purple'
+                    ? 'from-purple-500 to-purple-600'
+                    : catalog.theme === 'orange'
+                      ? 'from-orange-500 to-orange-600'
+                      : 'from-primary-500 to-primary-600'
+            } rounded-kawaii flex items-center justify-center`}
+          >
             <span className="text-2xl">📚</span>
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-gray-900 dark:text-white">
-              {catalog.name}
-            </h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">{catalog.name}</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               {catalog.catalog_products?.length || 0} productos
             </p>
@@ -69,7 +73,7 @@ const ShareDialog = ({ catalog, shareUrl, onClose }) => {
             </div>
             <Button
               onClick={handleCopy}
-              variant={copied ? "success" : "secondary"}
+              variant={copied ? 'success' : 'secondary'}
               icon={copied ? Check : Copy}
             >
               {copied ? '¡Copiado!' : 'Copiar'}
@@ -104,7 +108,9 @@ const ShareDialog = ({ catalog, shareUrl, onClose }) => {
         <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-kawaii">
           <p className="text-sm text-blue-800 dark:text-blue-300">
             💡 <strong>Tip:</strong> Cualquier persona con este enlace podrá ver tu catálogo.
-            {catalog.is_public ? '' : ' Asegúrate de marcarlo como público para permitir el acceso.'}
+            {catalog.is_public
+              ? ''
+              : ' Asegúrate de marcarlo como público para permitir el acceso.'}
           </p>
         </div>
       </div>

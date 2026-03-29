@@ -2,14 +2,14 @@ import { Card, CardHeader, CardTitle, CardContent, Badge } from '../common'
 import { DollarSign, TrendingUp, Calendar } from 'lucide-react'
 
 const RecentSales = ({ sales = [], loading = false }) => {
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
     }).format(amount)
   }
 
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     const date = new Date(dateString)
     const today = new Date()
     const isToday = date.toDateString() === today.toDateString()
@@ -39,7 +39,7 @@ const RecentSales = ({ sales = [], loading = false }) => {
       <CardContent>
         {loading ? (
           <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map((i) => (
+            {[1, 2, 3, 4, 5].map(i => (
               <div key={i} className="flex items-center gap-3 animate-pulse">
                 <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
                 <div className="flex-1">
@@ -51,7 +51,7 @@ const RecentSales = ({ sales = [], loading = false }) => {
           </div>
         ) : sales.length > 0 ? (
           <div className="space-y-3">
-            {sales.slice(0, 5).map((sale) => (
+            {sales.slice(0, 5).map(sale => (
               <div
                 key={sale.id}
                 className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-kawaii hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -82,7 +82,8 @@ const RecentSales = ({ sales = [], loading = false }) => {
                   </p>
                   {sale.transaction_items && sale.transaction_items.length > 0 && (
                     <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {sale.transaction_items.length} {sale.transaction_items.length === 1 ? 'producto' : 'productos'}
+                      {sale.transaction_items.length}{' '}
+                      {sale.transaction_items.length === 1 ? 'producto' : 'productos'}
                     </p>
                   )}
                 </div>
@@ -92,9 +93,7 @@ const RecentSales = ({ sales = [], loading = false }) => {
         ) : (
           <div className="text-center py-8">
             <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600 dark:text-gray-400">
-              No hay ventas registradas aún
-            </p>
+            <p className="text-gray-600 dark:text-gray-400">No hay ventas registradas aún</p>
           </div>
         )}
       </CardContent>

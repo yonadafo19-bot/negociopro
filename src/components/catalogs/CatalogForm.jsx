@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Modal, Input, Button, Toggle } from '../common'
-import { ProductSelector } from './ProductSelector'
+import ProductSelector from './ProductSelector'
 import { useInventory } from '../../hooks/useInventory'
 
 const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
@@ -22,7 +22,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
         description: catalog.description || '',
         theme: catalog.theme || 'default',
         is_public: catalog.is_public !== undefined ? catalog.is_public : true,
-        product_ids: catalog.catalog_products?.map((cp) => cp.product_id) || [],
+        product_ids: catalog.catalog_products?.map(cp => cp.product_id) || [],
       })
     }
   }, [catalog])
@@ -42,7 +42,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -60,10 +60,10 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
   }
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    setFormData(prev => ({ ...prev, [field]: value }))
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: null }))
+      setErrors(prev => ({ ...prev, [field]: null }))
     }
   }
 
@@ -91,7 +91,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
             </label>
             <Input
               value={formData.name}
-              onChange={(e) => handleChange('name', e.target.value)}
+              onChange={e => handleChange('name', e.target.value)}
               placeholder="Ej: Catálogo de Verano 2024"
               error={errors.name}
             />
@@ -104,7 +104,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
             </label>
             <textarea
               value={formData.description}
-              onChange={(e) => handleChange('description', e.target.value)}
+              onChange={e => handleChange('description', e.target.value)}
               placeholder="Describe tu catálogo..."
               rows={3}
               className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-kawaii text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -117,7 +117,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
               Tema del Catálogo
             </label>
             <div className="grid grid-cols-5 gap-3">
-              {themes.map((theme) => (
+              {themes.map(theme => (
                 <button
                   key={theme.value}
                   type="button"
@@ -146,16 +146,14 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
           {/* Public toggle */}
           <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-kawaii">
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Catálogo Público
-              </p>
+              <p className="font-medium text-gray-900 dark:text-white">Catálogo Público</p>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Permitir que cualquiera con el enlace pueda verlo
               </p>
             </div>
             <Toggle
               checked={formData.is_public}
-              onChange={(checked) => handleChange('is_public', checked)}
+              onChange={checked => handleChange('is_public', checked)}
             />
           </div>
 
@@ -167,12 +165,10 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
             <ProductSelector
               products={products}
               selectedIds={formData.product_ids}
-              onChange={(ids) => handleChange('product_ids', ids)}
+              onChange={ids => handleChange('product_ids', ids)}
             />
             {errors.products && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-                {errors.products}
-              </p>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.products}</p>
             )}
           </div>
         </div>

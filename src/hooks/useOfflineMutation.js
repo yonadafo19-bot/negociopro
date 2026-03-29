@@ -27,7 +27,7 @@ export const useOfflineMutation = (onlineFn, queueFn) => {
 export const useOfflineCreateProduct = () => {
   const { isOnline } = useConnection()
 
-  return async (product) => {
+  return async product => {
     const { productsService } = await import('../services/supabase')
     const { queueOperations } = await import('../services/syncQueue')
 
@@ -65,7 +65,7 @@ export const useOfflineCreateTransaction = () => {
 export const useOfflineCreateContact = () => {
   const { isOnline } = useConnection()
 
-  return async (contact) => {
+  return async contact => {
     const { contactsService } = await import('../services/supabase')
     const { queueOperations } = await import('../services/syncQueue')
 

@@ -19,21 +19,22 @@ export const useReports = (filters = {}) => {
     const productSales = {}
 
     transactions
-      .filter((t) => t.transaction_type === 'sale')
-      .forEach((transaction) => {
+      .filter(t => t.transaction_type === 'sale')
+      .forEach(transaction => {
         if (transaction.transaction_items) {
-          transaction.transaction_items.forEach((item) => {
+          transaction.transaction_items.forEach(item => {
             if (!productSales[item.product_id]) {
               productSales[item.product_id] = {
                 product_id: item.product_id,
-                product_name: products.find((p) => p.id === item.product_id)?.name || 'Desconocido',
-                category: products.find((p) => p.id === item.product_id)?.category || 'Sin categoría',
+                product_name: products.find(p => p.id === item.product_id)?.name || 'Desconocido',
+                category: products.find(p => p.id === item.product_id)?.category || 'Sin categoría',
                 quantity: 0,
                 revenue: 0,
               }
             }
             productSales[item.product_id].quantity += item.quantity
-            productSales[item.product_id].revenue += item.subtotal || (item.quantity * item.unit_price)
+            productSales[item.product_id].revenue +=
+              item.subtotal || item.quantity * item.unit_price
           })
         }
       })
@@ -48,8 +49,8 @@ export const useReports = (filters = {}) => {
     const salesByDate = {}
 
     transactions
-      .filter((t) => t.transaction_type === 'sale')
-      .forEach((transaction) => {
+      .filter(t => t.transaction_type === 'sale')
+      .forEach(transaction => {
         const date = new Date(transaction.transaction_date)
         const dateKey = date.toISOString().split('T')[0] // YYYY-MM-DD
 
@@ -65,9 +66,7 @@ export const useReports = (filters = {}) => {
         salesByDate[dateKey].count += 1
       })
 
-    return Object.values(salesByDate).sort(
-      (a, b) => new Date(a.date) - new Date(b.date)
-    )
+    return Object.values(salesByDate).sort((a, b) => new Date(a.date) - new Date(b.date))
   }, [transactions])
 
   // Ventas por categoría
@@ -75,11 +74,11 @@ export const useReports = (filters = {}) => {
     const categorySales = {}
 
     transactions
-      .filter((t) => t.transaction_type === 'sale')
-      .forEach((transaction) => {
+      .filter(t => t.transaction_type === 'sale')
+      .forEach(transaction => {
         if (transaction.transaction_items) {
-          transaction.transaction_items.forEach((item) => {
-            const product = products.find((p) => p.id === item.product_id)
+          transaction.transaction_items.forEach(item => {
+            const product = products.find(p => p.id === item.product_id)
             const category = product?.category || 'Sin categoría'
 
             if (!categorySales[category]) {
@@ -90,15 +89,13 @@ export const useReports = (filters = {}) => {
               }
             }
 
-            categorySales[category].amount += item.subtotal || (item.quantity * item.unit_price)
+            categorySales[category].amount += item.subtotal || item.quantity * item.unit_price
             categorySales[category].count += item.quantity
           })
         }
       })
 
-    return Object.values(categorySales).sort(
-      (a, b) => b.amount - a.amount
-    )
+    return Object.values(categorySales).sort((a, b) => b.amount - a.amount)
   }, [transactions, products])
 
   // Top clientes
@@ -106,10 +103,10 @@ export const useReports = (filters = {}) => {
     const customerSales = {}
 
     transactions
-      .filter((t) => t.transaction_type === 'sale' && t.contact_id)
-      .forEach((transaction) => {
+      .filter(t => t.transaction_type === 'sale' && t.contact_id)
+      .forEach(transaction => {
         const customerId = transaction.contact_id
-        const customer = customers.find((c) => c.id === customerId)
+        const customer = customers.find(c => c.id === customerId)
 
         if (!customerSales[customerId]) {
           customerSales[customerId] = {
@@ -132,8 +129,8 @@ export const useReports = (filters = {}) => {
 
   // Métricas de rendimiento
   const performanceMetrics = useMemo(() => {
-    const sales = transactions.filter((t) => t.transaction_type === 'sale')
-    const expenses = transactions.filter((t) => t.transaction_type === 'expense')
+    const sales = transactions.filter(t => t.transaction_type === 'sale')
+    const expenses = transactions.filter(t => t.transaction_type === 'expense')
 
     const totalRevenue = sales.reduce((sum, t) => sum + parseFloat(t.total_amount), 0)
     const totalExpenses = expenses.reduce((sum, t) => sum + parseFloat(t.total_amount), 0)
@@ -144,19 +141,19 @@ export const useReports = (filters = {}) => {
     // Ventas de hoy
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    const todaySales = sales.filter((t) => new Date(t.transaction_date) >= today)
+    const todaySales = sales.filter(t => new Date(t.transaction_date) >= today)
     const todayRevenue = todaySales.reduce((sum, t) => sum + parseFloat(t.total_amount), 0)
 
     // Ventas de esta semana
     const weekAgo = new Date(today)
     weekAgo.setDate(weekAgo.getDate() - 7)
-    const weekSales = sales.filter((t) => new Date(t.transaction_date) >= weekAgo)
+    const weekSales = sales.filter(t => new Date(t.transaction_date) >= weekAgo)
     const weekRevenue = weekSales.reduce((sum, t) => sum + parseFloat(t.total_amount), 0)
 
     // Ventas de este mes
     const monthAgo = new Date(today)
     monthAgo.setMonth(monthAgo.getMonth() - 1)
-    const monthSales = sales.filter((t) => new Date(t.transaction_date) >= monthAgo)
+    const monthSales = sales.filter(t => new Date(t.transaction_date) >= monthAgo)
     const monthRevenue = monthSales.reduce((sum, t) => sum + parseFloat(t.total_amount), 0)
 
     return {
@@ -192,21 +189,17 @@ export const useReports = (filters = {}) => {
     const lastMonth = new Date(today)
     lastMonth.setMonth(lastMonth.getMonth() - 1)
 
-    const todaySales = transactions.filter((t) => {
+    const todaySales = transactions.filter(t => {
       const tDate = new Date(t.transaction_date)
       return t.transaction_type === 'sale' && tDate >= today
     })
 
-    const yesterdaySales = transactions.filter((t) => {
+    const yesterdaySales = transactions.filter(t => {
       const tDate = new Date(t.transaction_date)
-      return (
-        t.transaction_type === 'sale' &&
-        tDate >= yesterday &&
-        tDate < today
-      )
+      return t.transaction_type === 'sale' && tDate >= yesterday && tDate < today
     })
 
-    const lastWeekSales = transactions.filter((t) => {
+    const lastWeekSales = transactions.filter(t => {
       const tDate = new Date(t.transaction_date)
       const lastWeekDay = new Date(lastWeek)
       const endOfLastWeek = new Date(lastWeekDay)
@@ -214,7 +207,7 @@ export const useReports = (filters = {}) => {
       return t.transaction_type === 'sale' && tDate >= lastWeekDay && tDate < endOfLastWeek
     })
 
-    const lastMonthSales = transactions.filter((t) => {
+    const lastMonthSales = transactions.filter(t => {
       const tDate = new Date(t.transaction_date)
       const lastMonthDay = new Date(lastMonth)
       const endOfLastMonth = new Date(lastMonthDay)
@@ -228,17 +221,18 @@ export const useReports = (filters = {}) => {
     const lastMonthRevenue = lastMonthSales.reduce((sum, t) => sum + parseFloat(t.total_amount), 0)
 
     // Cálculos de cambio porcentual
-    const todayVsYesterday = yesterdayRevenue > 0
-      ? ((todayRevenue - yesterdayRevenue) / yesterdayRevenue) * 100
-      : 0
+    const todayVsYesterday =
+      yesterdayRevenue > 0 ? ((todayRevenue - yesterdayRevenue) / yesterdayRevenue) * 100 : 0
 
-    const thisWeekVsLast = lastWeekRevenue > 0
-      ? ((performanceMetrics.weekRevenue - lastWeekRevenue) / lastWeekRevenue) * 100
-      : 0
+    const thisWeekVsLast =
+      lastWeekRevenue > 0
+        ? ((performanceMetrics.weekRevenue - lastWeekRevenue) / lastWeekRevenue) * 100
+        : 0
 
-    const thisMonthVsLast = lastMonthRevenue > 0
-      ? ((performanceMetrics.monthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100
-      : 0
+    const thisMonthVsLast =
+      lastMonthRevenue > 0
+        ? ((performanceMetrics.monthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100
+        : 0
 
     return {
       todayVsYesterday,
@@ -253,22 +247,22 @@ export const useReports = (filters = {}) => {
 
     // Preparar datos de productos más vendidos
     const productsData = topProducts.map((p, i) => ({
-      'Posición': i + 1,
-      'Producto': p.product_name,
-      'Categoría': p.category,
+      Posición: i + 1,
+      Producto: p.product_name,
+      Categoría: p.category,
       'Unidades Vendidas': p.quantity,
       'Ingresos Totales': p.revenue,
     }))
 
     // Preparar datos de ventas
     const salesData = transactions
-      .filter((t) => t.transaction_type === 'sale')
+      .filter(t => t.transaction_type === 'sale')
       .map((t, i) => ({
         '#': i + 1,
-        'Fecha': new Date(t.transaction_date).toLocaleDateString('es-ES'),
-        'Cliente': t.contacts?.name || 'Venta general',
-        'Monto': parseFloat(t.total_amount),
-        'Productos': t.transaction_items?.length || 0,
+        Fecha: new Date(t.transaction_date).toLocaleDateString('es-ES'),
+        Cliente: t.contacts?.name || 'Venta general',
+        Monto: parseFloat(t.total_amount),
+        Productos: t.transaction_items?.length || 0,
       }))
 
     // Crear workbook

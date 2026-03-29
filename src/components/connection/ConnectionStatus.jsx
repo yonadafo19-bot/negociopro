@@ -22,16 +22,20 @@ const ConnectionStatus = () => {
   }
 
   return (
-    <div className={`fixed bottom-4 right-4 z-50 max-w-sm transition-all ${
-      !isOnline ? 'animate-pulse' : ''
-    }`}>
-      <div className={`rounded-lg shadow-lg p-4 ${
-        !isOnline
-          ? 'bg-red-500 text-white'
-          : pendingSync > 0
-          ? 'bg-yellow-500 text-white'
-          : 'bg-green-500 text-white'
-      }`}>
+    <div
+      className={`fixed bottom-4 right-4 z-50 max-w-sm transition-all ${
+        !isOnline ? 'animate-pulse' : ''
+      }`}
+    >
+      <div
+        className={`rounded-lg shadow-lg p-4 ${
+          !isOnline
+            ? 'bg-red-500 text-white'
+            : pendingSync > 0
+              ? 'bg-yellow-500 text-white'
+              : 'bg-green-500 text-white'
+        }`}
+      >
         {/* Status */}
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
@@ -50,10 +54,10 @@ const ConnectionStatus = () => {
               {!isOnline
                 ? 'Sin conexión'
                 : isSyncing
-                ? 'Sincronizando...'
-                : pendingSync > 0
-                ? 'Cambios pendientes'
-                : 'Sincronizado'}
+                  ? 'Sincronizando...'
+                  : pendingSync > 0
+                    ? 'Cambios pendientes'
+                    : 'Sincronizado'}
             </p>
 
             {/* Message */}
@@ -61,10 +65,10 @@ const ConnectionStatus = () => {
               {!isOnline
                 ? 'No hay conexión a internet. Los cambios se guardarán localmente.'
                 : pendingSync > 0
-                ? `${pendingSync} cambio${pendingSync === 1 ? '' : 's'} pendiente${pendingSync === 1 ? '' : 's'} de sincronización.`
-                : lastSyncTime
-                ? `Sincronizado ${lastSyncTime.toLocaleTimeString()}`
-                : 'Todo está actualizado'}
+                  ? `${pendingSync} cambio${pendingSync === 1 ? '' : 's'} pendiente${pendingSync === 1 ? '' : 's'} de sincronización.`
+                  : lastSyncTime
+                    ? `Sincronizado ${lastSyncTime.toLocaleTimeString()}`
+                    : 'Todo está actualizado'}
             </p>
 
             {/* Error message */}

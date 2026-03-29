@@ -6,13 +6,13 @@ import { Badge } from '../common'
 const ProductSelector = ({ products, selectedIds, onChange }) => {
   const [searchTerm, setSearchTerm] = useState('')
 
-  const filteredProducts = products.filter((product) =>
+  const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const toggleProduct = (productId) => {
+  const toggleProduct = productId => {
     if (selectedIds.includes(productId)) {
-      onChange(selectedIds.filter((id) => id !== productId))
+      onChange(selectedIds.filter(id => id !== productId))
     } else {
       onChange([...selectedIds, productId])
     }
@@ -22,7 +22,7 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
     if (selectedIds.length === filteredProducts.length) {
       onChange([])
     } else {
-      onChange(filteredProducts.map((p) => p.id))
+      onChange(filteredProducts.map(p => p.id))
     }
   }
 
@@ -36,7 +36,7 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
             <Input
               placeholder="Buscar productos..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="pl-10 text-sm"
             />
           </div>
@@ -61,7 +61,7 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
           </div>
         ) : (
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {filteredProducts.map((product) => {
+            {filteredProducts.map(product => {
               const isSelected = selectedIds.includes(product.id)
               const isOutOfStock = product.stock_quantity <= 0
 
@@ -76,11 +76,13 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
                   }`}
                 >
                   {/* Checkbox */}
-                  <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${
-                    isSelected
-                      ? 'bg-primary-500 border-primary-500'
-                      : 'border-gray-300 dark:border-gray-600'
-                  }`}>
+                  <div
+                    className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${
+                      isSelected
+                        ? 'bg-primary-500 border-primary-500'
+                        : 'border-gray-300 dark:border-gray-600'
+                    }`}
+                  >
                     {isSelected && <Check className="h-3 w-3 text-white" />}
                   </div>
 
@@ -138,10 +140,8 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
       {/* Selected count */}
       <div className="p-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-300 dark:border-gray-600">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          <span className="font-medium text-gray-900 dark:text-white">
-            {selectedIds.length}
-          </span>{' '}
-          de {products.length} productos seleccionados
+          <span className="font-medium text-gray-900 dark:text-white">{selectedIds.length}</span> de{' '}
+          {products.length} productos seleccionados
         </p>
       </div>
     </div>

@@ -1,14 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { clsx } from 'clsx'
-import {
-  Home,
-  Package,
-  DollarSign,
-  Users,
-  BarChart3,
-  BookOpen,
-  Settings,
-} from 'lucide-react'
+import { Home, Package, DollarSign, Users, BarChart3, BookOpen, Settings } from 'lucide-react'
 
 const Sidebar = () => {
   const location = useLocation()
@@ -30,15 +22,13 @@ const Sidebar = () => {
           <div className="w-10 h-10 bg-primary-500 rounded-kawaii flex items-center justify-center">
             <Package className="h-6 w-6 text-white" />
           </div>
-          <span className="text-xl font-bold text-gray-900 dark:text-white">
-            NegociPro
-          </span>
+          <span className="text-xl font-bold text-gray-900 dark:text-white">NegociPro</span>
         </Link>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navigation.map((item) => {
+        {navigation.map(item => {
           const isActive = location.pathname === item.href
           return (
             <Link

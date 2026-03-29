@@ -27,31 +27,32 @@ export const AuthProvider = ({ children }) => {
       setLoading(false)
     }, 3000)
 
-    const { data: { subscription } } = authService.onAuthStateChange(
-      async (_event, session) => {
-        console.log('🔄 Auth change:', session?.user?.email || 'no session')
-        clearTimeout(forceTimeout)
+    const {
+      data: { subscription },
+    } = authService.onAuthStateChange(async (_event, session) => {
+      console.log('🔄 Auth change:', session?.user?.email || 'no session')
+      clearTimeout(forceTimeout)
 
-        setUser(session?.user ?? null)
+      setUser(session?.user ?? null)
 
-        if (session?.user) {
-          // ✅ BIEN: Fetch profile SIN bloquear
-          profileService.getProfile(session.user.id)
-            .then(({ data }) => {
-              if (data) setProfile(data)
-            })
-            .catch(err => {
-              console.error('Error fetching profile:', err)
-              // ✅ BIEN: No bloquear si hay error en profile
-            })
-        } else {
-          setProfile(null)
-        }
-
-        setLoading(false)
-        setError(null)
+      if (session?.user) {
+        // ✅ BIEN: Fetch profile SIN bloquear
+        profileService
+          .getProfile(session.user.id)
+          .then(({ data }) => {
+            if (data) setProfile(data)
+          })
+          .catch(err => {
+            console.error('Error fetching profile:', err)
+            // ✅ BIEN: No bloquear si hay error en profile
+          })
+      } else {
+        setProfile(null)
       }
-    )
+
+      setLoading(false)
+      setError(null)
+    })
 
     return () => {
       clearTimeout(forceTimeout)
@@ -103,7 +104,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const resetPassword = async (email) => {
+  const resetPassword = async email => {
     setLoading(true)
     setError(null)
     try {
@@ -118,7 +119,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const updateProfile = async (updates) => {
+  const updateProfile = async updates => {
     if (!user) return { data: null, error: new Error('No user logged in') }
 
     setLoading(true)
@@ -148,9 +149,5 @@ export const AuthProvider = ({ children }) => {
     updateProfile,
   }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

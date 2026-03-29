@@ -36,7 +36,7 @@ export const useContacts = (contactType = null) => {
   }
 
   // Crear contacto
-  const createContact = async (contactData) => {
+  const createContact = async contactData => {
     if (!user) return { error: new Error('No autenticado') }
 
     setLoading(true)
@@ -51,7 +51,7 @@ export const useContacts = (contactType = null) => {
       if (error) throw error
 
       // Actualizar lista localmente
-      setContacts((prev) => [data, ...prev])
+      setContacts(prev => [data, ...prev])
 
       return { data, error: null }
     } catch (err) {
@@ -73,9 +73,7 @@ export const useContacts = (contactType = null) => {
       if (error) throw error
 
       // Actualizar lista localmente
-      setContacts((prev) =>
-        prev.map((c) => (c.id === contactId ? data : c))
-      )
+      setContacts(prev => prev.map(c => (c.id === contactId ? data : c)))
 
       return { data, error: null }
     } catch (err) {
@@ -87,7 +85,7 @@ export const useContacts = (contactType = null) => {
   }
 
   // Eliminar contacto (soft delete)
-  const deleteContact = async (contactId) => {
+  const deleteContact = async contactId => {
     setLoading(true)
     setError(null)
 
@@ -97,7 +95,7 @@ export const useContacts = (contactType = null) => {
       if (error) throw error
 
       // Remover de la lista localmente
-      setContacts((prev) => prev.filter((c) => c.id !== contactId))
+      setContacts(prev => prev.filter(c => c.id !== contactId))
 
       return { error: null }
     } catch (err) {
@@ -109,12 +107,12 @@ export const useContacts = (contactType = null) => {
   }
 
   // Buscar contactos
-  const searchContacts = (searchTerm) => {
+  const searchContacts = searchTerm => {
     if (!searchTerm) return contacts
 
     const term = searchTerm.toLowerCase()
     return contacts.filter(
-      (c) =>
+      c =>
         c.name?.toLowerCase().includes(term) ||
         c.email?.toLowerCase().includes(term) ||
         c.phone?.toLowerCase().includes(term)
@@ -122,9 +120,9 @@ export const useContacts = (contactType = null) => {
   }
 
   // Filtrar por tipo
-  const filterByType = (type) => {
+  const filterByType = type => {
     if (!type || type === 'all') return contacts
-    return contacts.filter((c) => c.contact_type === type)
+    return contacts.filter(c => c.contact_type === type)
   }
 
   // Cargar contactos al montar
@@ -149,9 +147,9 @@ export const useContacts = (contactType = null) => {
     // Helpers
     isEmpty: contacts.length === 0,
     totalContacts: contacts.length,
-    customersCount: contacts.filter((c) => c.contact_type === 'customer').length,
-    suppliersCount: contacts.filter((c) => c.contact_type === 'supplier').length,
-    employeesCount: contacts.filter((c) => c.contact_type === 'employee').length,
+    customersCount: contacts.filter(c => c.contact_type === 'customer').length,
+    suppliersCount: contacts.filter(c => c.contact_type === 'supplier').length,
+    employeesCount: contacts.filter(c => c.contact_type === 'employee').length,
   }
 }
 

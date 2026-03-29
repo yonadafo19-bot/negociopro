@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useCatalogs } from '../hooks/useCatalogs'
-import {
-  Loader,
-  AlertCircle,
-  Mail,
-  MessageCircle,
-  Phone,
-  MapPin,
-} from 'lucide-react'
+import { Loader, AlertCircle, Mail, MessageCircle, Phone, MapPin } from 'lucide-react'
 
 const PublicCatalogPage = () => {
   const { shareLink } = useParams()
@@ -36,7 +29,7 @@ const PublicCatalogPage = () => {
     }
   }
 
-  const contactViaWhatsApp = (product) => {
+  const contactViaWhatsApp = product => {
     const businessName = catalog.profiles?.business_name || 'Negocio'
     const message = `Hola ${businessName}, me interesa el producto "${product.name}" que vi en tu catálogo.`
     const phone = catalog.profiles?.phone || ''
@@ -46,14 +39,14 @@ const PublicCatalogPage = () => {
     window.open(url, '_blank')
   }
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
     }).format(amount)
   }
 
-  const getThemeGradient = (theme) => {
+  const getThemeGradient = theme => {
     switch (theme) {
       case 'blue':
         return 'from-blue-500 to-blue-600'
@@ -101,7 +94,7 @@ const PublicCatalogPage = () => {
     )
   }
 
-  const products = catalog.catalog_products?.map((cp) => cp.products).filter(Boolean) || []
+  const products = catalog.catalog_products?.map(cp => cp.products).filter(Boolean) || []
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -111,9 +104,7 @@ const PublicCatalogPage = () => {
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-3">{catalog.name}</h1>
             {catalog.description && (
-              <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                {catalog.description}
-              </p>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto">{catalog.description}</p>
             )}
             <div className="flex items-center justify-center gap-6 mt-6 text-sm">
               <span className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
@@ -187,7 +178,7 @@ const PublicCatalogPage = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((product) => {
+            {products.map(product => {
               const isOutOfStock = product.stock_quantity <= 0
               const isLowStock = product.stock_quantity <= product.min_stock_alert && !isOutOfStock
 
@@ -291,7 +282,10 @@ const PublicCatalogPage = () => {
             <p>Compartido con ❤️ desde NegociPro</p>
             <p className="mt-1">
               Powered by{' '}
-              <a href="https://negociopro.com" className="text-primary-600 dark:text-primary-400 hover:underline">
+              <a
+                href="https://negociopro.com"
+                className="text-primary-600 dark:text-primary-400 hover:underline"
+              >
                 NegociPro
               </a>
             </p>

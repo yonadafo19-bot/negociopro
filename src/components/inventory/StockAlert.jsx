@@ -20,20 +20,18 @@ const StockAlert = ({ products = [], onViewAll }) => {
               Alerta de Stock Bajo
             </h3>
             <p className="text-sm text-yellow-800 dark:text-yellow-500">
-              {products.length} {products.length === 1 ? 'producto' : 'productos'}{' '}
-              necesitan reabastecimiento
+              {products.length} {products.length === 1 ? 'producto' : 'productos'} necesitan
+              reabastecimiento
             </p>
 
             {/* Lista de productos */}
             <div className="mt-3 space-y-1">
-              {products.slice(0, 3).map((product) => (
+              {products.slice(0, 3).map(product => (
                 <div
                   key={product.id}
                   className="flex items-center justify-between text-xs bg-white dark:bg-gray-800 px-3 py-2 rounded-kawaii"
                 >
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    {product.name}
-                  </span>
+                  <span className="font-medium text-gray-900 dark:text-white">{product.name}</span>
                   <span className="text-yellow-600 dark:text-yellow-400">
                     {product.stock_quantity} / {product.min_stock_alert}
                   </span>
@@ -49,13 +47,7 @@ const StockAlert = ({ products = [], onViewAll }) => {
           </div>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onViewAll}
-          icon={Package}
-          className="shrink-0"
-        >
+        <Button variant="outline" size="sm" onClick={onViewAll} icon={Package} className="shrink-0">
           Ver todos
         </Button>
       </div>

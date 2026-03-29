@@ -34,7 +34,7 @@ const Modal = ({
     full: 'max-w-full mx-4',
   }
 
-  const handleBackdropClick = (e) => {
+  const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
       onClose()
     }
@@ -57,9 +57,7 @@ const Modal = ({
         {/* Header */}
         {(title || showCloseButton) && (
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            {title && (
-              <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-            )}
+            {title && <h2 className="text-xl font-bold text-gray-900">{title}</h2>}
             {showCloseButton && (
               <button
                 onClick={onClose}
@@ -73,9 +71,7 @@ const Modal = ({
         )}
 
         {/* Content */}
-        <div className="p-6">
-          {children}
-        </div>
+        <div className="p-6">{children}</div>
       </div>
     </div>
   )

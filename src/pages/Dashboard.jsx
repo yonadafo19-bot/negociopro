@@ -4,14 +4,15 @@ import { useInventory } from '../hooks/useInventory'
 import { useSales } from '../hooks/useSales'
 import { useContacts } from '../hooks/useContacts'
 import { useAuth } from '../hooks/useAuth'
-import { StatCard, RecentSales, LowStockProducts, SalesChart, QuickActions } from '../components/dashboard'
 import {
-  Package,
-  TrendingUp,
-  Users,
-  DollarSign,
-  AlertTriangle,
-} from 'lucide-react'
+  StatCard,
+  RecentSales,
+  LowStockProducts,
+  SalesChart,
+  QuickActions,
+} from '../components/dashboard'
+import { PageLoader } from '../components/common'
+import { Package, TrendingUp, Users, DollarSign, AlertTriangle } from 'lucide-react'
 
 const DashboardPage = () => {
   const { profile } = useAuth()
@@ -23,32 +24,61 @@ const DashboardPage = () => {
     getLowStockProducts,
   } = useInventory()
 
-  const {
-    transactions,
-    loading: loadingSales,
-    totalSales,
-    salesCount,
-    totalExpenses,
-  } = useSales()
+  const { transactions, loading: loadingSales, totalSales, salesCount, totalExpenses } = useSales()
 
   const { customersCount } = useContacts('customer')
 
   const [lowStockProducts, setLowStockProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   // Cargar productos con stock bajo
   useEffect(() => {
     const loadLowStock = async () => {
-      const products = await getLowStockProducts()
-      setLowStockProducts(products)
+      try {
+        setLoading(true)
+        const products = await getLowStockProducts()
+        setLowStockProducts(products)
+      } catch (err) {
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
     }
     loadLowStock()
   }, [products])
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = amount => {
     return new Intl.NumberFormat('es-MX', {
       style: 'currency',
       currency: 'MXN',
     }).format(amount)
+  }
+
+  if (loading) {
+    return <PageLoader text="Cargando dashboard..." />
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Error al cargar el dashboard
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Por favor, intenta recargar la página
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-primary-500 text-white rounded-kawaii hover:bg-primary-600"
+          >
+            Recargar
+          </button>
+        </div>
+      </div>
+    )
   }
 
   // Preparar datos para el gráfico de ventas
@@ -62,12 +92,9 @@ const DashboardPage = () => {
       date.setDate(date.getDate() - i)
       date.setHours(0, 0, 0, 0)
 
-      const daySales = transactions.filter((t) => {
+      const daySales = transactions.filter(t => {
         const tDate = new Date(t.transaction_date)
-        return (
-          t.transaction_type === 'sale' &&
-          tDate.toDateString() === date.toDateString()
-        )
+        return t.transaction_type === 'sale' && tDate.toDateString() === date.toDateString()
       })
 
       const total = daySales.reduce((sum, t) => sum + parseFloat(t.total_amount), 0)

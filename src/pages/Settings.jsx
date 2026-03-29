@@ -1,7 +1,26 @@
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
-import { Card, CardHeader, CardTitle, CardContent, Button, Input, Modal, Badge } from '../components/common'
-import { User, Mail, Building, Phone, Camera, KeyRound, AlertCircle, CheckCircle } from 'lucide-react'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Button,
+  Input,
+  Modal,
+  Badge,
+  PageLoader,
+} from '../components/common'
+import {
+  User,
+  Mail,
+  Building,
+  Phone,
+  Camera,
+  KeyRound,
+  AlertCircle,
+  CheckCircle,
+} from 'lucide-react'
 
 const SettingsPage = () => {
   const { profile, user, updateProfile, signOut } = useAuth()
@@ -23,7 +42,12 @@ const SettingsPage = () => {
 
   const [errors, setErrors] = useState({})
 
-  const handleProfileUpdate = async (e) => {
+  // Mostrar PageLoader si no hay perfil cargado
+  if (!profile || !user) {
+    return <PageLoader text="Cargando configuración..." />
+  }
+
+  const handleProfileUpdate = async e => {
     e.preventDefault()
     setErrors({})
     setMessage({ type: '', text: '' })
@@ -52,7 +76,7 @@ const SettingsPage = () => {
     }
   }
 
-  const handlePasswordChange = async (e) => {
+  const handlePasswordChange = async e => {
     e.preventDefault()
     setErrors({})
     setMessage({ type: '', text: '' })
@@ -80,7 +104,7 @@ const SettingsPage = () => {
     // Por ahora es solo un placeholder
     setMessage({
       type: 'info',
-      text: 'Funcionalidad de cambio de contraseña próximamente'
+      text: 'Funcionalidad de cambio de contraseña próximamente',
     })
     setShowPasswordModal(false)
     setPasswordData({
@@ -99,12 +123,8 @@ const SettingsPage = () => {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Configuración
-        </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Gestiona tu cuenta y preferencias
-        </p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Configuración</h1>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">Gestiona tu cuenta y preferencias</p>
       </div>
 
       {/* Message */}
@@ -114,8 +134,8 @@ const SettingsPage = () => {
             message.type === 'success'
               ? 'bg-green-50 text-green-800 border border-green-200'
               : message.type === 'error'
-              ? 'bg-red-50 text-red-800 border border-red-200'
-              : 'bg-blue-50 text-blue-800 border border-blue-200'
+                ? 'bg-red-50 text-red-800 border border-red-200'
+                : 'bg-blue-50 text-blue-800 border border-blue-200'
           }`}
         >
           <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
@@ -142,9 +162,7 @@ const SettingsPage = () => {
                 <h3 className="font-semibold text-gray-900 dark:text-white">
                   {profile?.full_name || 'Usuario'}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {user?.email}
-                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{user?.email}</p>
                 <Button
                   type="button"
                   variant="ghost"
@@ -162,9 +180,7 @@ const SettingsPage = () => {
             <Input
               label="Nombre completo"
               value={formData.full_name}
-              onChange={(e) =>
-                setFormData({ ...formData, full_name: e.target.value })
-              }
+              onChange={e => setFormData({ ...formData, full_name: e.target.value })}
               error={errors.full_name}
               icon={User}
               placeholder="Tu nombre"
@@ -173,9 +189,7 @@ const SettingsPage = () => {
             <Input
               label="Nombre del negocio"
               value={formData.business_name}
-              onChange={(e) =>
-                setFormData({ ...formData, business_name: e.target.value })
-              }
+              onChange={e => setFormData({ ...formData, business_name: e.target.value })}
               error={errors.business_name}
               icon={Building}
               placeholder="Mi Negocio"
@@ -184,9 +198,7 @@ const SettingsPage = () => {
             <Input
               label="Teléfono"
               value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
+              onChange={e => setFormData({ ...formData, phone: e.target.value })}
               error={errors.phone}
               icon={Phone}
               placeholder="+52 55 1234 5678"
@@ -214,19 +226,13 @@ const SettingsPage = () => {
             <div className="flex items-center gap-3">
               <KeyRound className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               <div>
-                <h4 className="font-medium text-gray-900 dark:text-white">
-                  Contraseña
-                </h4>
+                <h4 className="font-medium text-gray-900 dark:text-white">Contraseña</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Última actualización: No registrada
                 </p>
               </div>
             </div>
-            <Button
-              variant="outline"
-              onClick={() => setShowPasswordModal(true)}
-              icon={KeyRound}
-            >
+            <Button variant="outline" onClick={() => setShowPasswordModal(true)} icon={KeyRound}>
               Cambiar
             </Button>
           </div>
@@ -235,12 +241,8 @@ const SettingsPage = () => {
             <div className="flex items-center gap-3">
               <Mail className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               <div>
-                <h4 className="font-medium text-gray-900 dark:text-white">
-                  Correo electrónico
-                </h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {user?.email}
-                </p>
+                <h4 className="font-medium text-gray-900 dark:text-white">Correo electrónico</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{user?.email}</p>
               </div>
             </div>
             <Button variant="outline" disabled>
@@ -261,12 +263,8 @@ const SettingsPage = () => {
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">
-                    Correo electrónico
-                  </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {user?.email}
-                  </p>
+                  <h4 className="font-medium text-gray-900 dark:text-white">Correo electrónico</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{user?.email}</p>
                 </div>
               </div>
               <Badge variant="success" icon={CheckCircle}>
@@ -278,32 +276,24 @@ const SettingsPage = () => {
               <div className="flex items-center gap-3">
                 <Building className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">
-                    Plan
-                  </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Plan Gratuito
-                  </p>
+                  <h4 className="font-medium text-gray-900 dark:text-white">Plan</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Plan Gratuito</p>
                 </div>
               </div>
-              <Badge variant="primary">
-                Free
-              </Badge>
+              <Badge variant="primary">Free</Badge>
             </div>
 
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-kawaii">
               <div className="flex items-center gap-3">
                 <User className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-white">
-                    Miembro desde
-                  </h4>
+                  <h4 className="font-medium text-gray-900 dark:text-white">Miembro desde</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {profile?.created_at
                       ? new Date(profile.created_at).toLocaleDateString('es-ES', {
                           year: 'numeric',
                           month: 'long',
-                          day: 'numeric'
+                          day: 'numeric',
                         })
                       : 'Hoy'}
                   </p>
@@ -322,17 +312,10 @@ const SettingsPage = () => {
         <CardContent>
           <div className="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-kawaii">
             <div>
-              <h4 className="font-medium text-red-900 dark:text-red-400">
-                Cerrar Sesión
-              </h4>
-              <p className="text-sm text-red-700 dark:text-red-500">
-                Salir de tu cuenta actual
-              </p>
+              <h4 className="font-medium text-red-900 dark:text-red-400">Cerrar Sesión</h4>
+              <p className="text-sm text-red-700 dark:text-red-500">Salir de tu cuenta actual</p>
             </div>
-            <Button
-              variant="danger"
-              onClick={handleSignOut}
-            >
+            <Button variant="danger" onClick={handleSignOut}>
               Cerrar Sesión
             </Button>
           </div>
@@ -350,9 +333,7 @@ const SettingsPage = () => {
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Funcionalidad de avatar próximamente
           </p>
-          <Button onClick={() => setShowAvatarModal(false)}>
-            Cerrar
-          </Button>
+          <Button onClick={() => setShowAvatarModal(false)}>Cerrar</Button>
         </div>
       </Modal>
 
@@ -367,7 +348,7 @@ const SettingsPage = () => {
             label="Contraseña actual"
             type="password"
             value={passwordData.currentPassword}
-            onChange={(e) =>
+            onChange={e =>
               setPasswordData({
                 ...passwordData,
                 currentPassword: e.target.value,
@@ -382,7 +363,7 @@ const SettingsPage = () => {
             label="Nueva contraseña"
             type="password"
             value={passwordData.newPassword}
-            onChange={(e) =>
+            onChange={e =>
               setPasswordData({
                 ...passwordData,
                 newPassword: e.target.value,
@@ -397,7 +378,7 @@ const SettingsPage = () => {
             label="Confirmar nueva contraseña"
             type="password"
             value={passwordData.confirmPassword}
-            onChange={(e) =>
+            onChange={e =>
               setPasswordData({
                 ...passwordData,
                 confirmPassword: e.target.value,

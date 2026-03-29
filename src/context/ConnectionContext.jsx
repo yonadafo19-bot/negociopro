@@ -84,7 +84,7 @@ export const ConnectionProvider = ({ children }) => {
   }, [isOnline, isSyncing])
 
   // Sync individual item
-  const syncItem = async (item) => {
+  const syncItem = async item => {
     const { resourceType, operation, data, resourceId } = item
 
     switch (resourceType) {
@@ -123,7 +123,7 @@ export const ConnectionProvider = ({ children }) => {
   }
 
   // Sync transaction
-  const syncTransaction = async (data) => {
+  const syncTransaction = async data => {
     const { transactionsService } = await import('../services/supabase')
     await transactionsService.createTransaction(data.transaction, data.items)
   }
@@ -143,7 +143,7 @@ export const ConnectionProvider = ({ children }) => {
   }
 
   // Sync catalog
-  const syncCatalog = async (data) => {
+  const syncCatalog = async data => {
     const { catalogsService } = await import('../services/supabase')
     await catalogsService.createCatalog(data.catalog, data.productIds)
   }
@@ -172,9 +172,5 @@ export const ConnectionProvider = ({ children }) => {
     queueOperations,
   }
 
-  return (
-    <ConnectionContext.Provider value={value}>
-      {children}
-    </ConnectionContext.Provider>
-  )
+  return <ConnectionContext.Provider value={value}>{children}</ConnectionContext.Provider>
 }
