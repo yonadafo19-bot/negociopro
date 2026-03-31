@@ -1,34 +1,61 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { X, Send, Mic, MicOff, Sparkles, Minimize2, Maximize2 } from 'lucide-react'
+import { X, Send, Mic, MicOff, Sparkles, Minimize2, Maximize2, Trash2 } from 'lucide-react'
 import { useToast } from '../common'
 import { useInventory } from '../../hooks/useInventory'
 import { useSales } from '../../hooks/useSales'
 import { useContacts } from '../../hooks/useContacts'
 import { useAuth } from '../../hooks/useAuth'
+import { useReports } from '../../hooks/useReports'
+import { supabase } from '../../services/supabase'
+
+const STORAGE_KEY = 'magorya_chat_history'
 
 const MagoryaChat = ({ isOpen, onClose }) => {
   const navigate = useNavigate()
   const toast = useToast()
   const { profile } = useAuth()
   const { createProduct, updateProduct, deleteProduct, products } = useInventory()
-  const { createSale, createExpense } = useSales()
+  const { createSale, createExpense, sales, expenses } = useSales()
   const { createContact, updateContact, deleteContact, contacts } = useContacts()
+  const { stats, getReport } = useReports()
 
-  const [messages, setMessages] = useState([
-    {
+  // Cargar mensajes guardados (memoria persistente)
+  const loadMessages = () => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        return parsed
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error)
+    }
+    // Mensaje de bienvenida por defecto
+    return [{
       id: 1,
       role: 'assistant',
-      content: `¡Hola ${profile?.full_name?.split(' ')[0] || 'amiga'}! 💛✨ Soy Magorya, tu asistente personal. ¿En qué te ayudo hoy? Puedo:
+      content: `¡Hola ${profile?.full_name?.split(' ')[0] || 'amiga'}! 💛✨ Soy **Magorya**, tu asistente inteligente.
 
-📦 **Inventario:** Agregar, editar o eliminar productos
-💰 **Ventas:** Registrar ventas o gastos
-👥 **Contactos:** Crear o gestionar contactos
-🧭 **Navegación:** Llevarte a cualquier página
+Tengo acceso a **toda tu información de negocios** y puedo ayudarte con:
 
-¡Escribe o háblame y te ayudo! 😊`,
-    },
-  ])
+📦 **Inventario** - Productos, stock, precios
+💰 **Ventas y Gastos** - Transacciones, reportes
+👥 **Contactos** - Clientes, proveedores
+📊 **Análisis** - Resúmenes, métricas, tendencias
+🧭 **Navegación** - Ir a cualquier página
+
+**Pregúntame lo que quieras:**
+• "¿Cómo va mi negocio?"
+• "¿Cuánto vendí hoy?"
+• "Productos con poco stock"
+• "Ventas de esta semana"
+
+¡Escribe o háblame! 😊`,
+    }]
+  }
+
+  const [messages, setMessages] = useState(loadMessages)
   const [input, setInput] = useState('')
   const [isListening, setIsListening] = useState(false)
   const [isSpeaking, setIsSpeaking] = useState(false)
@@ -41,6 +68,26 @@ const MagoryaChat = ({ isOpen, onClose }) => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  // Guardar mensajes automáticamente (memoria persistente)
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages))
+    } catch (error) {
+      console.error('Error saving chat history:', error)
+    }
+  }, [messages])
+
+  // Función para limpiar historial
+  const clearHistory = () => {
+    localStorage.removeItem(STORAGE_KEY)
+    setMessages([{
+      id: Date.now(),
+      role: 'assistant',
+      content: `¡Memoria limpiada! 🧹✨\n\nHe olvidado todas nuestras conversaciones anteriores. Podemos empezar de nuevo.\n\n¿En qué te ayudo? 😊`,
+    }])
+    toast.success('Historial de chat limpiado')
+  }
 
   // Configurar Speech Recognition
   useEffect(() => {
@@ -72,13 +119,13 @@ const MagoryaChat = ({ isOpen, onClose }) => {
         recognitionRef.current.stop()
       }
     }
-  }, [])
+  }, [toast])
 
   // Text-to-Speech
   const speak = (text) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(text)
+      const utterance = SpeechSynthesisUtterance(text.replace(/\*\*/g, ''))
       utterance.lang = 'es-ES'
       utterance.rate = 1.0
       utterance.pitch = 1.1
@@ -106,14 +153,237 @@ const MagoryaChat = ({ isOpen, onClose }) => {
     }
   }
 
-  // Procesar comandos - El cerebro de Magorya
+  // Obtener resumen del negocio
+  const getBusinessSummary = () => {
+    const totalProducts = products?.length || 0
+    const lowStock = products?.filter(p => p.stock_quantity <= p.min_stock_alert).length || 0
+    const totalContacts = contacts?.length || 0
+    const customers = contacts?.filter(c => c.contact_type === 'customer').length || 0
+    const suppliers = contacts?.filter(c => c.contact_type === 'supplier').length || 0
+
+    const today = new Date()
+    const todaySales = sales?.filter(s => {
+      const saleDate = new Date(s.transaction_date || s.created_at)
+      return saleDate.toDateString() === today.toDateString()
+    }).length || 0
+
+    return `📊 **Resumen de tu negocio:**
+
+📦 **Productos:** ${totalProducts} totales
+⚠️ **Stock bajo:** ${lowStock} productos necesitan reposición
+
+👥 **Contactos:** ${totalContacts} totales
+   • Clientes: ${customers}
+   • Proveedores: ${suppliers}
+
+💰 **Ventas hoy:** ${todaySales} transacciones
+
+${lowStock > 0 ? `\n🚨 **Alerta:** Tienes ${lowStock} productos con stock bajo. ¡Revisa tu inventario!` : ''}
+
+${todaySales === 0 ? '\n💡 **Tip:** No tienes ventas hoy. ¿Quieres registrar una?' : ''}`
+  }
+
+  // Obtener productos con stock bajo
+  const getLowStockProducts = () => {
+    const lowStock = products?.filter(p => p.stock_quantity <= p.min_stock_alert) || []
+    if (lowStock.length === 0) {
+      return '✅ ¡Excelente! Todos tus productos tienen stock suficiente. 📦'
+    }
+    let response = `⚠️ **Productos con stock bajo:**\n\n`
+    lowStock.forEach(p => {
+      response += `• **${p.name}** - Stock: ${p.stock_quantity} (mín: ${p.min_stock_alert})\n`
+    })
+    response += '\n¿Quieres que te lleve al inventario para reponer?'
+    return response
+  }
+
+  // Obtener ventas del periodo
+  const getSalesInfo = (period = 'hoy') => {
+    const today = new Date()
+    let filteredSales = sales || []
+
+    if (period === 'hoy') {
+      filteredSales = sales?.filter(s => {
+        const saleDate = new Date(s.transaction_date || s.created_at)
+        return saleDate.toDateString() === today.toDateString()
+      }) || []
+    } else if (period === 'semana') {
+      const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)
+      filteredSales = sales?.filter(s => {
+        const saleDate = new Date(s.transaction_date || s.created_at)
+        return saleDate >= weekAgo
+      }) || []
+    } else if (period === 'mes') {
+      const monthAgo = new Date(today.getFullYear(), today.getMonth(), 1)
+      filteredSales = sales?.filter(s => {
+        const saleDate = new Date(s.transaction_date || s.created_at)
+        return saleDate >= monthAgo
+      }) || []
+    }
+
+    const total = filteredSales.reduce((sum, s) => sum + (s.total || 0), 0)
+    const count = filteredSales.length
+
+    return `💰 **Ventas ${period}:**\n\n• Transacciones: ${count}\n• Total: $${total.toLocaleString()}\n\n${count === 0 ? '¿Quieres registrar una venta?' : '¡Buen trabajo! 🎉'}`
+  }
+
+  // Buscar producto
+  const searchProduct = (query) => {
+    const found = products?.filter(p =>
+      p.name.toLowerCase().includes(query.toLowerCase()) ||
+      p.sku?.toLowerCase().includes(query.toLowerCase()) ||
+      p.category?.toLowerCase().includes(query.toLowerCase())
+    ) || []
+
+    if (found.length === 0) {
+      return `No encontré ningún producto con "${query}". ¿Quieres crear uno?`
+    }
+
+    if (found.length === 1) {
+      const p = found[0]
+      return `📦 **${p.name}**\n\n• SKU: ${p.sku || 'N/A'}\n• Categoría: ${p.category || 'N/A'}\n• Stock: ${p.stock_quantity}\n• Precio venta: $${p.selling_price}\n• Costo: $${p.cost_price}\n\n${p.stock_quantity <= p.min_stock_alert ? '⚠️ ¡Stock bajo!' : '✅ Stock OK'}`
+    }
+
+    let response = `Encontré ${found.length} productos:\n\n`
+    found.slice(0, 5).forEach(p => {
+      response += `• **${p.name}** - Stock: ${p.stock_quantity} - $${p.selling_price}\n`
+    })
+    if (found.length > 5) {
+      response += `\n... y ${found.length - 5} más.`
+    }
+    return response
+  }
+
+  // Buscar contacto
+  const searchContact = (query) => {
+    const found = contacts?.filter(c =>
+      c.name.toLowerCase().includes(query.toLowerCase()) ||
+      c.email?.toLowerCase().includes(query.toLowerCase()) ||
+      c.phone?.toLowerCase().includes(query.toLowerCase())
+    ) || []
+
+    if (found.length === 0) {
+      return `No encontré ningún contacto con "${query}". ¿Quieres crear uno?`
+    }
+
+    let response = `👥 **Contactos encontrados:**\n\n`
+    found.slice(0, 5).forEach(c => {
+      const typeEmoji = c.contact_type === 'customer' ? '🛒' : c.contact_type === 'supplier' ? '🚚' : '👤'
+      response += `${typeEmoji} **${c.name}** - ${c.contact_type || 'Sin tipo'}\n`
+    })
+    return response
+  }
+
+  // CEREBRO DE MAGORYA - Procesamiento inteligente
   const processCommand = async (userInput) => {
     const input = userInput.toLowerCase().trim()
     setIsProcessing(true)
 
     try {
+      // COMANDOS DE RESUMEN/ESTADO
+      if (input.includes('cómo va') || input.includes('como va') || input.includes('estado') ||
+          input.includes('resumen') || input.includes('mi negocio') || input.includes('información')) {
+        return getBusinessSummary()
+      }
+
+      // COMANDOS DE STOCK BAJO
+      if (input.includes('stock bajo') || input.includes('poco stock') || input.includes('reponer') ||
+          input.includes('falta stock') || input.includes('alerta')) {
+        return getLowStockProducts()
+      }
+
+      // COMANDOS DE VENTAS
+      if (input.includes('venta') || input.includes('vendí') || input.includes('ingresos')) {
+        if (input.includes('hoy')) return getSalesInfo('hoy')
+        if (input.includes('semana') || input.includes('esta semana')) return getSalesInfo('semana')
+        if (input.includes('mes') || input.includes('este mes')) return getSalesInfo('mes')
+        if (input.includes('registrar') || input.includes('nueva') || input.includes('crear')) {
+          navigate('/app/sales')
+          setTimeout(() => {
+            const saleBtn = document.querySelector('[data-action="new-sale"]')
+            saleBtn?.click()
+          }, 500)
+          return 'Abriendo formulario de nueva venta 💸'
+        }
+        return getSalesInfo('hoy')
+      }
+
+      // COMANDOS DE PRODUCTOS
+      if (input.includes('producto')) {
+        // Buscar producto específico
+        const searchMatch = input.match(/producto\s+(["']?)(.+?)\1$/i) ||
+                            input.match(/buscar\s+(["']?)(.+?)\1$/i) ||
+                            input.match(/buscar producto\s+(["']?)(.+?)\1$/i)
+        if (searchMatch) {
+          return searchProduct(searchMatch[2])
+        }
+
+        // Crear producto
+        if (input.includes('agrega') || input.includes('crear') || input.includes('nuevo')) {
+          const nameMatch = input.match(/producto\s+["']?([^"']+)["']?/i) ||
+                          input.match(/agrega\s+["']?([^"']+)["']?/i)
+          if (nameMatch) {
+            const productName = nameMatch[1]
+            await createProduct({
+              name: productName,
+              sku: `SKU-${Date.now()}`,
+              category: 'General',
+              cost_price: 1000,
+              selling_price: 1500,
+              stock_quantity: 10,
+            })
+            return `✅ ¡Listo! Agregué **"${productName}"** a tu inventario.\n\n¿Quieres agregar algo más?`
+          }
+          navigate('/app/inventory')
+          return 'Te abro el formulario para agregar un producto 📝'
+        }
+
+        // Cuántos productos
+        if (input.includes('cuántos') || input.includes('cuantos') || input.includes('cuanto')) {
+          return `Tienes **${products?.length || 0}** productos en tu inventario 📦`
+        }
+      }
+
+      // COMANDOS DE CONTACTOS
+      if (input.includes('contacto') || input.includes('cliente') || input.includes('proveedor')) {
+        const searchMatch = input.match(/(?:contacto|cliente|proveedor)\s+(["']?)(.+?)\1$/i) ||
+                            input.match(/buscar\s+(["']?)(.+?)\1$/i)
+        if (searchMatch) {
+          return searchContact(searchMatch[2])
+        }
+
+        if (input.includes('nuevo') || input.includes('crear') || input.includes('agregar')) {
+          const nameMatch = input.match(/contacto\s+["']?([^"']+)["']?/i) ||
+                          input.match(/cliente\s+["']?([^"']+)["']?/i)
+          if (nameMatch) {
+            const contactName = nameMatch[1]
+            await createContact({
+              name: contactName,
+              contact_type: 'customer',
+            })
+            return `✅ ¡Perfecto! Creé el contacto de **"${contactName}"** 👥`
+          }
+          navigate('/app/contacts')
+          return 'Te llevo a contactos para crear uno nuevo 📝'
+        }
+
+        if (input.includes('cuántos') || input.includes('cuantos')) {
+          return `Tienes **${contacts?.length || 0}** contactos registrados 👥`
+        }
+      }
+
+      // BÚSQUEDA GENERAL
+      if (input.includes('buscar') && !input.includes('producto') && !input.includes('contacto')) {
+        const query = input.replace(/buscar\s+/, '').trim()
+        // Buscar en productos y contactos
+        const productResults = searchProduct(query)
+        const contactResults = searchContact(query)
+        return `📦 **Productos:**\n${productResults}\n\n👥 **Contactos:**\n${contactResults}`
+      }
+
       // COMANDOS DE NAVEGACIÓN
-      if (input.includes('ir a') || input.includes('ve a') || input.includes('navega') || input.includes('abre')) {
+      if (input.includes('ir a') || input.includes('ve a') || input.includes('navega') ||
+          input.includes('abre') || input.includes('llevara') || input.includes('llévame')) {
         if (input.includes('inventario') || input.includes('productos')) {
           navigate('/app/inventory')
           return '¡Te llevo al inventario! 📦'
@@ -126,87 +396,59 @@ const MagoryaChat = ({ isOpen, onClose }) => {
           navigate('/app/contacts')
           return '¡Allá vamos a tus contactos! 👥'
         }
-        if (input.includes('reporte') || input.includes('reportes')) {
+        if (input.includes('reporte') || input.includes('reportes') || input.includes('analític')) {
           navigate('/app/reports')
           return '¡Tus reportes están aquí! 📊'
         }
-        if (input.includes('dashboard') || input.includes('inicio')) {
+        if (input.includes('catalogo') || input.includes('catálogo')) {
+          navigate('/app/catalogs')
+          return '¡Abriendo catálogos! 📚'
+        }
+        if (input.includes('ajuste') || input.includes('configuración') || input.includes('settings')) {
+          navigate('/app/settings')
+          return '¡Allá vamos a la configuración! ⚙️'
+        }
+        if (input.includes('dashboard') || input.includes('inicio') || input.includes('home')) {
           navigate('/app/dashboard')
           return '¡Volviendo al inicio! 🏠'
         }
       }
 
-      // COMANDOS DE INVENTARIO - CREAR
-      if (input.includes('agrega') || input.includes('crear') || input.includes('nuevo producto')) {
-        const nameMatch = input.match(/producto\s+["']?([^"']+)["']?/i) || input.match(/agrega\s+["']?([^"']+)["']?/i)
-        if (nameMatch) {
-          const productName = nameMatch[1]
-          await createProduct({
-            name: productName,
-            sku: `SKU-${Date.now()}`,
-            category: 'General',
-            cost_price: 1000,
-            selling_price: 1500,
-            stock_quantity: 10,
-          })
-          return `¡Listo! Agregué "${productName}" a tu inventario ✨¿Quiéres agregar algo más?`
-        }
-        navigate('/app/inventory')
-        return 'Te abro el formulario para que agregues tu producto 📝'
-      }
-
-      // COMANDOS DE VENTAS
-      if (input.includes('venta') || input.includes('vender')) {
-        if (input.includes('registrar') || input.includes('nueva')) {
-          navigate('/app/sales')
-          setTimeout(() => {
-            // Trigger open modal if possible
-            const saleBtn = document.querySelector('[data-action="new-sale"]')
-            saleBtn?.click()
-          }, 500)
-          return '¡Abriendo formulario de venta! 💸'
-        }
-      }
-
-      // COMANDOS DE CONTACTOS
-      if (input.includes('contacto') && (input.includes('nuevo') || input.includes('crear') || input.includes('agregar'))) {
-        const nameMatch = input.match(/contacto\s+["']?([^"']+)["']?/i)
-        if (nameMatch) {
-          const contactName = nameMatch[1]
-          await createContact({
-            name: contactName,
-            contact_type: 'customer',
-          })
-          return `¡Perfecto! Creé el contacto de "${contactName}" 👥`
-        }
-        navigate('/app/contacts')
-        return 'Te llevo a contactos para crear uno nuevo 📝'
-      }
-
       // COMANDOS DE AYUDA
-      if (input.includes('ayuda') || input.includes('help') || input.includes('qué puedes') || input.includes('¿qué haces')) {
-        return `¡Claro que te ayudo! 😊 Puedo hacer:
+      if (input.includes('ayuda') || input.includes('help') || input.includes('qué puedes') ||
+          input.includes('¿qué haces') || input.includes('qué hace') || input.includes('qué puedes hacer')) {
+        return `¡Claro que te ayudo! 😊 Soy Magorya y **tengo acceso a toda tu información de negocios**.
 
-📦 **Productos:** "Agrega producto X" o "Crea producto Y"
-💰 **Ventas:** "Registrar venta" o "Nueva venta"
-👥 **Contactos:** "Crear contacto Juan"
-🧭 **Navegar:** "Ir a inventario" o "Ve a ventas"
-❓ **Preguntar:** "¿Cuántos productos tengo?"
+**Lo que puedo hacer:**
 
-¡Solo dime qué necesitas! 💪`
+📊 **Análisis del negocio:**
+• "¿Cómo va mi negocio?"
+• "Resumen de hoy"
+• "Productos con stock bajo"
+
+💰 **Ventas:**
+• "¿Cuánto vendí hoy/semana/mes?"
+• "Registrar nueva venta"
+• "Ventas del periodo"
+
+📦 **Productos:**
+• "Buscar producto X"
+• "Agrega producto nombre"
+• "¿Cuántos productos tengo?"
+
+👥 **Contactos:**
+• "Buscar cliente X"
+• "Crear contacto Juan"
+• "¿Cuántos clientes?"
+
+🧭 **Navegación:**
+• "Ir a inventario/ventas/contactos"
+• "Ve a reportes"
+
+¡Solo dime qué necesitas! 💪✨`
       }
 
-      // PREGUNTAS SOBRE DATOS
-      if (input.includes('cuántos') || input.includes('cuanto')) {
-        if (input.includes('producto')) {
-          return `Tienes ${products.length} productos en tu inventario 📦`
-        }
-        if (input.includes('contacto') || input.includes('cliente')) {
-          return `Tienes ${contacts.length} contactos registrados 👥`
-        }
-      }
-
-      // RESPUESTA AMIGABLE POR DEFECTO
+      // RESPUESTAS AMIGABLES POR DEFECTO
       const responses = [
         `¡Interesante! ¿Podrías darme más detalles? 🤔`,
         `¡Claro! ¿Qué más necesitas? 💛`,
@@ -232,14 +474,12 @@ const MagoryaChat = ({ isOpen, onClose }) => {
     setInput('')
     setIsProcessing(true)
 
-    // Simular pequeño delay para naturalidad
     await new Promise((resolve) => setTimeout(resolve, 500))
 
     const response = await processCommand(input)
     const assistantMessage = { id: Date.now() + 1, role: 'assistant', content: response }
     setMessages((prev) => [...prev, assistantMessage])
 
-    // Hablar la respuesta
     speak(response)
   }
 
@@ -268,7 +508,7 @@ const MagoryaChat = ({ isOpen, onClose }) => {
             {!isMinimized && (
               <>
                 <h3 className="text-white font-semibold text-sm">Magorya ✨</h3>
-                <p className="text-white/70 text-xs">Tu asistente virtual</p>
+                <p className="text-white/70 text-xs">Asistente Inteligente</p>
               </>
             )}
           </div>
@@ -281,6 +521,16 @@ const MagoryaChat = ({ isOpen, onClose }) => {
           >
             {isMinimized ? <Maximize2 className="h-4 w-4 text-white" /> : <Minimize2 className="h-4 w-4 text-white" />}
           </button>
+          {!isMinimized && (
+            <button
+              onClick={clearHistory}
+              className="p-1 hover:bg-white/10 rounded-lg transition-colors"
+              aria-label="Limpiar historial"
+              title="Limpiar historial"
+            >
+              <Trash2 className="h-4 w-4 text-white" />
+            </button>
+          )}
           <button
             onClick={onClose}
             className="p-1 hover:bg-white/10 rounded-lg transition-colors"
@@ -301,7 +551,7 @@ const MagoryaChat = ({ isOpen, onClose }) => {
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] p-3 rounded-2xl ${
+                  className={`max-w-[85%] p-3 rounded-2xl ${
                     msg.role === 'user'
                       ? 'bg-neo-primary dark:bg-dark-primary text-white'
                       : 'bg-neo-surface dark:bg-dark-surface text-neo-text dark:text-dark-text border border-neo-border dark:border-dark-border'
@@ -345,7 +595,7 @@ const MagoryaChat = ({ isOpen, onClose }) => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Escribe o usa el micrófono 🎤"
+                placeholder="Pregunta lo que quieras... 🎤"
                 disabled={isProcessing}
                 className="flex-1 px-4 py-2 bg-neo-bg dark:bg-dark-bg border border-neo-border dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-neo-primary dark:focus:ring-dark-primary text-neo-text dark:text-dark-text text-sm disabled:opacity-50"
               />
