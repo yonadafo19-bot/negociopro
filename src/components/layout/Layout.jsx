@@ -1,10 +1,15 @@
+import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import Header from './Header'
 import Sidebar from './Sidebar'
+import { MagoryaChat } from '../chat'
+import { Sparkles, X } from 'lucide-react'
 
 const Layout = () => {
   const { loading } = useAuth()
+  const [showChat, setShowChat] = useState(false)
+  const [chatOpen, setChatOpen] = useState(false)
 
   if (loading) {
     return (
@@ -31,6 +36,20 @@ const Layout = () => {
           <Outlet />
         </div>
       </main>
+
+      {/* Floating Chat Button */}
+      {!chatOpen && (
+        <button
+          onClick={() => setChatOpen(true)}
+          className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-neo-primary to-neo-accent dark:from-dark-primary dark:to-dark-accent text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
+          aria-label="Abrir asistente Magorya"
+        >
+          <Sparkles className="h-6 w-6 group-hover:rotate-12 transition-transform" />
+        </button>
+      )}
+
+      {/* Magorya Chat */}
+      <MagoryaChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   )
 }
