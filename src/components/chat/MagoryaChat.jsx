@@ -352,6 +352,75 @@ ${newData.email ? `📧 **Email:** ${newData.email}` : ''}
             return `❌ Hubo un error al crear el contacto: ${error.message}. ¿Intentamos de nuevo?`
           }
         }
+
+        // FORMULARIO DE PRODUCTO
+        if (form.type === 'product') {
+          if (form.step === 1) { // Nombre
+            newData.name = userInput
+            setActiveForm({ ...form, step: 2, data: newData })
+            return `¡Perfecto! El producto es **${userInput}** 📦
+
+Ahora necesito el **precio de venta**:
+¿A cuánto lo vas a vender?`
+          }
+
+          if (form.step === 2) { // Precio de venta
+            const price = parseFloat(input.replace(/[$,.]/g, ''))
+            if (isNaN(price) || price <= 0) {
+              return `❌ Precio inválido. Por favor ingresa un número válido.`
+            }
+            newData.selling_price = price
+            setActiveForm({ ...form, step: 3, data: newData })
+            return `Precio de venta: $${price.toLocaleString()}
+
+Ahora el **precio de costo**:
+¿A cuánto te costó?`
+          }
+
+          if (form.step === 3) { // Precio de costo
+            const cost = parseFloat(input.replace(/[$,.]/g, ''))
+            if (isNaN(cost) || cost < 0) {
+              return `❌ Costo inválido. Por favor ingresa un número válido.`
+            }
+            newData.cost_price = cost
+            setActiveForm({ ...form, step: 4, data: newData })
+            const margin = ((newData.selling_price - cost) / cost * 100).toFixed(1)
+            return `Costo: $${cost.toLocaleString()}
+Margen: ${margin}%
+
+Ahora el **stock inicial**:
+¿Cuántas unidades tienes?`
+          }
+
+          if (form.step === 4) { // Stock
+            const stock = parseInt(input.replace(/[^0-9]/g, ''))
+            if (isNaN(stock) || stock < 0) {
+              return `❌ Stock inválido. Por favor ingresa un número válido.`
+            }
+            newData.stock_quantity = stock
+            newData.min_stock_alert = Math.max(5, Math.floor(stock * 0.2))
+            newData.sku = `SKU-${Date.now()}`
+            newData.category = 'General'
+
+            // Crear el producto
+            try {
+              await createProduct(newData)
+              setActiveForm(null)
+              return `✅ ¡Producto creado exitosamente!
+
+📦 **Nombre:** ${newData.name}
+💰 **Precio venta:** $${newData.selling_price.toLocaleString()}
+📉 **Costo:** $${newData.cost_price.toLocaleString()}
+📊 **Stock:** ${newData.stock_quantity} unidades
+🔔 **Alerta:** ${newData.min_stock_alert} unidades
+
+¿Hay algo más en lo que pueda ayudarte? 😊`
+            } catch (error) {
+              setActiveForm(null)
+              return `❌ Hubo un error al crear el producto: ${error.message}. ¿Intentamos de nuevo?`
+            }
+          }
+        }
       }
 
       // COMANDOS PARA INICIAR FORMULARIO CONVERSACIONAL
@@ -426,10 +495,14 @@ ${newData.email ? `📧 **Email:** ${newData.email}` : ''}
 
       // Productos
       if (input.includes('producto')) {
+        // Verificar si quiere formulario conversacional
+        const useForm = formTriggers.some(t => input.includes(t)) ||
+                        (conversationState?.action === 'create_product' && isAffirmative)
+
         // Crear - PRIMERO
-        if (input.includes('crear') || input.includes('nuevo') || input.includes('agrega') || input === 'producto') {
+        if (input.includes('crear') || input.includes('nuevo') || input.includes('agrega') || input === 'producto' || useForm) {
           const nameMatch = input.match(/producto\s+["']?([^"']+)["']?/i) || input.match(/crear\s+(["']?)(.+?)\1/i)
-          if (nameMatch && nameMatch[1]) {
+          if (nameMatch && nameMatch[1] && !useForm) {
             const productName = nameMatch[1]
             await createProduct({
               name: productName,
@@ -441,8 +514,12 @@ ${newData.email ? `📧 **Email:** ${newData.email}` : ''}
             })
             return `✅ Creé "${productName}" en tu inventario.`
           }
-          navigate('/app/inventory')
-          return 'Abriendo formulario de producto... 📦'
+          // Iniciar formulario conversacional
+          setConversationState(null)
+          setActiveForm({ type: 'product', step: 1, data: {} })
+          return `¡Perfecto! Voy a crear el producto contigo 📦
+
+¿Cuál es el **nombre** del producto?`
         }
         // Buscar - DESPUÉS
         const searchMatch = input.match(/producto\s+(["']?)(.+?)\1$/i)
