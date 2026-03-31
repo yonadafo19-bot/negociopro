@@ -227,6 +227,179 @@ ${todaySales === 0 ? '\n💡 **Tip:** No tienes ventas hoy. ¿Quieres registrar 
     return `💰 **Ventas ${period}:**\n\n• Transacciones: ${count}\n• Total: $${total.toLocaleString()}\n\n${count === 0 ? '¿Quieres registrar una venta?' : '¡Buen trabajo! 🎉'}`
   }
 
+  // Análisis de tendencias - INTELIGENCIA AVANZADA
+  const getTrendAnalysis = () => {
+    const today = new Date()
+    const lastWeek = []
+    const thisWeek = []
+
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today)
+      date.setDate(date.getDate() - i)
+
+      const daySales = sales?.filter(s => {
+        const saleDate = new Date(s.transaction_date || s.created_at)
+        return saleDate.toDateString() === date.toDateString()
+      }) || []
+
+      const total = daySales.reduce((sum, s) => sum + (s.total || 0), 0)
+      if (i < 7) thisWeek.push({ day: date, total })
+      if (i >= 7 && i < 14) lastWeek.push({ day: date, total })
+    }
+
+    const thisWeekTotal = thisWeek.reduce((sum, d) => sum + d.total, 0)
+    const lastWeekTotal = lastWeek.reduce((sum, d) => sum + d.total, 0)
+    const change = lastWeekTotal > 0 ? ((thisWeekTotal - lastWeekTotal) / lastWeekTotal * 100).toFixed(1) : 0
+    const isPositive = thisWeekTotal >= lastWeekTotal
+
+    return `📈 **Análisis de Tendencias:**
+
+💰 Esta semana: $${thisWeekTotal.toLocaleString()}
+💰 Semana pasada: $${lastWeekTotal.toLocaleString()}
+${isPositive ? '📉' : '📉'} Variación: ${change > 0 ? '+' : ''}${change}%
+
+${isPositive && change > 0 ? '🎉 ¡Excelente! Tus ventas están creciendo.' : isPositive && change == 0 ? '➡️ Tus ventas se mantienen estables.' : '⚠️ Tus ventas han disminuido. ¿Quieres ver qué productos se venden más?'}`
+  }
+
+  // Productos más vendidos - INTELIGENCIA
+  const getTopProducts = () => {
+    const productSales = {}
+    sales?.forEach(sale => {
+      sale.transaction_items?.forEach(item => {
+        const productName = products?.find(p => p.id === item.product_id)?.name || 'Producto'
+        productSales[productName] = (productSales[productName] || 0) + (item.quantity || 0)
+      })
+    }) || {}
+
+    const sorted = Object.entries(productSales).sort((a, b) => b[1] - a[1]).slice(0, 5)
+
+    if (sorted.length === 0) {
+      return 'Aún no tienes ventas registradas. ¿Quieres registrar una? 💸'
+    }
+
+    let response = `🏆 **Productos más vendidos:**\n\n`
+    sorted.forEach(([name, qty], i) => {
+      response += `${i + 1}. **${name}** - ${qty} vendidos\n`
+    })
+    return response
+  }
+
+  // Mejores clientes - INTELIGENCIA
+  const getTopCustomers = () => {
+    const customerSpends = {}
+    sales?.forEach(sale => {
+      if (sale.contact_id) {
+        const customer = contacts?.find(c => c.id === sale.contact_id)?.name || 'Cliente'
+        customerSpends[customer] = (customerSpends[customer] || 0) + (sale.total || 0)
+      }
+    }) || {}
+
+    const sorted = Object.entries(customerSpends).sort((a, b) => b[1] - a[1]).slice(0, 5)
+
+    if (sorted.length === 0) {
+      return 'Aún no tienes ventas con clientes registrados. ¿Quieres crear un cliente? 👥'
+    }
+
+    let response = `⭐ **Mejores clientes:**\n\n`
+    sorted.forEach(([name, amount], i) => {
+      response += `${i + 1}. **${name}** - $${amount.toLocaleString()}\n`
+    })
+    return response
+  }
+
+  // Sugerencias inteligentes - INTELIGENCIA AVANZADA
+  const getSmartSuggestions = () => {
+    const suggestions = []
+
+    // Sugerencias de stock bajo
+    const lowStock = products?.filter(p => p.stock_quantity <= p.min_stock_alert) || []
+    if (lowStock.length > 0) {
+      suggestions.push(`📦 Tienes ${lowStock.length} productos con stock bajo. Considera reponer: ${lowStock.slice(0, 2).map(p => p.name).join(', ')}`)
+    }
+
+    // Sugerencias de productos sin stock
+    const noStock = products?.filter(p => p.stock_quantity === 0) || []
+    if (noStock.length > 0) {
+      suggestions.push(`🚨 ${noStock.length} productos están agotados: ${noStock.slice(0, 2).map(p => p.name).join(', ')}`)
+    }
+
+    // Sugerencias de precios
+    const lowMargin = products?.filter(p => {
+      const margin = ((p.selling_price - p.cost_price) / p.cost_price) * 100
+      return margin < 20
+    }) || []
+    if (lowMargin.length > 0) {
+      suggestions.push(`💡 ${lowMargin.length} productos tienen margen bajo (<20%). Considera ajustar precios.`)
+    }
+
+    // Sugerencias de ventas
+    const today = new Date()
+    const todaySales = sales?.filter(s => {
+      const saleDate = new Date(s.transaction_date || s.created_at)
+      return saleDate.toDateString() === today.toDateString()
+    }).length || 0
+    if (todaySales === 0) {
+      suggestions.push(`💸 No has registrado ventas hoy. ¿Quieres registrar una?`)
+    }
+
+    if (suggestions.length === 0) {
+      return `✨ **¡Todo está excelente!**\n\nNo tengo sugerencias urgentes. Tu negocio parece estar funcionando bien. ¿Hay algo específico en lo que pueda ayudarte?`
+    }
+
+    return `💡 **Sugerencias inteligentes:**\n\n` + suggestions.join('\n\n')
+  }
+
+  // Análisis de rentabilidad - INTELIGENCIA AVANZADA
+  const getProfitabilityAnalysis = () => {
+    let totalRevenue = 0
+    let totalCost = 0
+
+    sales?.forEach(sale => {
+      sale.transaction_items?.forEach(item => {
+        const product = products?.find(p => p.id === item.product_id)
+        if (product) {
+          totalRevenue += (product.selling_price || 0) * (item.quantity || 0)
+          totalCost += (product.cost_price || 0) * (item.quantity || 0)
+        }
+      })
+    }) || {}
+
+    const profit = totalRevenue - totalCost
+    const margin = totalRevenue > 0 ? ((profit / totalRevenue) * 100).toFixed(1) : 0
+
+    return `💹 **Análisis de Rentabilidad:**
+
+💰 Ingresos totales: $${totalRevenue.toLocaleString()}
+📦 Costos totales: $${totalCost.toLocaleString()}
+💵 Ganancia neta: $${profit.toLocaleString()}
+📊 Margen de ganancia: ${margin}%
+
+${margin > 40 ? '🎉 ¡Excelente margen de ganancia!' : margin > 20 ? '👍 Margen saludable.' : '⚠️ Margen bajo. Considera ajustar precios.'}`
+  }
+
+  // Proyección de ventas - INTELIGENCIA AVANZADA
+  const getSalesProjection = () => {
+    const today = new Date()
+    const thisMonthSales = sales?.filter(s => {
+      const saleDate = new Date(s.transaction_date || s.created_at)
+      return saleDate.getMonth() === today.getMonth() && saleDate.getFullYear() === today.getFullYear()
+    }) || []
+
+    const daysSoFar = today.getDate()
+    const totalSoFar = thisMonthSales.reduce((sum, s) => sum + (s.total || 0), 0)
+    const dailyAverage = daysSoFar > 0 ? totalSoFar / daysSoFar : 0
+    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()
+    const projected = dailyAverage * daysInMonth
+
+    return `🔮 **Proyección de ventas este mes:**
+
+💰 Vendido hasta hoy: $${totalSoFar.toLocaleString()} (${daysSoFar} días)
+📊 Promedio diario: $${dailyAverage.toFixed(0).toLocaleString()}
+🔮 Proyección fin de mes: $${projected.toLocaleString()}
+
+${projected > totalSoFar ? `📈 Vas por buen camino para llegar a $${projected.toLocaleString()}` : '📊 Mantén el ritmo'}`
+  }
+
   // Buscar producto
   const searchProduct = (query) => {
     const found = products?.filter(p =>
@@ -280,6 +453,71 @@ ${todaySales === 0 ? '\n💡 **Tip:** No tienes ventas hoy. ¿Quieres registrar 
     setIsProcessing(true)
 
     try {
+      // COMANDOS DE AYUDA - PRIMERO (mayor prioridad)
+      // Detectar variaciones de "qué puedes hacer", "qué haces", "para qué sirves", etc.
+      const ayudaPatterns = [
+        'ayuda', 'help',
+        'que puedes', 'qué puedes',
+        'que haces', 'qué haces',
+        'que hace', 'qué hace',
+        'para que sirves', 'para qué sirves',
+        'que puedes hacer', 'qué puedes hacer',
+        'que puedes hacer por mi', 'qué puedes hacer por mi',
+        'que puedes hacer por mí', 'qué puedes hacer por mí',
+        'que puedes hacer por ti', 'qué puedes hacer por ti',
+        'que puedes hacer amiga', 'qué puedes hacer amiga',
+        'cuales son tus funciones', 'cuáles son tus funciones',
+        'que me puedes ofrecer', 'qué me puedes ofrecer',
+        'que puedes ayudarme', 'qué puedes ayudarme',
+        'explicame que haces', 'explícame que haces',
+      ]
+
+      if (ayudaPatterns.some(pattern => input.includes(pattern))) {
+        return `¡Claro que te ayudo! 😊 Soy **Magorya**, tu asistente inteligente con acceso a **toda tu información de negocios**.
+
+**Lo que puedo hacer por ti:**
+
+📊 **Análisis del negocio:**
+• "¿Cómo va mi negocio?" - Resumen completo
+• "Resumen de hoy" - Estado actual
+• "Productos con stock bajo" - Alertas
+• "¿Cuánto vendí esta semana?" - Ventas por periodo
+
+🤖 **Inteligencia avanzada:**
+• "Tendencias de ventas" - Análisis evolutivo
+• "Productos más vendidos" - Ranking top
+• "Mejores clientes" - Clientes VIP
+• "Sugerencias" - Recomendaciones inteligentes
+• "Rentabilidad" - Análisis de ganancias
+• "Proyección del mes" - Predicción de ventas
+
+💰 **Ventas y Gastos:**
+• "¿Cuánto vendí hoy/semana/mes?"
+• "Registrar nueva venta"
+• "Ventas de este mes"
+
+📦 **Inventario:**
+• "Buscar producto X" - Info de productos
+• "Agrega producto [nombre]" - Crear productos
+• "¿Cuántos productos tengo?"
+• "Stock bajo" - Alertas de reposición
+
+👥 **Contactos:**
+• "Buscar cliente X" - Info de contactos
+• "Crear contacto Juan" - Agregar contactos
+• "¿Cuántos clientes tengo?"
+
+🧭 **Navegación:**
+• "Ir a inventario/ventas/contactos"
+• "Ve a reportes" - Ir a cualquier página
+
+💬 **Memoria:**
+• Recuerdo TODAS nuestras conversaciones
+• Tengo contexto completo de tu negocio
+
+¡Solo dime qué necesitas! 💪✨`
+      }
+
       // COMANDOS DE RESUMEN/ESTADO
       if (input.includes('cómo va') || input.includes('como va') || input.includes('estado') ||
           input.includes('resumen') || input.includes('mi negocio') || input.includes('información')) {
@@ -381,6 +619,43 @@ ${todaySales === 0 ? '\n💡 **Tip:** No tienes ventas hoy. ¿Quieres registrar 
         return `📦 **Productos:**\n${productResults}\n\n👥 **Contactos:**\n${contactResults}`
       }
 
+      // COMANDOS INTELIGENTES AVANZADOS
+      // Análisis de tendencias
+      if (input.includes('tendencia') || input.includes('tendencias') || input.includes('analisis') || input.includes('análisis') ||
+          input.includes('como van las ventas') || input.includes('como van las cosas') || input.includes('evolución')) {
+        return getTrendAnalysis()
+      }
+
+      // Productos más vendidos
+      if (input.includes('productos mas vendidos') || input.includes('productos más vendidos') || input.includes('top productos') ||
+          input.includes('mejores productos') || input.includes('ranking productos')) {
+        return getTopProducts()
+      }
+
+      // Mejores clientes
+      if (input.includes('mejores clientes') || input.includes('top clientes') || input.includes('clientes mas importantes') ||
+          input.includes('clientes más importantes') || input.includes('ranking clientes')) {
+        return getTopCustomers()
+      }
+
+      // Sugerencias inteligentes
+      if (input.includes('sugerencia') || input.includes('sugerencias') || input.includes('recomendacion') || input.includes('recomendaciones') ||
+          input.includes('que debo hacer') || input.includes('qué debo hacer') || input.includes('que me recomiendas') || input.includes('qué me recomiendas')) {
+        return getSmartSuggestions()
+      }
+
+      // Rentabilidad
+      if (input.includes('rentabilidad') || input.includes('ganancia') || input.includes('utilidad') || input.includes('margen') ||
+          input.includes('profit') || input.includes('cuanto gano') || input.includes('cuánto gano')) {
+        return getProfitabilityAnalysis()
+      }
+
+      // Proyecciones
+      if (input.includes('proyeccion') || input.includes('proyección') || input.includes('pronostico') || input.includes('pronóstico') ||
+          input.includes('predecir') || input.includes('proyectado') || input.includes('voy a llegar') || input.includes('voy a vender')) {
+        return getSalesProjection()
+      }
+
       // COMANDOS DE NAVEGACIÓN
       if (input.includes('ir a') || input.includes('ve a') || input.includes('navega') ||
           input.includes('abre') || input.includes('llevara') || input.includes('llévame')) {
@@ -412,40 +687,6 @@ ${todaySales === 0 ? '\n💡 **Tip:** No tienes ventas hoy. ¿Quieres registrar 
           navigate('/app/dashboard')
           return '¡Volviendo al inicio! 🏠'
         }
-      }
-
-      // COMANDOS DE AYUDA
-      if (input.includes('ayuda') || input.includes('help') || input.includes('qué puedes') ||
-          input.includes('¿qué haces') || input.includes('qué hace') || input.includes('qué puedes hacer')) {
-        return `¡Claro que te ayudo! 😊 Soy Magorya y **tengo acceso a toda tu información de negocios**.
-
-**Lo que puedo hacer:**
-
-📊 **Análisis del negocio:**
-• "¿Cómo va mi negocio?"
-• "Resumen de hoy"
-• "Productos con stock bajo"
-
-💰 **Ventas:**
-• "¿Cuánto vendí hoy/semana/mes?"
-• "Registrar nueva venta"
-• "Ventas del periodo"
-
-📦 **Productos:**
-• "Buscar producto X"
-• "Agrega producto nombre"
-• "¿Cuántos productos tengo?"
-
-👥 **Contactos:**
-• "Buscar cliente X"
-• "Crear contacto Juan"
-• "¿Cuántos clientes?"
-
-🧭 **Navegación:**
-• "Ir a inventario/ventas/contactos"
-• "Ve a reportes"
-
-¡Solo dime qué necesitas! 💪✨`
       }
 
       // RESPUESTAS AMIGABLES POR DEFECTO
