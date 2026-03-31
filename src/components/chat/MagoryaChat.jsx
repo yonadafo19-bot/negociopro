@@ -423,6 +423,132 @@ Ahora el **stock inicial**:
             }
           }
         }
+
+        // FORMULARIO DE VENTA
+        if (form.type === 'sale') {
+          if (form.step === 1) { // Primer producto
+            // Buscar producto por nombre
+            const foundProduct = products?.find(p =>
+              p.name.toLowerCase().includes(input.toLowerCase()) ||
+              p.sku?.toLowerCase().includes(input.toLowerCase())
+            )
+
+            if (!foundProduct) {
+              return `No encontré "${input}". Intenta con otro nombre o escribe "cancelar" para salir.`
+            }
+
+            newData.items = [{ product: foundProduct, quantity: 1, price: foundProduct.selling_price }]
+            newData.total = foundProduct.selling_price
+            setActiveForm({ ...form, step: 2, data: newData })
+
+            return `✅ Agregué **${foundProduct.name}** ($${foundProduct.selling_price.toLocaleString()})
+
+¿Quieres agregar **más productos**?
+Escribe el nombre del siguiente producto o "terminar" para finalizar.`
+          }
+
+          if (form.step === 2) { // Más productos o finalizar
+            if (input === 'terminar' || input === 'finalizar' || input === 'no' || input === 'listo') {
+              setActiveForm({ ...form, step: 4, data: newData })
+              return `💰 **Resumen de venta:**
+
+${newData.items.map((item, i) => `${i + 1}. ${item.product.name} x${item.quantity} = $${(item.price * item.quantity).toLocaleString()}`).join('\n')}
+
+**Total: $${newData.total.toLocaleString()}**
+
+Ahora, ¿cuál es el **método de pago**?
+• efectivo
+• tarjeta
+• transferencia`
+            }
+
+            // Buscar otro producto
+            const foundProduct = products?.find(p =>
+              p.name.toLowerCase().includes(input.toLowerCase()) ||
+              p.sku?.toLowerCase().includes(input.toLowerCase())
+            )
+
+            if (!foundProduct) {
+              return `No encontré "${input}". Intenta con otro nombre o escribe "terminar".`
+            }
+
+            // Verificar si ya está en la venta
+            const existingItem = newData.items.find(i => i.product.id === foundProduct.id)
+            if (existingItem) {
+              existingItem.quantity++
+              newData.total += foundProduct.selling_price
+            } else {
+              newData.items.push({ product: foundProduct, quantity: 1, price: foundProduct.selling_price })
+              newData.total += foundProduct.selling_price
+            }
+
+            setActiveForm({ ...form, step: 2, data: newData })
+
+            return `✅ Agregué **${foundProduct.name}** ($${foundProduct.selling_price.toLocaleString()})
+
+**Productos en venta:**
+${newData.items.map((item, i) => `  ${i + 1}. ${item.product.name} x${item.quantity}`).join('\n')}
+
+**Subtotal: $${newData.total.toLocaleString()}**
+
+¿Más productos? (nombre o "terminar")`
+          }
+
+          if (form.step === 4) { // Método de pago
+            const paymentMethods = { 'efectivo': 'cash', 'tarjeta': 'card', 'transferencia': 'transfer' }
+            newData.payment_method = paymentMethods[input] || 'cash'
+
+            setActiveForm({ ...form, step: 5, data: newData })
+            return `Método de pago: **${input}**
+
+Último paso: ¿Hay algún **cliente** asociado?
+Escribe el nombre del cliente o "omitir" para no asociar ninguno.`
+          }
+
+          if (form.step === 5) { // Cliente y FINALIZAR
+            let contactId = null
+            if (input !== 'omitir' && input !== 'no' && input !== 'none') {
+              const foundContact = contacts?.find(c =>
+                c.name.toLowerCase().includes(input.toLowerCase())
+              )
+              if (foundContact) {
+                contactId = foundContact.id
+              }
+            }
+
+            // Crear la venta
+            try {
+              const saleData = {
+                total: newData.total,
+                transaction_type: 'sale',
+                payment_method: newData.payment_method,
+                contact_id: contactId,
+                items: newData.items.map(item => ({
+                  product_id: item.product.id,
+                  quantity: item.quantity,
+                  price: item.price,
+                }))
+              }
+
+              await createSale(saleData)
+              setActiveForm(null)
+
+              return `✅ ¡Venta registrada exitosamente! 🎉
+
+💰 **Total: $${newData.total.toLocaleString()}**
+💳 **Pago: ${newData.payment_method === 'cash' ? 'Efectivo' : newData.payment_method === 'card' ? 'Tarjeta' : 'Transferencia'}**
+${contactId ? `👤 Cliente asociado` : ''}
+
+**Productos vendidos:**
+${newData.items.map(item => `  • ${item.product.name} x${item.quantity}`).join('\n')}
+
+¿Hay algo más en lo que pueda ayudarte? 😊`
+            } catch (error) {
+              setActiveForm(null)
+              return `❌ Hubo un error al crear la venta: ${error.message}. ¿Intentamos de nuevo?`
+            }
+          }
+        }
       }
 
       // COMANDOS PARA INICIAR FORMULARIO CONVERSACIONAL
@@ -488,9 +614,30 @@ Ahora el **stock inicial**:
       if (input.includes('venta') || input.includes('vendí')) {
         if (input.includes('hoy')) return getSalesInfo('hoy')
         if (input.includes('semana')) return getSalesInfo('semana')
-        if (input.includes('registrar') || input.includes('nueva') || input.includes('crear')) {
-          navigate('/app/sales')
-          return 'Abriendo formulario de venta... 💸'
+
+        // Verificar si quiere formulario conversacional
+        const useForm = formTriggers.some(t => input.includes(t)) ||
+                        (conversationState?.action === 'create_sale' && isAffirmative) ||
+                        input.includes('tú creas') || input.includes('tu creas') ||
+                        input.includes('genera tu') || input.includes('genera tú')
+
+        if (input.includes('registrar') || input.includes('nueva') || input.includes('crear') || useForm) {
+          setConversationState(null)
+          setActiveForm({ type: 'sale', step: 1, data: { items: [], total: 0 } })
+
+          // Verificar si hay productos
+          const availableProducts = products?.length || 0
+          if (availableProducts === 0) {
+            setActiveForm(null)
+            return `❌ No tienes productos en el inventario. Primero crea productos con "crear producto" o "crea productos de ejemplo". 📦`
+          }
+
+          return `¡Perfecto! Voy a crear la venta contigo 💸
+
+Tienes ${availableProducts} productos disponibles.
+
+¿Cuál es el **primer producto** que vas a vender?
+(Escribe el nombre del producto)`
         }
         return getSalesInfo('hoy')
       }
