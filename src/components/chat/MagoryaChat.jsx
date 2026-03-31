@@ -16,7 +16,7 @@ const MagoryaChat = ({ isOpen, onClose }) => {
   const toast = useToast()
   const { profile } = useAuth()
   const { createProduct, products } = useInventory()
-  const { createSale, sales } = useSales()
+  const { createSale, transactions, totalSales, totalExpenses, salesCount } = useSales()
   const { createContact, contacts } = useContacts()
   const { createCatalog } = useCatalogs()
 
@@ -217,7 +217,7 @@ ${results.join('\n')}
     const customers = contacts?.filter(c => c.contact_type === 'customer').length || 0
 
     const today = new Date()
-    const todaySales = sales?.filter(s => {
+    const todaySales = transactions?.filter(s => {
       const saleDate = new Date(s.transaction_date || s.created_at)
       return saleDate.toDateString() === today.toDateString()
     }).length || 0
@@ -254,7 +254,7 @@ ${lowStock > 0 ? `\n🚨 Tienes ${lowStock} productos con stock bajo.` : ''}`
   const getSalesInfo = (period) => {
     const today = new Date()
     // Combinar ventas del hook + ventas locales creadas en la sesión
-    const allSales = [...(sales || []), ...localSales]
+    const allSales = [...(transactions || []), ...localSales]
 
     let filteredSales = allSales || []
 
@@ -271,7 +271,7 @@ ${lowStock > 0 ? `\n🚨 Tienes ${lowStock} productos con stock bajo.` : ''}`
       })
     }
 
-    const total = filteredSales.reduce((sum, s) => sum + (s.total || 0), 0)
+    const total = filteredSales.reduce((sum, s) => sum + (s.total || s.total_amount || 0), 0)
     const count = filteredSales.length
 
     if (count === 0) {
@@ -333,7 +333,7 @@ ${lowStock > 0 ? `\n🚨 Tienes ${lowStock} productos con stock bajo.` : ''}`
     }
 
     const today = new Date()
-    const todaySales = sales?.filter(s => {
+    const todaySales = transactions?.filter(s => {
       const saleDate = new Date(s.transaction_date || s.created_at)
       return saleDate.toDateString() === today.toDateString()
     }).length || 0
@@ -699,7 +699,7 @@ Puedes ver y editar tu catálogo en la sección de Catálogos.
             return 'Abriendo formulario de producto... 📦'
           }
           if (state.action === 'create_sale') {
-            navigate('/app/sales')
+            navigate('/app/transactions')
             return 'Abriendo formulario de venta... 💸'
           }
           if (state.action === 'check_low_stock') {
@@ -900,7 +900,7 @@ Empecemos. ¿Cuál es el **nombre** del contacto?`
           return '¡Te llevo al inventario! 📦'
         }
         if (input.includes('venta') || input.includes('ventas')) {
-          navigate('/app/sales')
+          navigate('/app/transactions')
           return '¡Vamos a las ventas! 💰'
         }
         if (input.includes('contacto') || input.includes('clientes')) {

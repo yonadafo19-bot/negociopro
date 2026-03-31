@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useSales } from './useSales'
 import { useInventory } from './useInventory'
 import { useContacts } from './useContacts'
-import { exportToPDF } from '../services/exportService'
+import { exportToPDF as exportPDFService } from '../services/exportService'
 
 /**
  * Hook personalizado para reportes y analytics
@@ -296,7 +296,7 @@ export const useReports = (filters = {}) => {
       index: i + 1,
     }))
 
-    exportToPDF(dataWithIndex, {
+    exportPDFService(dataWithIndex, {
       title: 'Top 10 Productos Más Vendidos',
       fileName: 'top_productos',
       columns,
