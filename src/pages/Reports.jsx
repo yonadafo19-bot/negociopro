@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts'
-import { FileSpreadsheet, TrendingUp, Calendar, Download } from 'lucide-react'
+import { FileSpreadsheet, TrendingUp, Calendar, Download, FileText } from 'lucide-react'
 import {
   ReportFilters,
   TopProducts,
@@ -31,10 +31,12 @@ const ReportsPage = () => {
     performanceMetrics,
     comparisons,
     exportToExcel,
+    exportToPDF,
     hasData,
   } = useReports()
 
   const [loadingExport, setLoadingExport] = useState(false)
+  const [loadingPDF, setLoadingPDF] = useState(false)
 
   // Mostrar PageLoader mientras carga inicialmente
   if (!hasData && !topProducts.length && !salesByPeriod.length) {
@@ -49,7 +51,7 @@ const ReportsPage = () => {
     }).format(value)
   }
 
-  const handleExport = async () => {
+  const handleExportExcel = async () => {
     setLoadingExport(true)
     try {
       await exportToExcel()
@@ -57,6 +59,17 @@ const ReportsPage = () => {
       console.error('Error exporting:', error)
     } finally {
       setLoadingExport(false)
+    }
+  }
+
+  const handleExportPDF = () => {
+    setLoadingPDF(true)
+    try {
+      exportToPDF()
+    } catch (error) {
+      console.error('Error exporting PDF:', error)
+    } finally {
+      setLoadingPDF(false)
     }
   }
 
@@ -78,14 +91,25 @@ const ReportsPage = () => {
           <p className="text-gray-600 dark:text-gray-400">Análisis detallado de tu negocio</p>
         </div>
 
-        <Button
-          onClick={handleExport}
-          disabled={!hasData || loadingExport}
-          loading={loadingExport}
-          icon={FileSpreadsheet}
-        >
-          Exportar a Excel
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={handleExportPDF}
+            disabled={!hasData || loadingPDF}
+            loading={loadingPDF}
+            icon={FileText}
+            variant="outline"
+          >
+            PDF
+          </Button>
+          <Button
+            onClick={handleExportExcel}
+            disabled={!hasData || loadingExport}
+            loading={loadingExport}
+            icon={FileSpreadsheet}
+          >
+            Excel
+          </Button>
+        </div>
       </div>
 
       {!hasData ? (

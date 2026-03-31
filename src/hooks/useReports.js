@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { useSales } from './useSales'
 import { useInventory } from './useInventory'
 import { useContacts } from './useContacts'
+import { exportToPDF } from '../services/exportService'
 
 /**
  * Hook personalizado para reportes y analytics
@@ -280,6 +281,28 @@ export const useReports = (filters = {}) => {
     XLSX.writeFile(wb, `NegociPro_Reportes_${new Date().toISOString().split('T')[0]}.xlsx`)
   }
 
+  // Exportar a PDF
+  const exportToPDF = () => {
+    const columns = [
+      { header: 'Posición', field: 'index' },
+      { header: 'Producto', field: 'product_name' },
+      { header: 'Categoría', field: 'category' },
+      { header: 'Unidades', field: 'quantity' },
+      { header: 'Ingresos', field: 'revenue' },
+    ]
+
+    const dataWithIndex = topProducts.map((p, i) => ({
+      ...p,
+      index: i + 1,
+    }))
+
+    exportToPDF(dataWithIndex, {
+      title: 'Top 10 Productos Más Vendidos',
+      fileName: 'top_productos',
+      columns,
+    })
+  }
+
   return {
     // Datos procesados
     topProducts,
@@ -291,6 +314,7 @@ export const useReports = (filters = {}) => {
 
     // Métodos
     exportToExcel,
+    exportToPDF,
 
     // Helpers
     hasData: transactions.length > 0,
