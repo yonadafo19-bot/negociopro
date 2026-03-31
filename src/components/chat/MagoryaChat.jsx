@@ -61,6 +61,7 @@ Tengo acceso a **toda tu información de negocios** y puedo ayudarte con:
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
+  const [conversationState, setConversationState] = useState(null) // Estado conversacional
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
 
@@ -194,6 +195,7 @@ ${todaySales === 0 ? '\n💡 **Tip:** No tienes ventas hoy. ¿Quieres registrar 
       response += `• **${p.name}** - Stock: ${p.stock_quantity} (mín: ${p.min_stock_alert})\n`
     })
     response += '\n¿Quieres que te lleve al inventario para reponer?'
+    setConversationState({ action: 'check_low_stock' })
     return response
   }
 
@@ -224,7 +226,11 @@ ${todaySales === 0 ? '\n💡 **Tip:** No tienes ventas hoy. ¿Quieres registrar 
     const total = filteredSales.reduce((sum, s) => sum + (s.total || 0), 0)
     const count = filteredSales.length
 
-    return `💰 **Ventas ${period}:**\n\n• Transacciones: ${count}\n• Total: $${total.toLocaleString()}\n\n${count === 0 ? '¿Quieres registrar una venta?' : '¡Buen trabajo! 🎉'}`
+    if (count === 0) {
+      setConversationState({ action: 'create_sale' })
+      return `💰 **Ventas ${period}:**\n\n• Transacciones: ${count}\n• Total: $${total.toLocaleString()}\n\n¿Quieres registrar una venta?`
+    }
+    return `💰 **Ventas ${period}:**\n\n• Transacciones: ${count}\n• Total: $${total.toLocaleString()}\n\n¡Buen trabajo! 🎉`
   }
 
   // Análisis de tendencias - INTELIGENCIA AVANZADA
@@ -409,6 +415,7 @@ ${projected > totalSoFar ? `📈 Vas por buen camino para llegar a $${projected.
     ) || []
 
     if (found.length === 0) {
+      setConversationState({ action: 'create_product' })
       return `No encontré ningún producto con "${query}". ¿Quieres crear uno?`
     }
 
@@ -436,6 +443,7 @@ ${projected > totalSoFar ? `📈 Vas por buen camino para llegar a $${projected.
     ) || []
 
     if (found.length === 0) {
+      setConversationState({ action: 'create_contact' })
       return `No encontré ningún contacto con "${query}". ¿Quieres crear uno?`
     }
 
@@ -453,6 +461,40 @@ ${projected > totalSoFar ? `📈 Vas por buen camino para llegar a $${projected.
     setIsProcessing(true)
 
     try {
+      // RESPUESTAS AFIRMATIVAS/NEGATIVAS - Manejo de estado conversacional
+      const affirmative = ['si', 'sí', 'claro', 'yes', 'y', 'ok', 'vale', 'de acuerdo', 'por supuesto', 'obvio', 'afirmativo']
+      const negative = ['no', 'nop', 'nope', 'negativo']
+
+      const isAffirmative = affirmative.some(a => input === a || input.includes(a))
+      const isNegative = negative.some(n => input === n || input.includes(n))
+
+      // Manejar respuestas a preguntas previas
+      if (conversationState && (isAffirmative || isNegative)) {
+        const state = conversationState
+        setConversationState(null) // Limpiar estado
+
+        if (state.action === 'create_contact' && isAffirmative) {
+          navigate('/app/contacts')
+          return 'Abriendo formulario de contacto... 📝\n\nCompleta los datos y guarda. ¡Avísame si necesitas algo más! 😊'
+        }
+        if (state.action === 'create_product' && isAffirmative) {
+          navigate('/app/inventory')
+          return 'Abriendo formulario de producto... 📦\n\nCompleta los datos y guarda. ¡Avísame si necesitas algo más! 😊'
+        }
+        if (state.action === 'create_sale' && isAffirmative) {
+          navigate('/app/sales')
+          return 'Abriendo formulario de venta... 💸\n\nCompleta los datos y guarda. ¡Avísame si necesitas algo más! 😊'
+        }
+        if (state.action === 'check_low_stock' && isAffirmative) {
+          navigate('/app/inventory')
+          return '¡Te llevo al inventario! 📦\n\nAllí puedes reponer el stock de los productos que lo necesitan.'
+        }
+
+        if (isNegative) {
+          return '¡Entendido! ¿Hay algo más en lo que pueda ayudarte? 😊'
+        }
+      }
+
       // COMANDOS DE AYUDA - PRIMERO (mayor prioridad)
       // Detectar variaciones de "qué puedes hacer", "qué haces", "para qué sirves", etc.
       const ayudaPatterns = [
@@ -548,16 +590,35 @@ ${projected > totalSoFar ? `📈 Vas por buen camino para llegar a $${projected.
 
       // COMANDOS DE PRODUCTOS
       if (input.includes('producto')) {
-        // Buscar producto específico
+        // PRIMERO: Detectar intención de CREAR (antes de buscar)
+        if (input.includes('agrega') || input.includes('crear') || input.includes('nuevo') ||
+            input === 'producto' || (input.length < 20 && input.includes('producto'))) {
+          const nameMatch = input.match(/producto\s+["']?([^"']+)["']?/i) ||
+                          input.match(/agrega\s+["']?([^"']+)["']?/i) ||
+                          input.match(/crear\s+(["']?)(.+?)\1/i)
+          if (nameMatch && (nameMatch[1] || nameMatch[2])) {
+            const productName = nameMatch[1] || nameMatch[2]
+            await createProduct({
+              name: productName,
+              sku: `SKU-${Date.now()}`,
+              category: 'General',
+              cost_price: 1000,
+              selling_price: 1500,
+              stock_quantity: 10,
+            })
+            return `✅ ¡Listo! Agregué **"${productName}"** a tu inventario.\n\n¿Quieres agregar algo más?`
+          }
+          navigate('/app/inventory')
+          return 'Te abro el formulario para agregar un producto 📝'
+        }
+
+        // DESPUÉS: Buscar producto específico
         const searchMatch = input.match(/producto\s+(["']?)(.+?)\1$/i) ||
                             input.match(/buscar\s+(["']?)(.+?)\1$/i) ||
                             input.match(/buscar producto\s+(["']?)(.+?)\1$/i)
         if (searchMatch) {
           return searchProduct(searchMatch[2])
         }
-
-        // Crear producto
-        if (input.includes('agrega') || input.includes('crear') || input.includes('nuevo')) {
           const nameMatch = input.match(/producto\s+["']?([^"']+)["']?/i) ||
                           input.match(/agrega\s+["']?([^"']+)["']?/i)
           if (nameMatch) {
@@ -584,13 +645,32 @@ ${projected > totalSoFar ? `📈 Vas por buen camino para llegar a $${projected.
 
       // COMANDOS DE CONTACTOS
       if (input.includes('contacto') || input.includes('cliente') || input.includes('proveedor')) {
+        // PRIMERO: Detectar intención de CREAR (antes de buscar)
+        if (input.includes('nuevo') || input.includes('crear') || input.includes('agregar') ||
+            input.includes('registra') || input.includes('registrar') || input === 'contacto' ||
+            input === 'cliente' || (input.length < 15 && (input.includes('contacto') || input.includes('cliente')))) {
+          const nameMatch = input.match(/contacto\s+["']?([^"']+)["']?/i) ||
+                          input.match(/cliente\s+["']?([^"']+)["']?/i) ||
+                          input.match(/crear\s+(["']?)(.+?)\1/i) ||
+                          input.match(/nuevo\s+(["']?)(.+?)\1/i)
+          if (nameMatch && nameMatch[2]) {
+            const contactName = nameMatch[2]
+            await createContact({
+              name: contactName,
+              contact_type: 'customer',
+            })
+            return `✅ ¡Perfecto! Creé el contacto de **"${contactName}"** 👥`
+          }
+          navigate('/app/contacts')
+          return 'Te llevo a contactos para crear uno nuevo 📝'
+        }
+
+        // DESPUÉS: Buscar contacto específico
         const searchMatch = input.match(/(?:contacto|cliente|proveedor)\s+(["']?)(.+?)\1$/i) ||
                             input.match(/buscar\s+(["']?)(.+?)\1$/i)
         if (searchMatch) {
           return searchContact(searchMatch[2])
         }
-
-        if (input.includes('nuevo') || input.includes('crear') || input.includes('agregar')) {
           const nameMatch = input.match(/contacto\s+["']?([^"']+)["']?/i) ||
                           input.match(/cliente\s+["']?([^"']+)["']?/i)
           if (nameMatch) {
