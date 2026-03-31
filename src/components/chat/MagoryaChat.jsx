@@ -497,6 +497,49 @@ Ahora el **stock inicial**:
 
       // Productos
       if (input.includes('producto')) {
+        // Crear productos de ejemplo
+        if (input.includes('ejemplo') || input.includes('demo') || input.includes('test') || input.includes('prueba')) {
+          const countMatch = input.match(/(\d+)\s*(?:producto|ejemplo|demo)/i)
+          const count = countMatch ? parseInt(countMatch[1]) : 5
+
+          const exampleProducts = [
+            { name: 'Café Premium 1kg', cost_price: 5000, selling_price: 8500, stock_quantity: 25, category: 'Alimentos' },
+            { name: 'Arroz Grano Largo 1kg', cost_price: 1200, selling_price: 1800, stock_quantity: 50, category: 'Alimentos' },
+            { name: 'Leche Entera 1L', cost_price: 800, selling_price: 1200, stock_quantity: 30, category: 'Lácteos' },
+            { name: 'Pan de Molde', cost_price: 1500, selling_price: 2500, stock_quantity: 15, category: 'Panadería' },
+            { name: 'Aceite Vegetal 500ml', cost_price: 2000, selling_price: 3500, stock_quantity: 20, category: 'Alimentos' },
+            { name: 'Azúcar Blanca 1kg', cost_price: 900, selling_price: 1500, stock_quantity: 40, category: 'Alimentos' },
+            { name: 'Jabón de Tocador', cost_price: 600, selling_price: 1200, stock_quantity: 60, category: 'Higiene' },
+            { name: 'Detergente 1L', cost_price: 1800, selling_price: 3200, stock_quantity: 25, category: 'Limpieza' },
+            { name: 'Pilas AA', cost_price: 500, selling_price: 1500, stock_quantity: 100, category: 'Electrónica' },
+            { name: 'Galletas Paquete', cost_price: 400, selling_price: 800, stock_quantity: 45, category: 'Alimentos' },
+          ]
+
+          const toCreate = exampleProducts.slice(0, Math.min(count, 10))
+          let created = 0
+          let failed = 0
+
+          for (const product of toCreate) {
+            try {
+              await createProduct({
+                ...product,
+                sku: `SKU-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+              })
+              created++
+            } catch (error) {
+              failed++
+            }
+          }
+
+          return `✅ **Productos de ejemplo creados:**
+
+Creados: ${created} productos${failed > 0 ? `\nFallidos: ${failed}` : ''}
+
+${toCreate.map((p, i) => `${i + 1}. **${p.name}** - $${p.selling_price} - Stock: ${p.stock_quantity}`).join('\n')}
+
+¿Hay algo más en lo que pueda ayudarte? 😊`
+        }
+
         // Verificar si quiere formulario conversacional
         const useForm = formTriggers.some(t => input.includes(t)) ||
                         (conversationState?.action === 'create_product' && isAffirmative)
