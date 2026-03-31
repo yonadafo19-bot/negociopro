@@ -27,3 +27,4 @@ export {
   InlineLoader,
 } from './Skeleton'
 export { default as ToastProvider, useToast } from './Toast'
+export { default as ImageUpload } from './ImageUpload'

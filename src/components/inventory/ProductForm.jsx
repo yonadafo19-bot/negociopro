@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Input, Button, Card } from '../common'
+import { Input, Button, Card, ImageUpload } from '../common'
 import { validatePrice, validateStock, validateRequired } from '../../utils/validators'
 import { Package, DollarSign, Barcode, Hash, AlertCircle } from 'lucide-react'
 
@@ -86,10 +86,18 @@ const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) =>
       selling_price: parseFloat(formData.selling_price),
       stock_quantity: parseInt(formData.stock_quantity),
       min_stock_alert: parseInt(formData.min_stock_alert),
-      image_url: formData.image_url.trim() || null,
+      image_url: formData.image_url || null,
     }
 
     onSubmit(productData)
+  }
+
+  const handleImageUpload = (url) => {
+    setFormData(prev => ({ ...prev, image_url: url }))
+  }
+
+  const handleImageRemove = () => {
+    setFormData(prev => ({ ...prev, image_url: '' }))
   }
 
   const categories = [
@@ -180,6 +188,18 @@ const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) =>
             </select>
           </div>
         </div>
+      </div>
+
+      {/* Imagen del producto */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+          Imagen del Producto
+        </h3>
+        <ImageUpload
+          imageUrl={formData.image_url}
+          onUpload={handleImageUpload}
+          onRemove={handleImageRemove}
+        />
       </div>
 
       {/* Precios */}

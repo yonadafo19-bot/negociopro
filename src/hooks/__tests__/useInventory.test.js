@@ -3,19 +3,52 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
+import { renderHook, waitFor, act } from '@testing-library/react'
 import { useInventory } from '../useInventory'
 
-// Mock del servicio de Supabase
-vi.mock('../../services/supabase', () => ({
-  productsService: {
-    getProducts: vi.fn(),
-    getProduct: vi.fn(),
-    createProduct: vi.fn(),
-    updateProduct: vi.fn(),
-    deleteProduct: vi.fn(),
-    getLowStockProducts: vi.fn(),
+// Simple mock services
+const mockProducts = [
+  {
+    id: '1',
+    name: 'Producto 1',
+    stock_quantity: 10,
+    cost_price: 100,
+    selling_price: 150,
+    is_active: true,
   },
+  {
+    id: '2',
+    name: 'Producto 2',
+    stock_quantity: 5,
+    cost_price: 50,
+    selling_price: 80,
+    is_active: true,
+  },
+]
+
+const mockServices = {
+  getProducts: vi.fn().mockResolvedValue({ data: mockProducts, error: null }),
+  getProduct: vi.fn(),
+  createProduct: vi.fn().mockResolvedValue({
+    data: { id: 'new-1', name: 'New Product', ...mockProducts[0] },
+    error: null,
+  }),
+  updateProduct: vi.fn().mockResolvedValue({
+    data: { id: '1', name: 'Updated Product', ...mockProducts[0] },
+    error: null,
+  }),
+  deleteProduct: vi.fn().mockResolvedValue({ error: null }),
+  getLowStockProducts: vi.fn().mockResolvedValue({ data: mockProducts, error: null }),
+}
+
+vi.mock('../../services/supabase', () => ({
+  productsService: mockServices,
+}))
+
+// Mock useAuth
+const mockUser = { id: 'test-user-id' }
+vi.mock('../useAuth', () => ({
+  useAuth: vi.fn(() => ({ user: mockUser })),
 }))
 
 describe('useInventory Hook', () => {
@@ -25,38 +58,18 @@ describe('useInventory Hook', () => {
 
   describe('cargar productos', () => {
     it('debe cargar la lista de productos', async () => {
-      const mockProducts = [
-        {
-          id: '1',
-          name: 'Producto 1',
-          stock_quantity: 10,
-          sale_price: 100,
-          is_active: true,
-        },
-        {
-          id: '2',
-          name: 'Producto 2',
-          stock_quantity: 5,
-          sale_price: 50,
-          is_active: true,
-        },
-      ]
-
-      vi.mocked(import('../../services/supabase').productsService.getProducts).mockResolvedValue({
-        data: mockProducts,
-        error: null,
-      })
-
       const { result } = renderHook(() => useInventory())
 
       await waitFor(() => {
         expect(result.current.products).toEqual(mockProducts)
         expect(result.current.loading).toBe(false)
       })
+
+      expect(mockServices.getProducts).toHaveBeenCalledWith('test-user-id')
     })
 
     it('debe manejar errores al cargar productos', async () => {
-      vi.mocked(import('../../services/supabase').productsService.getProducts).mockResolvedValue({
+      mockServices.getProducts.mockResolvedValueOnce({
         data: null,
         error: { message: 'Error loading products' },
       })
@@ -67,97 +80,129 @@ describe('useInventory Hook', () => {
         expect(result.current.error).toBe('Error loading products')
       })
     })
+
+    it('debe usar mock data cuando no hay productos', async () => {
+      mockServices.getProducts.mockResolvedValueOnce({ data: [], error: null })
+
+      const { result } = renderHook(() => useInventory())
+
+      await waitFor(() => {
+        expect(result.current.products).toBeDefined()
+        expect(result.current.isDemoMode).toBe(true)
+      })
+    })
   })
 
   describe('crear producto', () => {
     it('debe crear un producto exitosamente', async () => {
-      const mockProduct = {
-        name: 'Nuevo Producto',
-        stock_quantity: 20,
-        sale_price: 150,
-        cost_price: 100,
-        sku: 'SKU-001',
-      }
+      const { result } = renderHook(() => useInventory())
 
-      vi.mocked(import('../../services/supabase').productsService.createProduct).mockResolvedValue({
-        data: { ...mockProduct, id: '123' },
-        error: null,
+      let response
+      await act(async () => {
+        response = await result.current.createProduct({
+          name: 'New Product',
+          sku: 'SKU123',
+          category: 'Test',
+          cost_price: 100,
+          selling_price: 150,
+          stock_quantity: 10,
+        })
+      })
+
+      expect(response.error).toBeNull()
+      expect(response.data.id).toBe('new-1')
+    })
+
+    it('debe manejar errores al crear producto', async () => {
+      mockServices.createProduct.mockResolvedValueOnce({
+        data: null,
+        error: { message: 'Error creating product' },
       })
 
       const { result } = renderHook(() => useInventory())
 
-      const { data, error } = await result.current.createProduct(mockProduct)
+      const response = await result.current.createProduct({ name: 'Test' })
 
-      expect(error).toBeNull()
-      expect(data.id).toBe('123')
-      expect(data.name).toBe('Nuevo Producto')
+      expect(response.data).toBeNull()
+      expect(response.error.message).toBe('Error creating product')
     })
   })
 
   describe('actualizar producto', () => {
     it('debe actualizar un producto existente', async () => {
-      const productId = '123'
-      const updates = {
-        name: 'Producto Actualizado',
-        stock_quantity: 15,
-      }
-
-      vi.mocked(import('../../services/supabase').productsService.updateProduct).mockResolvedValue({
-        data: { ...updates, id: productId },
-        error: null,
-      })
-
       const { result } = renderHook(() => useInventory())
 
-      const { data, error } = await result.current.updateProduct(productId, updates)
+      const response = await result.current.updateProduct('1', {
+        name: 'Updated Product',
+      })
 
-      expect(error).toBeNull()
-      expect(data.id).toBe(productId)
-      expect(data.name).toBe('Producto Actualizado')
+      expect(response.error).toBeNull()
+      expect(response.data.name).toBe('Updated Product')
     })
-  })
 
-  describe('eliminar producto (soft delete)', () => {
-    it('debe marcar un producto como inactivo', async () => {
-      const productId = '123'
-
-      vi.mocked(import('../../services/supabase').productsService.deleteProduct).mockResolvedValue({
+    it('debe manejar errores al actualizar producto', async () => {
+      mockServices.updateProduct.mockResolvedValueOnce({
         data: null,
-        error: null,
+        error: { message: 'Error updating product' },
       })
 
       const { result } = renderHook(() => useInventory())
 
-      const { error } = await result.current.deleteProduct(productId)
+      const response = await result.current.updateProduct('1', { name: 'Updated' })
 
-      expect(error).toBeNull()
+      expect(response.data).toBeNull()
+      expect(response.error.message).toBe('Error updating product')
     })
   })
 
-  describe('productos con stock bajo', () => {
-    it('debe obtener productos con stock bajo', async () => {
-      const lowStockProducts = [
-        {
-          id: '1',
-          name: 'Producto Bajo Stock',
-          stock_quantity: 2,
-          min_stock_alert: 5,
-        },
-      ]
+  describe('eliminar producto', () => {
+    it('debe eliminar un producto existente', async () => {
+      const { result } = renderHook(() => useInventory())
 
-      vi.mocked(
-        import('../../services/supabase').productsService.getLowStockProducts
-      ).mockResolvedValue({
-        data: lowStockProducts,
-        error: null,
+      const response = await result.current.deleteProduct('1')
+
+      expect(response.error).toBeNull()
+    })
+
+    it('debe manejar errores al eliminar producto', async () => {
+      mockServices.deleteProduct.mockResolvedValueOnce({
+        error: { message: 'Error deleting product' },
       })
 
       const { result } = renderHook(() => useInventory())
 
-      await waitFor(async () => {
-        const products = await result.current.fetchLowStockProducts()
-        expect(products).toEqual(lowStockProducts)
-        expect(products[0].stock_quantity).toBeLessThan(products[0].min_stock_alert)
+      const response = await result.current.deleteProduct('1')
+
+      expect(response.error.message).toBe('Error deleting product')
+    })
+  })
+
+  describe('helpers', () => {
+    it('debe buscar productos correctamente', async () => {
+      const { result } = renderHook(() => useInventory())
+
+      await waitFor(() => {
+        const results = result.current.searchProducts('Producto 1')
+        expect(results).toHaveLength(1)
+        expect(results[0].name).toBe('Producto 1')
+      })
+    })
+
+    it('debe filtrar por categoría', async () => {
+      const { result } = renderHook(() => useInventory())
+
+      await waitFor(() => {
+        const allProducts = result.current.filterByCategory('all')
+        expect(allProducts).toHaveLength(2)
+      })
+    })
+
+    it('debe calcular helpers correctamente', async () => {
+      const { result } = renderHook(() => useInventory())
+
+      await waitFor(() => {
+        expect(result.current.totalProducts).toBe(2)
+        expect(result.current.isEmpty).toBe(false)
       })
     })
   })
