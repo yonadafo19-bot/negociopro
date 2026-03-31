@@ -7,6 +7,7 @@ import { useSales } from '../../hooks/useSales'
 import { useContacts } from '../../hooks/useContacts'
 import { useAuth } from '../../hooks/useAuth'
 import { useReports } from '../../hooks/useReports'
+import { useCatalogs } from '../../hooks/useCatalogs'
 
 const STORAGE_KEY = 'magorya_chat_history'
 
@@ -17,6 +18,7 @@ const MagoryaChat = ({ isOpen, onClose }) => {
   const { createProduct, products } = useInventory()
   const { createSale, sales } = useSales()
   const { createContact, contacts } = useContacts()
+  const { createCatalog } = useCatalogs()
 
   const loadMessages = () => {
     try {
@@ -71,9 +73,61 @@ const MagoryaChat = ({ isOpen, onClose }) => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
   const [conversationState, setConversationState] = useState(null)
-  const [activeForm, setActiveForm] = useState(null) // { type: 'contact' | 'product', step: number, data: {} }
+  const [activeForm, setActiveForm] = useState(null) // { type: 'contact' | 'product' | 'sale', step: number, data: {} }
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
+
+  // Crear TODOS los datos de ejemplo
+  const createAllExampleData = async () => {
+    let results = []
+
+    // Crear productos de ejemplo
+    const exampleProducts = [
+      { name: 'Café Premium 1kg', cost_price: 5000, selling_price: 8500, stock_quantity: 25, category: 'Alimentos' },
+      { name: 'Arroz Grano Largo 1kg', cost_price: 1200, selling_price: 1800, stock_quantity: 50, category: 'Alimentos' },
+      { name: 'Leche Entera 1L', cost_price: 800, selling_price: 1200, stock_quantity: 30, category: 'Lácteos' },
+      { name: 'Pan de Molde', cost_price: 1500, selling_price: 2500, stock_quantity: 15, category: 'Panadería' },
+      { name: 'Aceite Vegetal 500ml', cost_price: 2000, selling_price: 3500, stock_quantity: 20, category: 'Alimentos' },
+      { name: 'Azúcar Blanca 1kg', cost_price: 900, selling_price: 1500, stock_quantity: 40, category: 'Alimentos' },
+      { name: 'Detergente 1L', cost_price: 1800, selling_price: 3200, stock_quantity: 25, category: 'Limpieza' },
+      { name: 'Galletas Paquete', cost_price: 400, selling_price: 800, stock_quantity: 45, category: 'Alimentos' },
+    ]
+
+    let productsCreated = 0
+    for (const p of exampleProducts) {
+      try {
+        await createProduct({ ...p, sku: `SKU-${Date.now()}-${Math.random().toString(36).substr(2, 5)}` })
+        productsCreated++
+      } catch (e) { console.log('Error creating product:', e) }
+    }
+    results.push(`📦 ${productsCreated} productos`)
+
+    // Crear contactos de ejemplo
+    const exampleContacts = [
+      { name: 'Juan Pérez', contact_type: 'customer', phone: '+56912345678', email: 'juan@email.com' },
+      { name: 'María González', contact_type: 'customer', phone: '+56987654321', email: 'maria@email.com' },
+      { name: 'Carlos Ruiz', contact_type: 'customer', phone: '+56955555555', email: 'carlos@email.com' },
+      { name: 'Proveedor ABC', contact_type: 'supplier', phone: '+56911111111', email: 'ventas@abc.cl' },
+      { name: 'Distribuidora XYZ', contact_type: 'supplier', phone: '+56922222222', email: 'contacto@xyz.cl' },
+    ]
+
+    let contactsCreated = 0
+    for (const c of exampleContacts) {
+      try {
+        await createContact(c)
+        contactsCreated++
+      } catch (e) { console.log('Error creating contact:', e) }
+    }
+    results.push(`👥 ${contactsCreated} contactos`)
+
+    return `✅ **Datos de ejemplo creados:**
+
+${results.join('\n')}
+
+🎉 Tu negocio ahora tiene información para probar todas las funciones.
+
+¿Quieres crear un catálogo o registrar una venta también? 😊`
+  }
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -549,6 +603,61 @@ ${newData.items.map(item => `  • ${item.product.name} x${item.quantity}`).join
             }
           }
         }
+
+        // FORMULARIO DE CATÁLOGO
+        if (form.type === 'catalog') {
+          if (form.step === 1) { // Nombre del catálogo
+            newData.name = userInput
+            setActiveForm({ ...form, step: 2, data: newData })
+            return `¡Perfecto! El catálogo es **${userInput}** 📚
+
+Ahora dame una **descripción** corta:
+(O escribe "omitir" para dejarlo sin descripción)`
+          }
+
+          if (form.step === 2) { // Descripción
+            if (input !== 'omitir' && input !== 'no') {
+              newData.description = userInput
+            }
+
+            setActiveForm({ ...form, step: 3, data: newData })
+            return `Descripción agregada.
+
+¿Quieres que el catálogo sea **público** para compartirlo?
+Escribe "si" para público o "no" para privado.`
+          }
+
+          if (form.step === 3) { // Público/Privado
+            newData.is_public = input === 'si' || input === 'sí'
+
+            // Obtener productos disponibles
+            const availableProducts = products || []
+            if (availableProducts.length === 0) {
+              setActiveForm(null)
+              return `❌ No tienes productos para agregar al catálogo. Primero crea productos con "crear producto" o "datos de ejemplo". 📦`
+            }
+
+            newData.product_ids = availableProducts.slice(0, 5).map(p => p.id)
+
+            try {
+              await createCatalog(newData, newData.product_ids)
+              setActiveForm(null)
+              return `✅ ¡Catálogo creado exitosamente! 🎉
+
+📚 **Nombre:** ${newData.name}
+${newData.description ? `📝 **Descripción:** ${newData.description}` : ''}
+${newData.is_public ? '🌐 **Público** - Compartible' : '🔒 **Privado**'}
+📦 **Productos:** ${availableProducts.slice(0, 5).length} productos agregados
+
+Puedes ver y editar tu catálogo en la sección de Catálogos.
+
+¿Hay algo más en lo que pueda ayudarte? 😊`
+            } catch (error) {
+              setActiveForm(null)
+              return `❌ Hubo un error al crear el catálogo: ${error.message}. ¿Intentamos de nuevo?`
+            }
+          }
+        }
       }
 
       // COMANDOS PARA INICIAR FORMULARIO CONVERSACIONAL
@@ -598,6 +707,11 @@ ${newData.items.map(item => `  • ${item.product.name} x${item.quantity}`).join
 • "Sugerencias" - Recomendaciones
 
 ¡Escribe o usa el micrófono! 🎤`
+      }
+
+      // Crear TODOS los datos de ejemplo
+      if (input.includes('datos de ejemplo') || input.includes('todo ejemplo') || input.includes('llena todo') || input.includes('poblar todo') || input.includes('inicia mi negocio')) {
+        return await createAllExampleData()
       }
 
       // Resumen del negocio
@@ -779,6 +893,18 @@ Empecemos. ¿Cuál es el **nombre** del contacto?`
         if (input.includes('reporte') || input.includes('reportes')) {
           navigate('/app/reports')
           return '¡Tus reportes! 📊'
+        }
+        if (input.includes('catalogo') || input.includes('catálogo') || input.includes('catalogos')) {
+          const useForm = formTriggers.some(t => input.includes(t)) || input.includes('tú creas') || input.includes('tu creas')
+          if (input.includes('crear') || input.includes('nuevo') || useForm) {
+            setConversationState(null)
+            setActiveForm({ type: 'catalog', step: 1, data: {} })
+            return `¡Perfecto! Voy a crear el catálogo contigo 📚
+
+¿Cuál es el **nombre** del catálogo?`
+          }
+          navigate('/app/catalogs')
+          return '¡A catálogos! 📚'
         }
         if (input.includes('dashboard') || input.includes('inicio')) {
           navigate('/app/dashboard')
