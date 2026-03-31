@@ -12,18 +12,25 @@ const Button = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center gap-2 font-medium rounded-kawaii transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+    'inline-flex items-center justify-center gap-2 font-medium rounded-neo transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed dark:focus:ring-offset-dark-bg'
 
   const variants = {
-    primary: 'bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 shadow-kawaii',
+    primary:
+      'bg-neo-primary dark:bg-dark-primary text-white hover:bg-neo-primary-light dark:hover:bg-dark-primary-light focus:ring-neo-primary dark:focus:ring-dark-primary shadow-neo hover:shadow-neo-lg active:shadow-inner-shadow',
     secondary:
-      'bg-secondary-500 text-white hover:bg-secondary-600 focus:ring-secondary-500 shadow-kawaii',
-    accent: 'bg-accent-500 text-white hover:bg-accent-600 focus:ring-accent-500 shadow-kawaii',
-    success: 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500 shadow-kawaii',
-    danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 shadow-kawaii',
+      'bg-neo-surface dark:bg-dark-surface text-neo-text dark:text-dark-text hover:bg-neo-bg dark:hover:bg-dark-bg-alt focus:ring-gray-400 border border-neo-border dark:border-dark-border shadow-neo hover:shadow-neo-lg active:shadow-inner-shadow',
+    accent:
+      'bg-neo-accent dark:bg-dark-accent text-white hover:bg-neo-accent-light dark:hover:bg-dark-accent-light focus:ring-neo-accent dark:focus:ring-dark-accent shadow-neo hover:shadow-neo-lg active:shadow-inner-shadow',
+    success:
+      'bg-neo-success dark:bg-dark-success text-white hover:bg-neo-success-light dark:hover:bg-dark-success-light focus:ring-neo-success dark:focus:ring-dark-success shadow-neo hover:shadow-neo-lg active:shadow-inner-shadow',
+    danger:
+      'bg-neo-danger dark:bg-dark-danger text-white hover:bg-neo-danger-light dark:hover:bg-dark-danger-light focus:ring-neo-danger dark:focus:ring-dark-danger shadow-neo hover:shadow-neo-lg active:shadow-inner-shadow',
+    warning:
+      'bg-neo-warning dark:bg-dark-warning text-white hover:bg-neo-warning-light dark:hover:bg-dark-warning-light focus:ring-neo-warning dark:focus:ring-dark-warning shadow-neo hover:shadow-neo-lg active:shadow-inner-shadow',
     outline:
-      'border-2 border-primary-500 text-primary-500 hover:bg-primary-50 focus:ring-primary-500',
-    ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
+      'border-2 border-neo-primary dark:border-dark-primary text-neo-primary dark:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt focus:ring-neo-primary dark:focus:ring-dark-primary shadow-neo-sm',
+    ghost:
+      'text-neo-text dark:text-dark-text hover:bg-neo-bg dark:hover:bg-dark-bg-alt focus:ring-gray-400',
   }
 
   const sizes = {

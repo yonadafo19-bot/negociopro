@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from './useAuth'
 import { productsService } from '../services/supabase'
+import { mockProducts, mockCategories } from '../data/mockData'
 
 /**
  * Hook personalizado para gestión de inventario
+ * Usa datos mock cuando no hay conexión a Supabase (modo demo)
  *
  * @example
- * const { products, loading, error, createProduct, updateProduct, deleteProduct } = useInventory()
+ * const { products, loading, createProduct } = useInventory()
  */
 export const useInventory = () => {
   const { user } = useAuth()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [isDemoMode, setIsDemoMode] = useState(false)
 
   // Cargar productos
   const fetchProducts = async () => {
@@ -26,17 +29,22 @@ export const useInventory = () => {
 
       if (error) throw error
 
-      setProducts(data || [])
+      // Si no hay productos, usar datos mock
+      setProducts(data && data.length > 0 ? data : mockProducts)
+      setIsDemoMode(data && data.length > 0 ? false : true)
     } catch (err) {
       setError(err.message)
       console.error('Error fetching products:', err)
+      // En caso de error, también usar datos mock
+      setProducts(mockProducts)
+      setIsDemoMode(true)
     } finally {
       setLoading(false)
     }
   }
 
   // Crear producto
-  const createProduct = async productData => {
+  const createProduct = async (productData) => {
     if (!user) return { error: new Error('No autenticado') }
 
     setLoading(true)
@@ -56,6 +64,14 @@ export const useInventory = () => {
       return { data, error: null }
     } catch (err) {
       setError(err.message)
+      // En caso de error, agregar producto a lista mock
+      const newProduct = {
+        id: `mock-${Date.now()}`,
+        ...productData,
+        user_id: user.id,
+      }
+      setProducts(prev => [newProduct, ...prev])
+      setIsDemoMode(true)
       return { data: null, error: err }
     } finally {
       setLoading(false)
@@ -85,7 +101,7 @@ export const useInventory = () => {
   }
 
   // Eliminar producto (soft delete)
-  const deleteProduct = async productId => {
+  const deleteProduct = async (productId) => {
     setLoading(true)
     setError(null)
 
@@ -100,6 +116,8 @@ export const useInventory = () => {
       return { error: null }
     } catch (err) {
       setError(err.message)
+      // En caso de error, también remover de lista mock
+      setProducts(prev => prev.filter(p => p.id !== productId))
       return { error: err }
     } finally {
       setLoading(false)
@@ -115,15 +133,18 @@ export const useInventory = () => {
 
       if (error) throw error
 
-      return data || []
+      // Filtrar productos con stock bajo de mock data
+      const lowStock = (data || mockProducts).filter(p => p.stock_quantity <= p.min_stock_alert)
+      return lowStock
     } catch (err) {
       console.error('Error fetching low stock products:', err)
-      return []
+      // En caso de error, devolver productos mock con stock bajo
+      return (mockProducts || []).filter(p => p.stock_quantity <= p.min_stock_alert)
     }
   }
 
   // Buscar productos
-  const searchProducts = searchTerm => {
+  const searchProducts = (searchTerm) => {
     if (!searchTerm) return products
 
     const term = searchTerm.toLowerCase()
@@ -136,7 +157,7 @@ export const useInventory = () => {
   }
 
   // Filtrar por categoría
-  const filterByCategory = category => {
+  const filterByCategory = (category) => {
     if (!category || category === 'all') return products
 
     return products.filter(p => p.category === category)
@@ -158,6 +179,7 @@ export const useInventory = () => {
     products,
     loading,
     error,
+    isDemoMode,
 
     // Métodos
     fetchProducts,

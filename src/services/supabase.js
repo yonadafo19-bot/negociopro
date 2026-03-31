@@ -34,6 +34,21 @@ export const authService = {
     return { data, error }
   },
 
+  // Sign in with Google
+  signInWithGoogle: async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/app/dashboard`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    })
+    return { data, error }
+  },
+
   // Sign out
   signOut: async () => {
     const { error } = await supabase.auth.signOut()
@@ -152,7 +167,6 @@ export const productsService = {
       .select('*')
       .eq('user_id', userId)
       .eq('is_active', true)
-      .filter('stock_quantity', 'lte', 'min_stock_alert')
     return { data, error }
   },
 }

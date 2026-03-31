@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useContacts } from '../hooks/useContacts'
-import { Card, Button, Modal, Input, Badge, PageLoader } from '../components/common'
+import { Card, Button, Modal, Badge, PageLoader } from '../components/common'
 import { User, UserPlus, Mail, Phone, Building, AlertCircle } from 'lucide-react'
+import { ContactForm } from '../components/contacts'
 
 const ContactsPage = () => {
   const {
@@ -23,24 +24,19 @@ const ContactsPage = () => {
   const [filterType, setFilterType] = useState('all')
 
   const filteredContacts =
-    filterType === 'all' ? contacts : contacts.filter(c => c.contact_type === filterType)
-
-  // Mostrar PageLoader mientras carga inicialmente
-  if (loading && contacts.length === 0) {
-    return <PageLoader text="Cargando contactos..." />
-  }
+    filterType === 'all' ? contacts : contacts.filter((c) => c.contact_type === filterType)
 
   const handleCreate = () => {
     setEditingContact(null)
     setShowModal(true)
   }
 
-  const handleEdit = contact => {
+  const handleEdit = (contact) => {
     setEditingContact(contact)
     setShowModal(true)
   }
 
-  const handleDelete = contact => {
+  const handleDelete = (contact) => {
     setDeletingContact(contact)
   }
 
@@ -66,7 +62,7 @@ const ContactsPage = () => {
     setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
-  const handleSubmit = async contactData => {
+  const handleSubmit = async (contactData) => {
     setModalLoading(true)
     setMessage({ type: '', text: '' })
 
@@ -96,7 +92,7 @@ const ContactsPage = () => {
     setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
-  const getContactTypeLabel = type => {
+  const getContactTypeLabel = (type) => {
     const labels = {
       customer: 'Cliente',
       supplier: 'Proveedor',
@@ -105,7 +101,7 @@ const ContactsPage = () => {
     return labels[type] || type
   }
 
-  const getContactTypeColor = type => {
+  const getContactTypeColor = (type) => {
     const colors = {
       customer: 'success',
       supplier: 'warning',
@@ -114,13 +110,20 @@ const ContactsPage = () => {
     return colors[type] || 'secondary'
   }
 
+  // Mostrar PageLoader mientras carga inicialmente
+  if (loading && contacts.length === 0) {
+    return <PageLoader text="Cargando contactos..." />
+  }
+
   return (
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Contactos</h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <h1 className="text-3xl font-bold text-neo-text dark:text-dark-text mb-2">
+            Contactos
+          </h1>
+          <p className="text-neo-text-muted dark:text-dark-text-muted">
             Gestiona tus clientes, proveedores y empleados
           </p>
         </div>
@@ -134,36 +137,36 @@ const ContactsPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-green-500 rounded-kawaii">
+            <div className="p-3 bg-neo-success dark:bg-dark-success rounded-neo shadow-neo">
               <User className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Clientes</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{customersCount}</p>
+              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Clientes</p>
+              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">{customersCount}</p>
             </div>
           </div>
         </Card>
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-yellow-500 rounded-kawaii">
+            <div className="p-3 bg-neo-warning dark:bg-dark-warning rounded-neo shadow-neo">
               <Building className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Proveedores</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{suppliersCount}</p>
+              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Proveedores</p>
+              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">{suppliersCount}</p>
             </div>
           </div>
         </Card>
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-primary-500 rounded-kawaii">
+            <div className="p-3 bg-neo-primary dark:bg-dark-primary rounded-neo shadow-neo">
               <User className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Empleados</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{employeesCount}</p>
+              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Empleados</p>
+              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">{employeesCount}</p>
             </div>
           </div>
         </Card>
@@ -172,15 +175,15 @@ const ContactsPage = () => {
       {/* Filters */}
       <Card padding="md" className="mb-6">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filtrar por:</span>
+          <span className="text-sm font-medium text-neo-text dark:text-dark-text">Filtrar por:</span>
 
           <div className="flex gap-2">
             <button
               onClick={() => setFilterType('all')}
-              className={`px-4 py-2 rounded-kawaii text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-neo text-sm font-medium transition-all duration-200 shadow-sm ${
                 filterType === 'all'
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-neo-primary dark:bg-dark-primary text-white'
+                  : 'bg-neo-bg dark:bg-dark-bg-alt text-neo-text dark:text-dark-text hover:bg-neo-surface dark:hover:bg-dark-surface'
               }`}
             >
               Todos ({contacts.length})
@@ -188,10 +191,10 @@ const ContactsPage = () => {
 
             <button
               onClick={() => setFilterType('customer')}
-              className={`px-4 py-2 rounded-kawaii text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-neo text-sm font-medium transition-all duration-200 shadow-sm ${
                 filterType === 'customer'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-neo-success dark:bg-dark-success text-white'
+                  : 'bg-neo-bg dark:bg-dark-bg-alt text-neo-text dark:text-dark-text hover:bg-neo-surface dark:hover:bg-dark-surface'
               }`}
             >
               Clientes ({customersCount})
@@ -199,10 +202,10 @@ const ContactsPage = () => {
 
             <button
               onClick={() => setFilterType('supplier')}
-              className={`px-4 py-2 rounded-kawaii text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-neo text-sm font-medium transition-all duration-200 shadow-sm ${
                 filterType === 'supplier'
-                  ? 'bg-yellow-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-neo-warning dark:bg-dark-warning text-white'
+                  : 'bg-neo-bg dark:bg-dark-bg-alt text-neo-text dark:text-dark-text hover:bg-neo-surface dark:hover:bg-dark-surface'
               }`}
             >
               Proveedores ({suppliersCount})
@@ -210,10 +213,10 @@ const ContactsPage = () => {
 
             <button
               onClick={() => setFilterType('employee')}
-              className={`px-4 py-2 rounded-kawaii text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-neo text-sm font-medium transition-all duration-200 shadow-sm ${
                 filterType === 'employee'
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-neo-primary dark:bg-dark-primary text-white'
+                  : 'bg-neo-bg dark:bg-dark-bg-alt text-neo-text dark:text-dark-text hover:bg-neo-surface dark:hover:bg-dark-surface'
               }`}
             >
               Empleados ({employeesCount})
@@ -225,10 +228,10 @@ const ContactsPage = () => {
       {/* Message */}
       {message.text && (
         <div
-          className={`mb-6 p-4 rounded-kawaii flex items-start gap-2 ${
+          className={`mb-6 p-4 rounded-neo flex items-start gap-2 border shadow-neo-sm ${
             message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200 dark:bg-green-900/20 dark:text-green-400'
-              : 'bg-red-50 text-red-800 border border-red-200 dark:bg-red-900/20 dark:text-red-400'
+              ? 'bg-neo-success/10 dark:bg-dark-success/10 text-neo-success dark:text-dark-success border-neo-success/30 dark:border-dark-success/30'
+              : 'bg-neo-danger/10 dark:bg-dark-danger/10 text-neo-danger dark:text-dark-danger border-neo-danger/30 dark:border-dark-danger/30'
           }`}
         >
           <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
@@ -240,48 +243,50 @@ const ContactsPage = () => {
       <Card>
         {loading ? (
           <div className="text-center py-8">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-500 border-r-transparent"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Cargando contactos...</p>
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-neo-border dark:border-dark-border border-t-neo-primary dark:border-t-dark-primary"></div>
+            <p className="mt-2 text-neo-text-muted dark:text-dark-text-muted">
+              Cargando contactos...
+            </p>
           </div>
         ) : filteredContacts.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                <tr className="border-b border-neo-border dark:border-dark-border">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Nombre
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Tipo
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Email
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Teléfono
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Acciones
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredContacts.map(contact => (
+                {filteredContacts.map((contact) => (
                   <tr
                     key={contact.id}
-                    className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                    className="border-b border-neo-border/50 dark:border-dark-border/50 hover:bg-neo-bg dark:hover:bg-dark-bg-alt"
                   >
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-accent-500 rounded-full flex items-center justify-center text-white font-bold">
+                        <div className="w-10 h-10 bg-neo-primary dark:bg-dark-primary rounded-neo flex items-center justify-center text-white font-bold shadow-neo">
                           {contact.name?.charAt(0).toUpperCase() || 'U'}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900 dark:text-white">
+                          <p className="font-medium text-neo-text dark:text-dark-text">
                             {contact.name}
                           </p>
                           {contact.tax_id && (
-                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                            <p className="text-xs text-neo-text-light dark:text-dark-text-light">
                               {contact.tax_id}
                             </p>
                           )}
@@ -293,22 +298,26 @@ const ContactsPage = () => {
                         {getContactTypeLabel(contact.contact_type)}
                       </Badge>
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
+                    <td className="py-3 px-4 text-sm text-neo-text-muted dark:text-dark-text-muted">
                       {contact.email || '-'}
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
+                    <td className="py-3 px-4 text-sm text-neo-text-muted dark:text-dark-text-muted">
                       {contact.phone || '-'}
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => handleEdit(contact)}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEdit(contact)}
+                        >
                           Editar
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDelete(contact)}
-                          className="text-red-600 hover:text-red-700"
+                          className="text-neo-danger dark:text-dark-danger hover:bg-neo-danger/10 dark:hover:bg-dark-danger/10"
                         >
                           Eliminar
                         </Button>
@@ -321,11 +330,11 @@ const ContactsPage = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <User className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <User className="h-16 w-16 text-neo-text-muted dark:text-dark-text-muted mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text mb-2">
               Sin contactos
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-neo-text-muted dark:text-dark-text-muted mb-6">
               {filterType !== 'all'
                 ? `No hay ${getContactTypeLabel(filterType).toLowerCase()}s registrados`
                 : 'Empieza agregando tus primeros contactos'}
@@ -360,7 +369,9 @@ const ContactsPage = () => {
         />
 
         {message.text && (
-          <div className="mt-4 p-3 rounded-kawaii text-sm text-center">{message.text}</div>
+          <div className="mt-4 p-3 rounded-neo text-sm text-center border border-neo-border dark:border-dark-border shadow-inner-shadow">
+            {message.text}
+          </div>
         )}
       </Modal>
 
@@ -372,19 +383,21 @@ const ContactsPage = () => {
         size="sm"
       >
         <div className="text-center">
-          <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+          <AlertCircle className="h-16 w-16 text-neo-danger dark:text-dark-danger mx-auto mb-4" />
 
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text mb-2">
             ¿Estás seguro?
           </h3>
 
-          <p className="text-gray-600 dark:text-gray-400 mb-2">Vas a eliminar el contacto:</p>
+          <p className="text-neo-text-muted dark:text-dark-text-muted mb-2">
+            Vas a eliminar el contacto:
+          </p>
 
-          <p className="font-semibold text-gray-900 dark:text-white mb-6">
+          <p className="font-semibold text-neo-text dark:text-dark-text mb-6">
             {deletingContact?.name}
           </p>
 
-          <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
+          <p className="text-sm text-neo-text-light dark:text-dark-text-light mb-6">
             Esta acción no se puede deshacer.
           </p>
 
@@ -409,173 +422,6 @@ const ContactsPage = () => {
         </div>
       </Modal>
     </div>
-  )
-}
-
-// Contact Form Component
-const ContactForm = ({ contact, onSubmit, onCancel, loading = false }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    tax_id: '',
-    contact_type: 'customer',
-    notes: '',
-  })
-
-  const [errors, setErrors] = useState({})
-
-  useEffect(() => {
-    if (contact) {
-      setFormData({
-        name: contact.name || '',
-        email: contact.email || '',
-        phone: contact.phone || '',
-        address: contact.address || '',
-        tax_id: contact.tax_id || '',
-        contact_type: contact.contact_type || 'customer',
-        notes: contact.notes || '',
-      })
-    }
-  }, [contact])
-
-  const handleChange = e => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-
-    // Limpiar error cuando el usuario empieza a escribir
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }))
-    }
-  }
-
-  const validate = () => {
-    const newErrors = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'El nombre es requerido'
-    }
-
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email inválido'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = e => {
-    e.preventDefault()
-
-    if (!validate()) return
-
-    onSubmit({
-      name: formData.name.trim(),
-      email: formData.email.trim() || null,
-      phone: formData.phone.trim() || null,
-      address: formData.address.trim() || null,
-      tax_id: formData.tax_id.trim() || null,
-      contact_type: formData.contact_type,
-      notes: formData.notes.trim() || null,
-    })
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <Input
-        label="Nombre *"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        error={errors.name}
-        placeholder="Juan Pérez"
-        required
-      />
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Tipo de contacto *
-        </label>
-        <select
-          name="contact_type"
-          value={formData.contact_type}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
-          required
-        >
-          <option value="customer">Cliente</option>
-          <option value="supplier">Proveedor</option>
-          <option value="employee">Empleado</option>
-        </select>
-      </div>
-
-      <Input
-        label="Email"
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        error={errors.email}
-        placeholder="juan@ejemplo.com"
-        icon={Mail}
-      />
-
-      <Input
-        label="Teléfono"
-        type="tel"
-        name="phone"
-        value={formData.phone}
-        onChange={handleChange}
-        placeholder="+52 55 1234 5678"
-        icon={Phone}
-      />
-
-      <Input
-        label="Dirección"
-        name="address"
-        value={formData.address}
-        onChange={handleChange}
-        placeholder="Calle 123, Colonia, Ciudad"
-      />
-
-      <Input
-        label="RFC / Tax ID"
-        name="tax_id"
-        value={formData.tax_id}
-        onChange={handleChange}
-        placeholder="RFC (opcional)"
-      />
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Notas
-        </label>
-        <textarea
-          name="notes"
-          value={formData.notes}
-          onChange={handleChange}
-          placeholder="Notas adicionales..."
-          rows={3}
-          className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
-        />
-      </div>
-
-      <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          className="flex-1"
-          disabled={loading}
-        >
-          Cancelar
-        </Button>
-        <Button type="submit" className="flex-1" loading={loading} disabled={loading}>
-          {contact ? 'Actualizar' : 'Crear'} Contacto
-        </Button>
-      </div>
-    </form>
   )
 }
 

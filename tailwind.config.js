@@ -1,66 +1,79 @@
-/** @type {import('tailwindcss').Config} */
-export default {
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#f0fdf4',
-          100: '#fef2f2',
-          200: '#fee2e2',
-          300: '#fecaca',
-          400: '#fca5a5',
-          500: '#ef4444',
-          600: '#dc2626',
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d',
-          950: '#450a0a',
+        // Neumorphic Light Mode Colors
+        neo: {
+          bg: '#e0e5ec',
+          'bg-alt': '#f4f6fa',
+          surface: '#ffffff',
+          'surface-alt': '#f8f9fc',
+          text: '#1e293b',
+          'text-muted': '#64748b',
+          'text-light': '#94a3b8',
+          border: '#e2e8f0',
+          primary: '#6366f1',
+          'primary-light': '#818cf8',
+          accent: '#f472b6',
+          'accent-light': '#fb7185',
+          success: '#10b981',
+          'success-light': '#34d399',
+          warning: '#f59e0b',
+          'warning-light': '#fbbf24',
+          danger: '#ef4444',
+          'danger-light': '#fca5a5',
         },
-        secondary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
+        // Neumorphic Dark Mode Colors - CONTRASTE MEJORADO
+        dark: {
+          bg: '#1a1a2e',
+          'bg-alt': '#1e1e35',
+          surface: '#252538',
+          'surface-alt': '#2a2a42',
+          text: '#f1f5f9', // Blanco puro para máximo contraste
+          'text-muted': '#a5b4fc', // Azul claro mejorado
+          'text-light': '#64748b', // Gris medio
+          border: '#3f3f52',
+          primary: '#818cf8', // Azul brillante para mejor contraste
+          'primary-light': '#a5b4fc',
+          accent: '#fb923c',
+          'accent-light': '#fdba74',
+          success: '#22c55e',
+          'success-light': '#4ade80',
+          warning: '#f59e0b',
+          'warning-light': '#fbbf24',
+          danger: '#f87171',
+          'danger-light': '#fca5a5',
         },
-        accent: {
-          50: '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#d946ef',
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
-          950: '#4a044e',
-        }
-      },
-      fontFamily: {
-        sans: ['Quicksand', 'Inter', 'sans-serif'],
       },
       boxShadow: {
-        'kawaii': '4px 4px 0px 0px rgba(0,0,0,0.1)',
-        'kawaii-sm': '2px 2px 0px 0px rgba(0,0,0,0.1)',
-        'kawaii-lg': '6px 6px 0px 0px rgba(0,0,0,0.1)',
+        // Neumorphic shadows - soft, with depth
+        'neo-sm': '0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(255, 255, 255, 0.8)',
+        'neo': '0 4px 6px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(255, 255, 255, 0.8)',
+        'neo-lg': '0 10px 15px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(255, 255, 255, 0.8)',
+        'neo-xl': '0 20px 25px rgba(0, 0, 0, 0.08), 0 10px 10px rgba(255, 255, 255, 0.8)',
+        // Inner shadow for pressed states
+        'inner-shadow': 'inset 2px 4px 6px rgba(0, 0, 0, 0.06)',
+        'inner-shadow-lg': 'inset 4px 6px 10px rgba(0, 0, 0, 0.08)',
       },
       borderRadius: {
-        'kawaii': '1rem',
-        'kawaii-lg': '1.5rem',
-        'kawaii-xl': '2rem',
-      }
+        'neo-sm': '0.5rem',
+        'neo': '0.75rem',
+        'neo-lg': '1rem',
+        'neo-xl': '1.25rem',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+      },
     },
   },
   plugins: [],
 }
+
+export default config

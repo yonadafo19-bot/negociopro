@@ -1,183 +1,88 @@
 /**
  * Design System - NegociPro
- * Tokens y variables de diseño para consistencia visual
+ * Sistema Neumórfico Profesional con Modo Día/Noche
+ * WCAG AA Contrast Compliant - CONTRASTE MEJORADO EN MODO OSCURO
  */
 
 // ============================================
-// COLORES - Semantic tokens
+// COLORES - Neumorphic Light Mode
 // ============================================
 export const colors = {
-  // Primary colors (brand)
-  primary: {
-    50: '#fef2f2',
-    100: '#fee2e2',
-    200: '#fecaca',
-    300: '#fca5a5',
-    400: '#f87171',
-    500: '#ef4444',
-    600: '#dc2626',
-    700: '#b91c1c',
-    800: '#991b1b',
-    900: '#7f1d1d',
-    950: '#450a0a',
+  // Light Mode Colors
+  neo: {
+    bg: '#e0e5ec',
+    'bg-alt': '#f4f6fa',
+    surface: '#ffffff',
+    'surface-alt': '#f8f9fc',
+    text: '#1e293b',
+    'text-muted': '#64748b',
+    'text-light': '#94a3b8',
+    border: '#e2e8f0',
+    primary: '#6366f1',
+    'primary-light': '#818cf8',
+    accent: '#f472b6',
+    'accent-light': '#fb7185',
+    success: '#10b981',
+    'success-light': '#34d399',
+    warning: '#f59e0b',
+    'warning-light': '#fbbf24',
+    danger: '#ef4444',
+    'danger-light': '#fca5a5',
   },
-
-  // Secondary colors
-  secondary: {
-    50: '#f0f9ff',
-    100: '#e0f2fe',
-    200: '#bae6fd',
-    300: '#7dd3fc',
-    400: '#38bdf8',
-    500: '#0ea5e9',
-    600: '#0284c7',
-    700: '#0369a1',
-    800: '#075985',
-    900: '#0c4a6e',
-    950: '#082f49',
-  },
-
-  // Accent colors
-  accent: {
-    50: '#fdf4ff',
-    100: '#fae8ff',
-    200: '#f5d0fe',
-    300: '#f0abfc',
-    400: '#e879f9',
-    500: '#d946ef',
-    600: '#c026d3',
-    700: '#a21caf',
-    800: '#86198f',
-    900: '#701a75',
-    950: '#4a044e',
-  },
-
-  // Semantic colors
-  success: {
-    light: '#86efac',
-    DEFAULT: '#22c55e',
-    dark: '#16a34a',
-  },
-
-  warning: {
-    light: '#fcd34d',
-    DEFAULT: '#f59e0b',
-    dark: '#d97706',
-  },
-
-  danger: {
-    light: '#fca5a5',
-    DEFAULT: '#ef4444',
-    dark: '#dc2626',
-  },
-
-  info: {
-    light: '#7dd3fc',
-    DEFAULT: '#0ea5e9',
-    dark: '#0284c7',
-  },
-
-  // Neutral colors
-  gray: {
-    50: '#f9fafb',
-    100: '#f3f4f6',
-    200: '#e5e7eb',
-    300: '#d1d5db',
-    400: '#9ca3af',
-    500: '#6b7280',
-    600: '#4b5563',
-    700: '#374151',
-    800: '#1f2937',
-    900: '#111827',
-    950: '#030712',
+  // Dark Mode Colors - CONTRASTE MEJORADO
+  dark: {
+    bg: '#1a1a2e',
+    'bg-alt': '#1e1e35',
+    surface: '#252538',
+    'surface-alt': '#2a2a42',
+    text: '#f1f5f9', // Blanco puro para máximo contraste
+    'text-muted': '#a5b4fc', // Azul claro para mejor contraste
+    'text-light': '#94a3b8', // Gris medio
+    border: '#3f3f52',
+    primary: '#818cf8', // Azul brillante para mejor contraste
+    'primary-light': '#a5b4fc',
+    accent: '#fb923c',
+    'accent-light': '#fdba74',
+    success: '#22c55e',
+    'success-light': '#4ade80',
+    warning: '#f59e0b',
+    'warning-light': '#fbbf24',
+    danger: '#f87171',
+    'danger-light': '#fca5a5',
   },
 }
 
 // ============================================
-// SPACING - Scale consistente
+// SOMBRAS Neumórficas
 // ============================================
-export const spacing = {
-  0: '0',
-  px: '1px',
-  0.5: '0.125rem', // 2px
-  1: '0.25rem', // 4px
-  1.5: '0.375rem', // 6px
-  2: '0.5rem', // 8px
-  2.5: '0.625rem', // 10px
-  3: '0.75rem', // 12px
-  3.5: '0.875rem', // 14px
-  4: '1rem', // 16px
-  5: '1.25rem', // 20px
-  6: '1.5rem', // 24px
-  7: '1.75rem', // 28px
-  8: '2rem', // 32px
-  9: '2.25rem', // 36px
-  10: '2.5rem', // 40px
-  12: '3rem', // 48px
-  16: '4rem', // 64px
-  20: '5rem', // 80px
-  24: '6rem', // 96px
-  32: '8rem', // 128px
-  40: '10rem', // 160px
-  48: '12rem', // 192px
-  56: '14rem', // 224px
-  64: '16rem', // 256px',
+export const shadows = {
+  // Light mode shadows - suaves con brillo
+  'neo-sm': '0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(255, 255, 255, 0.8)',
+  'neo': '0 4px 6px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(255, 255, 255, 0.8)',
+  'neo-lg': '0 10px 15px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(255, 255, 255, 0.8)',
+  'neo-xl': '0 20px 25px rgba(0, 0, 0, 0.08), 0 10px 10px rgba(255, 255, 255, 0.8)',
+  // Inner shadow para estados presionados
+  'inner-shadow': 'inset 2px 4px 6px rgba(0, 0, 0, 0.06)',
+  'inner-shadow-lg': 'inset 4px 6px 10px rgba(0, 0, 0, 0.08)',
+  // Sombras estándar
+  sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+  DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.06)',
+  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.06)',
+  '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 12px 25px -6px rgba(0, 0, 0, 0.1)',
+  inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+  none: 'none',
 }
 
 // ============================================
-// TYPOGRAPHY - Escalas de fuente
-// ============================================
-export const typography = {
-  // Font families
-  fontFamily: {
-    sans: ['Quicksand', 'Inter', 'system-ui', 'sans-serif'],
-    mono: ['Fira Code', 'Monaco', 'Consolas', 'monospace'],
-  },
-
-  // Font sizes
-  fontSize: {
-    xs: ['0.75rem', { lineHeight: '1rem' }], // 12px
-    sm: ['0.875rem', { lineHeight: '1.25rem' }], // 14px
-    base: ['1rem', { lineHeight: '1.5rem' }], // 16px
-    lg: ['1.125rem', { lineHeight: '1.75rem' }], // 18px
-    xl: ['1.25rem', { lineHeight: '1.75rem' }], // 20px
-    '2xl': ['1.5rem', { lineHeight: '2rem' }], // 24px
-    '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
-    '4xl': ['2.25rem', { lineHeight: '2.5rem' }], // 36px
-    '5xl': ['3rem', { lineHeight: '1' }], // 48px
-    '6xl': ['3.75rem', { lineHeight: '1' }], // 60px
-  },
-
-  // Font weights
-  fontWeight: {
-    light: '300',
-    normal: '400',
-    medium: '500',
-    semibold: '600',
-    bold: '700',
-    extrabold: '800',
-  },
-
-  // Letter spacing
-  letterSpacing: {
-    tighter: '-0.05em',
-    tight: '-0.025em',
-    normal: '0',
-    wide: '0.025em',
-    wider: '0.05em',
-    widest: '0.1em',
-  },
-}
-
-// ============================================
-// BORDER RADIUS - "Kawaii" style
+// BORDER RADIUS - Neumórfico
 // ============================================
 export const borderRadius = {
-  kawaii: '1rem', // 16px
-  'kawaii-sm': '0.75rem', // 12px
-  'kawaii-lg': '1.25rem', // 20px
-  'kawaii-xl': '1.5rem', // 24px
-  none: '0',
+  'neo-sm': '0.5rem',
+  'neo': '0.75rem',
+  'neo-lg': '1rem',
+  'neo-xl': '1.25rem',
   sm: '0.125rem',
   DEFAULT: '0.25rem',
   md: '0.375rem',
@@ -189,22 +94,72 @@ export const borderRadius = {
 }
 
 // ============================================
-// SHADOWS - Kawaii style shadows
+// SPACING - Scale consistente
 // ============================================
-export const shadows = {
-  kawaii: '4px 4px 0px 0px rgba(0, 0, 0, 0.1)',
-  'kawaii-sm': '2px 2px 0px 0px rgba(0, 0, 0, 0.1)',
-  'kawaii-lg': '6px 6px 0px 0px rgba(0, 0, 0, 0.1)',
-  'kawaii-xl': '8px 8px 0px 0px rgba(0, 0, 0, 0.1)',
+export const spacing = {
+  0: '0',
+  px: '1px',
+  0.5: '0.125rem',
+  1: '0.25rem',
+  1.5: '0.375rem',
+  2: '0.5rem',
+  2.5: '0.625rem',
+  3: '0.75rem',
+  3.5: '0.875rem',
+  4: '1rem',
+  5: '1.25rem',
+  6: '1.5rem',
+  7: '1.75rem',
+  8: '2rem',
+  9: '2.25rem',
+  10: '2.5rem',
+  12: '3rem',
+  16: '4rem',
+  20: '5rem',
+  24: '6rem',
+  32: '8rem',
+  40: '10rem',
+  48: '12rem',
+  56: '14rem',
+  64: '16rem',
+}
 
-  sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-  DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-  '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-  inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-  none: 'none',
+// ============================================
+// TYPOGRAPHY - Escalas de fuente
+// ============================================
+export const typography = {
+  fontFamily: {
+    sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+    mono: ['Fira Code', 'Monaco', 'Consolas', 'monospace'],
+  },
+  fontSize: {
+    xs: ['0.75rem', { lineHeight: '1rem' }],
+    sm: ['0.875rem', { lineHeight: '1.25rem' }],
+    base: ['1rem', { lineHeight: '1.5rem' }],
+    lg: ['1.125rem', { lineHeight: '1.75rem' }],
+    xl: ['1.25rem', { lineHeight: '1.75rem' }],
+    '2xl': ['1.5rem', { lineHeight: '2rem' }],
+    '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+    '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+    '5xl': ['3rem', { lineHeight: '1' }],
+    '6xl': ['3.75rem', { lineHeight: '1' }],
+  },
+  fontWeight: {
+    light: '300',
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+    extrabold: '800',
+  },
+  letterSpacing: {
+    tighter: '-0.05em',
+    tight: '-0.025em',
+    normal: '0',
+    wide: '0.025em',
+    wider: '0.05em',
+    widest: '0.1em',
+  },
 }
 
 // ============================================
@@ -229,8 +184,6 @@ export const transitions = {
   base: '200ms cubic-bezier(0.4, 0, 0.2, 1)',
   normal: '250ms cubic-bezier(0.4, 0, 0.2, 1)',
   slow: '350ms cubic-bezier(0.4, 0, 0.2, 1)',
-
-  // Easing functions
   easing: {
     DEFAULT: 'cubic-bezier(0.4, 0, 0.2, 1)',
     linear: 'linear',
@@ -245,18 +198,17 @@ export const transitions = {
 // BREAKPOINTS - Responsive design
 // ============================================
 export const breakpoints = {
-  sm: '640px', // Mobile landscape
-  md: '768px', // Tablet
-  lg: '1024px', // Desktop
-  xl: '1280px', // Wide desktop
-  '2xl': '1536px', // Extra wide
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+  '2xl': '1536px',
 }
 
 // ============================================
 // COMPONENT SPECIFIC
 // ============================================
 export const components = {
-  // Button
   button: {
     height: {
       sm: '2.5rem',
@@ -275,8 +227,6 @@ export const components = {
       lg: '1.125rem',
     },
   },
-
-  // Input
   input: {
     height: {
       sm: '2.5rem',
@@ -294,8 +244,6 @@ export const components = {
       lg: '1.125rem',
     },
   },
-
-  // Card
   card: {
     padding: {
       none: '0',
@@ -305,8 +253,6 @@ export const components = {
       xl: '2.5rem',
     },
   },
-
-  // Modal
   modal: {
     width: {
       sm: '90%',

@@ -37,8 +37,10 @@ const DashboardPage = () => {
     const loadLowStock = async () => {
       try {
         setLoading(true)
-        const products = await getLowStockProducts()
-        setLowStockProducts(products)
+        const allProducts = await getLowStockProducts()
+        // Filtrar productos con stock bajo
+        const lowStock = allProducts.filter((p) => p.stock_quantity <= p.min_stock_alert)
+        setLowStockProducts(lowStock)
       } catch (err) {
         setError(err)
       } finally {
@@ -46,43 +48,16 @@ const DashboardPage = () => {
       }
     }
     loadLowStock()
-  }, [products])
+  }, [])
 
-  const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
-  if (loading) {
-    return <PageLoader text="Cargando dashboard..." />
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Error al cargar el dashboard
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Por favor, intenta recargar la página
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary-500 text-white rounded-kawaii hover:bg-primary-600"
-          >
-            Recargar
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // Preparar datos para el gráfico de ventas
-  // Agrupar ventas por día (últimos 7 días)
+  // Preparar datos para el gráfico de ventas - ANTES de cualquier return
   const salesChartData = useMemo(() => {
     const last7Days = []
     const today = new Date()
@@ -92,15 +67,20 @@ const DashboardPage = () => {
       date.setDate(date.getDate() - i)
       date.setHours(0, 0, 0, 0)
 
-      const daySales = transactions.filter(t => {
-        const tDate = new Date(t.transaction_date)
-        return t.transaction_type === 'sale' && tDate.toDateString() === date.toDateString()
-      })
+      const daySales = (transactions || []).filter(
+        (t) => {
+          const tDate = new Date(t.transaction_date)
+          return t.transaction_type === 'sale' && tDate.toDateString() === date.toDateString()
+        }
+      )
 
-      const total = daySales.reduce((sum, t) => sum + parseFloat(t.total_amount), 0)
+      const total = daySales.reduce(
+        (sum, t) => sum + parseFloat(t.total_amount || 0),
+        0
+      )
 
       last7Days.push({
-        name: date.toLocaleDateString('es-ES', { weekday: 'short' }),
+        name: date.toLocaleDateString('es-CL', { weekday: 'short' }),
         amount: total,
       })
     }
@@ -108,14 +88,41 @@ const DashboardPage = () => {
     return last7Days
   }, [transactions])
 
+  // Ahora sí, los returns condicionales
+  if (loading) {
+    return <PageLoader text="Cargando dashboard..." />
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-neo-bg dark:bg-dark-bg">
+        <div className="card-neo p-8 text-center">
+          <AlertTriangle className="h-16 w-16 text-neo-danger dark:text-dark-danger mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-neo-text dark:text-dark-text mb-2">
+            Error al cargar el dashboard
+          </h2>
+          <p className="text-neo-text-muted dark:text-dark-text-muted mb-4">
+            Por favor, intenta recargar la página
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="btn-neo-primary px-6 py-2 rounded-neo"
+          >
+            Recargar
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
       {/* Welcome Section */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-neo-text dark:text-dark-text mb-2">
           ¡Hola, {profile?.full_name?.split(' ')[0] || 'Usuario'}! 👋
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-neo-text-muted dark:text-dark-text-muted">
           Bienvenido a {profile?.business_name || 'NegociPro'}
         </p>
       </div>
@@ -179,7 +186,7 @@ const DashboardPage = () => {
             loading={loadingInventory}
             onViewAll={() => {
               // Navigate to inventory page
-              window.location.href = '/inventory'
+              window.location.href = '/app/inventory'
             }}
           />
         </div>

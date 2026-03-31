@@ -13,6 +13,7 @@ import CatalogsPage from '../pages/Catalogs'
 import SettingsPage from '../pages/Settings'
 import SyncSettingsPage from '../pages/SyncSettings'
 import PublicCatalogPage from '../pages/PublicCatalog'
+import LandingPage from '../pages/LandingPage'
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -46,7 +47,7 @@ const PublicRoute = ({ children }) => {
   }
 
   if (user) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/app/dashboard" replace />
   }
 
   return children
@@ -55,6 +56,9 @@ const PublicRoute = ({ children }) => {
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Landing page (public) */}
+      <Route path="/" element={<LandingPage />} />
+
       {/* Public routes */}
       <Route
         path="/login"
@@ -86,7 +90,7 @@ const AppRoutes = () => {
 
       {/* Protected routes with Layout */}
       <Route
-        path="/"
+        path="/app"
         element={
           <ProtectedRoute>
             <Layout />
@@ -103,11 +107,18 @@ const AppRoutes = () => {
         <Route path="sync" element={<SyncSettingsPage />} />
       </Route>
 
-      {/* Default route */}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Default protected route redirect */}
+      <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
+      <Route path="/inventory" element={<Navigate to="/app/inventory" replace />} />
+      <Route path="/sales" element={<Navigate to="/app/sales" replace />} />
+      <Route path="/contacts" element={<Navigate to="/app/contacts" replace />} />
+      <Route path="/reports" element={<Navigate to="/app/reports" replace />} />
+      <Route path="/catalogs" element={<Navigate to="/app/catalogs" replace />} />
+      <Route path="/settings" element={<Navigate to="/app/settings" replace />} />
+      <Route path="/sync" element={<Navigate to="/app/sync" replace />} />
 
       {/* 404 */}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<LandingPage />} />
     </Routes>
   )
 }

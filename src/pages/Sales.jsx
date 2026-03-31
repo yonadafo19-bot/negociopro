@@ -31,14 +31,14 @@ const SalesPage = () => {
   const [modalLoading, setModalLoading] = useState(false)
   const [message, setMessage] = useState({ type: '', text: '' })
 
-  const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
-  const formatDate = dateString => {
+  const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'short',
@@ -48,12 +48,7 @@ const SalesPage = () => {
     })
   }
 
-  // Mostrar PageLoader mientras carga inicialmente
-  if (loading && transactions.length === 0) {
-    return <PageLoader text="Cargando ventas..." />
-  }
-
-  const handleSaleSubmit = async saleData => {
+  const handleSaleSubmit = async (saleData) => {
     setModalLoading(true)
     setMessage({ type: '', text: '' })
 
@@ -74,7 +69,7 @@ const SalesPage = () => {
     setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
-  const handleExpenseSubmit = async expenseData => {
+  const handleExpenseSubmit = async (expenseData) => {
     setModalLoading(true)
     setMessage({ type: '', text: '' })
 
@@ -100,15 +95,27 @@ const SalesPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Ventas y Gastos</h1>
-          <p className="text-gray-600 dark:text-gray-400">Registra y gestiona tus transacciones</p>
+          <h1 className="text-3xl font-bold text-neo-text dark:text-dark-text mb-2">
+            Ventas y Gastos
+          </h1>
+          <p className="text-neo-text-muted dark:text-dark-text-muted">
+            Registra y gestiona tus transacciones
+          </p>
         </div>
 
         <div className="flex gap-3">
-          <Button variant="outline" onClick={() => setShowClosingModal(true)} icon={Calculator}>
+          <Button
+            variant="outline"
+            onClick={() => setShowClosingModal(true)}
+            icon={Calculator}
+          >
             Cierre de Caja
           </Button>
-          <Button variant="outline" onClick={() => setShowExpenseModal(true)} icon={TrendingDown}>
+          <Button
+            variant="outline"
+            onClick={() => setShowExpenseModal(true)}
+            icon={TrendingDown}
+          >
             Registrar Gasto
           </Button>
           <Button onClick={() => setShowSaleModal(true)} icon={Plus}>
@@ -121,12 +128,14 @@ const SalesPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-green-500 rounded-kawaii">
+            <div className="p-3 bg-neo-success dark:bg-dark-success rounded-neo shadow-neo">
               <TrendingUp className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Ventas totales</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">
+                Ventas totales
+              </p>
+              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">
                 {formatCurrency(totalSales)}
               </p>
             </div>
@@ -135,12 +144,14 @@ const SalesPage = () => {
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-red-500 rounded-kawaii">
+            <div className="p-3 bg-neo-danger dark:bg-dark-danger rounded-neo shadow-neo">
               <TrendingDown className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Gastos totales</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">
+                Gastos totales
+              </p>
+              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">
                 {formatCurrency(totalExpenses)}
               </p>
             </div>
@@ -149,12 +160,12 @@ const SalesPage = () => {
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-primary-500 rounded-kawaii">
+            <div className="p-3 bg-neo-primary dark:bg-dark-primary rounded-neo shadow-neo">
               <DollarSign className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Balance</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Balance</p>
+              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">
                 {formatCurrency(totalSales - totalExpenses)}
               </p>
             </div>
@@ -165,10 +176,10 @@ const SalesPage = () => {
       {/* Message */}
       {message.text && (
         <div
-          className={`mb-6 p-4 rounded-kawaii flex items-start gap-2 ${
+          className={`mb-6 p-4 rounded-neo flex items-start gap-2 border shadow-neo-sm ${
             message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200 dark:bg-green-900/20 dark:text-green-400'
-              : 'bg-red-50 text-red-800 border border-red-200 dark:bg-red-900/20 dark:text-red-400'
+              ? 'bg-neo-success/10 dark:bg-dark-success/10 text-neo-success dark:text-dark-success border-neo-success/30 dark:border-dark-success/30'
+              : 'bg-neo-danger/10 dark:bg-dark-danger/10 text-neo-danger dark:text-dark-danger border-neo-danger/30 dark:border-dark-danger/30'
           }`}
         >
           <DollarSign className="h-5 w-5 flex-shrink-0 mt-0.5" />
@@ -179,7 +190,7 @@ const SalesPage = () => {
       {/* Recent transactions */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text">
             Transacciones Recientes
           </h3>
           <Badge variant="secondary">{salesCount} ventas</Badge>
@@ -187,41 +198,43 @@ const SalesPage = () => {
 
         {loading ? (
           <div className="text-center py-8">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-500 border-r-transparent"></div>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Cargando transacciones...</p>
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-neo-border dark:border-dark-border border-t-neo-primary dark:border-t-dark-primary"></div>
+            <p className="mt-2 text-neo-text-muted dark:text-dark-text-muted">
+              Cargando transacciones...
+            </p>
           </div>
         ) : transactions.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                <tr className="border-b border-neo-border dark:border-dark-border">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Fecha
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Tipo
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Monto
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Cliente
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Estado
                   </th>
-                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <th className="text-center py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
                     Acciones
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {transactions.slice(0, 10).map(transaction => (
+                {transactions.slice(0, 10).map((transaction) => (
                   <tr
                     key={transaction.id}
-                    className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                    className="border-b border-neo-border/50 dark:border-dark-border/50 hover:bg-neo-bg dark:hover:bg-dark-bg-alt"
                   >
-                    <td className="py-3 px-4 text-sm text-gray-900 dark:text-white">
+                    <td className="py-3 px-4 text-sm text-neo-text dark:text-dark-text">
                       {formatDate(transaction.transaction_date)}
                     </td>
                     <td className="py-3 px-4">
@@ -242,10 +255,10 @@ const SalesPage = () => {
                             : 'Ingreso'}
                       </Badge>
                     </td>
-                    <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">
+                    <td className="py-3 px-4 text-sm font-medium text-neo-text dark:text-dark-text">
                       {formatCurrency(transaction.total_amount)}
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
+                    <td className="py-3 px-4 text-sm text-neo-text-muted dark:text-dark-text-muted">
                       {transaction.contacts?.name || '-'}
                     </td>
                     <td className="py-3 px-4">
@@ -267,20 +280,21 @@ const SalesPage = () => {
                       </Badge>
                     </td>
                     <td className="py-3 px-4 text-center">
-                      {transaction.transaction_type === 'sale' && transaction.contacts?.email ? (
-                        <EmailButton
-                          type="sale-receipt"
-                          data={{ transaction, items: transaction.transaction_items || [] }}
-                          emailAddress={transaction.contacts.email}
-                          variant="email"
-                          size="sm"
-                          showIcon={true}
-                        >
-                          <Mail className="h-4 w-4" />
-                        </EmailButton>
-                      ) : (
-                        <span className="text-gray-400 dark:text-gray-600 text-xs">-</span>
-                      )}
+                      {transaction.transaction_type === 'sale' &&
+                        transaction.contacts?.email ? (
+                          <EmailButton
+                            type="sale-receipt"
+                            data={{ transaction, items: transaction.transaction_items || [] }}
+                            emailAddress={transaction.contacts.email}
+                            variant="email"
+                            size="sm"
+                            showIcon={true}
+                          >
+                            <Mail className="h-4 w-4" />
+                          </EmailButton>
+                        ) : (
+                          <span className="text-neo-text-light dark:text-dark-text-light text-xs">-</span>
+                        )}
                     </td>
                   </tr>
                 ))}
@@ -289,11 +303,11 @@ const SalesPage = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <Calendar className="h-16 w-16 text-neo-text-muted dark:text-dark-text-muted mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text mb-2">
               Sin transacciones
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-neo-text-muted dark:text-dark-text-muted mb-6">
               Empieza registrando tu primera venta
             </p>
             <Button onClick={() => setShowSaleModal(true)} icon={Plus}>
@@ -323,7 +337,9 @@ const SalesPage = () => {
         />
 
         {message.text && (
-          <div className="mt-4 p-3 rounded-kawaii text-sm text-center">{message.text}</div>
+          <div className="mt-4 p-3 rounded-neo text-sm text-center border border-neo-border dark:border-dark-border shadow-inner-shadow">
+            {message.text}
+          </div>
         )}
       </Modal>
 
@@ -345,6 +361,12 @@ const SalesPage = () => {
           }}
           loading={modalLoading}
         />
+
+        {message.text && (
+          <div className="mt-4 p-3 rounded-neo text-sm text-center border border-neo-border dark:border-dark-border shadow-inner-shadow">
+            {message.text}
+          </div>
+        )}
       </Modal>
 
       {/* Cash register closing modal */}

@@ -5,10 +5,10 @@ import { Minus, Plus, Trash2, Package } from 'lucide-react'
 const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
   const [quantity, setQuantity] = useState(item.quantity)
 
-  const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
@@ -32,7 +32,7 @@ const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
     }
   }
 
-  const handleQuantityChange = e => {
+  const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value) || 1
 
     if (value < 1) return
@@ -51,7 +51,7 @@ const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
   const subtotal = quantity * item.unit_price
 
   return (
-    <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-kawaii">
+    <div className="flex items-center gap-4 p-4 bg-neo-bg dark:bg-dark-bg-alt rounded-neo border border-neo-border dark:border-dark-border shadow-neo-sm">
       {/* Product info */}
       <div className="flex-1">
         <div className="flex items-start gap-3">
@@ -59,27 +59,31 @@ const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
             <img
               src={item.image_url}
               alt={item.name}
-              className="w-16 h-16 object-cover rounded-kawaii"
+              className="w-16 h-16 object-cover rounded-neo border border-neo-border dark:border-dark-border shadow-neo-sm"
             />
           ) : (
-            <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-kawaii flex items-center justify-center">
-              <Package className="h-8 w-8 text-gray-400" />
+            <div className="w-16 h-16 bg-neo-surface dark:bg-dark-surface rounded-neo flex items-center justify-center border border-neo-border dark:border-dark-border shadow-inner-shadow">
+              <Package className="h-8 w-8 text-neo-text-muted dark:text-dark-text-muted" />
             </div>
           )}
 
           <div className="flex-1">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{item.name}</h4>
+            <h4 className="font-semibold text-neo-text dark:text-dark-text mb-1">
+              {item.name}
+            </h4>
 
             {item.sku && (
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">SKU: {item.sku}</p>
+              <p className="text-xs text-neo-text-light dark:text-dark-text-light mb-1">
+                SKU: {item.sku}
+              </p>
             )}
 
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
+            <p className="text-sm font-medium text-neo-text dark:text-dark-text">
               {formatCurrency(item.unit_price)} c/u
             </p>
 
             {maxStock && quantity >= maxStock && (
-              <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+              <p className="text-xs text-neo-warning dark:text-dark-warning mt-1">
                 Máximo disponible: {maxStock}
               </p>
             )}
@@ -122,8 +126,10 @@ const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
       {/* Subtotal and remove */}
       <div className="flex items-center gap-4">
         <div className="text-right w-24">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Subtotal</p>
-          <p className="text-lg font-bold text-gray-900 dark:text-white">
+          <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">
+            Subtotal
+          </p>
+          <p className="text-lg font-bold text-neo-text dark:text-dark-text">
             {formatCurrency(subtotal)}
           </p>
         </div>
@@ -132,7 +138,7 @@ const CartItem = ({ item, onUpdate, onRemove, maxStock = null }) => {
           variant="ghost"
           size="sm"
           onClick={() => onRemove(item)}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 p-2"
+          className="text-neo-danger dark:text-dark-danger hover:bg-neo-danger/10 dark:hover:bg-dark-danger/10 p-2"
           title="Eliminar del carrito"
         >
           <Trash2 className="h-4 w-4" />

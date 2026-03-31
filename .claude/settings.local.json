@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh repo:*)",
+      "Bash(npm run:*)",
+      "Bash(cd:*)",
+      "Bash(rm -rf NegociPro-V4)",
+      "Bash(cp -r \"Saas-Factory V4/saas-factory/saas-factory\" NegociPro-V4)",
+      "Bash(mkdir -p supabase/migrations)",
+      "Bash(cp \"C:/Users/EQUIPO/negociopro-audit/supabase/migrations/001_initial_schema.sql\" supabase/migrations/)",
+      "Bash(cp \"C:/Users/EQUIPO/negociopro-audit/supabase/migrations/002_rls_policies.sql\" supabase/migrations)",
+      "Bash(ls -la \"C:/Users/EQUIPO/Desktop/Antigravity/NegociPro-V4/src/app/\\(main\\)/dashboard\")",
+      "Bash(npm install:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

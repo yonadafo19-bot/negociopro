@@ -2,10 +2,10 @@ import { Card, Badge, Button } from '../common'
 import { Package, Edit, Trash2, TrendingUp, AlertTriangle } from 'lucide-react'
 
 const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
-  const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
@@ -17,7 +17,7 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
       hover
       className={`transition-all duration-200 ${
         isLowStock
-          ? 'border-yellow-300 dark:border-yellow-600 bg-yellow-50/50 dark:bg-yellow-900/10'
+          ? 'border-neo-warning dark:border-dark-warning bg-neo-warning/5 dark:bg-dark-warning/5'
           : ''
       }`}
     >
@@ -28,20 +28,22 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
             <img
               src={product.image_url}
               alt={product.name}
-              className="w-16 h-16 object-cover rounded-kawaii mb-2"
+              className="w-16 h-16 object-cover rounded-neo border border-neo-border dark:border-dark-border shadow-neo-sm mb-2"
             />
           ) : (
-            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-kawaii flex items-center justify-center mb-2">
-              <Package className="h-8 w-8 text-gray-400" />
+            <div className="w-16 h-16 bg-neo-bg dark:bg-dark-bg-alt rounded-neo flex items-center justify-center mb-2 border border-neo-border dark:border-dark-border shadow-inner-shadow">
+              <Package className="h-8 w-8 text-neo-text-muted dark:text-dark-text-muted" />
             </div>
           )}
 
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">
+          <h3 className="font-semibold text-neo-text dark:text-dark-text mb-1 line-clamp-2">
             {product.name}
           </h3>
 
           {product.sku && (
-            <p className="text-xs text-gray-500 dark:text-gray-400">SKU: {product.sku}</p>
+            <p className="text-xs text-neo-text-light dark:text-dark-text-light">
+              SKU: {product.sku}
+            </p>
           )}
 
           {product.category && (
@@ -53,7 +55,12 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
 
         {/* Actions */}
         <div className="flex gap-1">
-          <Button variant="ghost" size="sm" onClick={() => onEdit(product)} title="Editar">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onEdit(product)}
+            title="Editar"
+          >
             <Edit className="h-4 w-4" />
           </Button>
           <Button
@@ -61,7 +68,7 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
             size="sm"
             onClick={() => onDelete(product)}
             title="Eliminar"
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+            className="text-neo-danger dark:text-dark-danger hover:bg-neo-danger/10 dark:hover:bg-dark-danger/10"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -71,10 +78,12 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
       {/* Stock */}
       <div className="mb-3">
         <div className="flex items-center justify-between text-sm mb-1">
-          <span className="text-gray-600 dark:text-gray-400">Stock:</span>
+          <span className="text-neo-text-muted dark:text-dark-text-muted">Stock:</span>
           <span
             className={`font-semibold ${
-              isLowStock ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-900 dark:text-white'
+              isLowStock
+                ? 'text-neo-warning dark:text-dark-warning'
+                : 'text-neo-text dark:text-dark-text'
             }`}
           >
             {product.stock_quantity} unidades
@@ -82,21 +91,21 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
         </div>
 
         {isLowStock && (
-          <div className="flex items-center gap-1 text-xs text-yellow-600 dark:text-yellow-400">
+          <div className="flex items-center gap-1 text-xs text-neo-warning dark:text-dark-warning">
             <AlertTriangle className="h-3 w-3" />
             <span>Stock bajo (mín: {product.min_stock_alert})</span>
           </div>
         )}
 
         {/* Progress bar */}
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
+        <div className="w-full bg-neo-bg dark:bg-dark-bg-alt rounded-neo h-2 mt-1 shadow-inner-shadow">
           <div
-            className={`h-2 rounded-full transition-all ${
+            className={`h-2 rounded-neo transition-all shadow-neo-sm ${
               isLowStock
-                ? 'bg-yellow-500'
+                ? 'bg-neo-warning dark:bg-dark-warning'
                 : product.stock_quantity > product.min_stock_alert * 2
-                  ? 'bg-green-500'
-                  : 'bg-blue-500'
+                  ? 'bg-neo-success dark:bg-dark-success'
+                  : 'bg-neo-primary dark:bg-dark-primary'
             }`}
             style={{
               width: `${Math.min(
@@ -110,16 +119,16 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
 
       {/* Prices */}
       <div className="grid grid-cols-2 gap-2 mb-3">
-        <div className="bg-gray-50 dark:bg-gray-800 p-2 rounded-kawaii">
-          <p className="text-xs text-gray-600 dark:text-gray-400">Costo</p>
-          <p className="font-semibold text-gray-900 dark:text-white">
+        <div className="bg-neo-bg dark:bg-dark-bg-alt p-2 rounded-neo border border-neo-border dark:border-dark-border shadow-inner-shadow">
+          <p className="text-xs text-neo-text-muted dark:text-dark-text-muted">Costo</p>
+          <p className="font-semibold text-neo-text dark:text-dark-text">
             {formatCurrency(product.cost_price)}
           </p>
         </div>
 
-        <div className="bg-green-50 dark:bg-green-900/20 p-2 rounded-kawaii">
-          <p className="text-xs text-gray-600 dark:text-gray-400">Venta</p>
-          <p className="font-semibold text-green-600 dark:text-green-400">
+        <div className="bg-neo-success/10 dark:bg-dark-success/10 p-2 rounded-neo border border-neo-success/30 dark:border-dark-success/30">
+          <p className="text-xs text-neo-text-muted dark:text-dark-text-muted">Venta</p>
+          <p className="font-semibold text-neo-success dark:text-dark-success">
             {formatCurrency(product.selling_price)}
           </p>
         </div>
@@ -127,11 +136,12 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
 
       {/* Profit margin */}
       {product.cost_price > 0 && (
-        <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
-          <TrendingUp className="h-3 w-3" />
+        <div className="flex items-center gap-1 text-xs text-neo-text-muted dark:text-dark-text-muted">
+          <TrendingUp className="h-3 w-3 text-neo-primary dark:text-dark-primary" />
           <span>
             Margen:{' '}
-            {(((product.selling_price - product.cost_price) / product.cost_price) * 100).toFixed(0)}
+            {(((product.selling_price - product.cost_price) / product.cost_price) *
+              100).toFixed(0)}
             %
           </span>
         </div>

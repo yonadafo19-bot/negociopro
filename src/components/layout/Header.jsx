@@ -26,12 +26,12 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { name: 'Inventario', href: '/inventory', icon: Package },
-    { name: 'Ventas', href: '/sales', icon: DollarSign },
-    { name: 'Contactos', href: '/contacts', icon: Users },
-    { name: 'Reportes', href: '/reports', icon: BarChart3 },
-    { name: 'Catálogos', href: '/catalogs', icon: BookOpen },
+    { name: 'Dashboard', href: '/app/dashboard', icon: Home },
+    { name: 'Inventario', href: '/app/inventory', icon: Package },
+    { name: 'Ventas', href: '/app/sales', icon: DollarSign },
+    { name: 'Contactos', href: '/app/contacts', icon: Users },
+    { name: 'Reportes', href: '/app/reports', icon: BarChart3 },
+    { name: 'Catálogos', href: '/app/catalogs', icon: BookOpen },
   ]
 
   const handleSignOut = async () => {
@@ -40,18 +40,18 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-40">
+    <header className="bg-neo-surface dark:bg-dark-surface border-b border-neo-border dark:border-dark-border shadow-neo-sm sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <Link to="/dashboard" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-primary-500 rounded-kawaii flex items-center justify-center">
+            <Link to="/app/dashboard" className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-neo-primary dark:bg-dark-primary rounded-neo flex items-center justify-center shadow-neo">
                 <Package className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">NegociPro</h1>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+                <h1 className="text-xl font-bold text-neo-text dark:text-dark-text">NegociPro</h1>
+                <p className="text-xs text-neo-text-muted dark:text-dark-text-muted">
                   {profile?.business_name || 'Mi Negocio'}
                 </p>
               </div>
@@ -59,12 +59,12 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navigation.map(item => (
+          <nav className="hidden md:flex items-center gap-2">
+            {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
+                className="px-3 py-2 text-sm font-medium text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-sm hover:shadow-neo-sm"
               >
                 <span className="flex items-center gap-2">
                   <item.icon className="h-4 w-4" />
@@ -79,16 +79,17 @@ const Header = () => {
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
+              className="p-2 text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-neo-sm"
               title={isDark ? 'Modo claro' : 'Modo oscuro'}
+              aria-label="Cambiar tema"
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
 
             {/* Settings */}
             <Link
-              to="/settings"
-              className="hidden sm:flex p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
+              to="/app/settings"
+              className="hidden sm:flex p-2 text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-neo-sm"
               title="Configuración"
             >
               <Settings className="h-5 w-5" />
@@ -96,8 +97,8 @@ const Header = () => {
 
             {/* User menu */}
             <div className="relative hidden sm:block">
-              <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors">
-                <div className="w-8 h-8 bg-accent-500 rounded-full flex items-center justify-center text-white font-bold">
+              <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neo-text dark:text-dark-text hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-neo-sm">
+                <div className="w-8 h-8 bg-neo-accent dark:bg-dark-accent rounded-neo flex items-center justify-center text-white font-bold shadow-neo-sm">
                   {profile?.full_name?.charAt(0).toUpperCase() || 'U'}
                 </div>
                 <span className="hidden lg:inline">{profile?.full_name || 'Usuario'}</span>
@@ -107,7 +108,8 @@ const Header = () => {
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
+              className="md:hidden p-2 text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-neo-sm"
+              aria-label="Menu"
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -117,34 +119,34 @@ const Header = () => {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 dark:border-gray-700 py-2">
+        <div className="md:hidden border-t border-neo-border dark:border-dark-border py-2 bg-neo-surface dark:bg-dark-surface">
           <div className="px-4 space-y-1">
-            {navigation.map(item => (
+            {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
+                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200"
               >
                 <item.icon className="h-5 w-5" />
                 {item.name}
               </Link>
             ))}
 
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
+            <div className="border-t border-neo-border dark:border-dark-border pt-2 mt-2">
               <Link
-                to="/settings"
+                to="/app/settings"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
+                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200"
               >
                 <Settings className="h-5 w-5" />
                 Configuración
               </Link>
 
               <Link
-                to="/sync"
+                to="/app/sync"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-kawaii transition-colors"
+                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200"
               >
                 <RefreshCw className="h-5 w-5" />
                 Sincronización
@@ -155,7 +157,7 @@ const Header = () => {
                   handleSignOut()
                   setMobileMenuOpen(false)
                 }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-base font-medium text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-kawaii transition-colors"
+                className="w-full flex items-center gap-3 px-3 py-2 text-base font-medium text-neo-danger dark:text-dark-danger hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200"
               >
                 <LogOut className="h-5 w-5" />
                 Cerrar Sesión

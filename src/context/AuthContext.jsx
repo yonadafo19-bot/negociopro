@@ -14,8 +14,8 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
-  // ✅ BIEN: Iniciar en false, NO true
-  const [loading, setLoading] = useState(false)
+  // ✅ CAMBIAR: Iniciar en true hasta verificar el estado de auth
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -25,11 +25,9 @@ export const AuthProvider = ({ children }) => {
     const forceTimeout = setTimeout(() => {
       console.log('⏰ Timeout - forzando loading=false')
       setLoading(false)
-    }, 3000)
+    }, 5000)
 
-    const {
-      data: { subscription },
-    } = authService.onAuthStateChange(async (_event, session) => {
+    const authData = authService.onAuthStateChange(async (_event, session) => {
       console.log('🔄 Auth change:', session?.user?.email || 'no session')
       clearTimeout(forceTimeout)
 
@@ -40,23 +38,47 @@ export const AuthProvider = ({ children }) => {
         profileService
           .getProfile(session.user.id)
           .then(({ data }) => {
-            if (data) setProfile(data)
+            if (data) {
+              setProfile(data)
+            } else {
+              // Si no existe el perfil, crear uno básico en el estado
+              console.warn('Profile not found, creating temporary one')
+              setProfile({
+                id: session.user.id,
+                email: session.user.email,
+                full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || 'Usuario',
+                business_name: session.user.user_metadata?.business_name || 'Mi Negocio',
+                plan_tier: 'free'
+              })
+            }
           })
           .catch(err => {
             console.error('Error fetching profile:', err)
-            // ✅ BIEN: No bloquear si hay error en profile
+            // Crear perfil básico en el estado si hay error
+            setProfile({
+              id: session.user.id,
+              email: session.user.email,
+              full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || 'Usuario',
+              business_name: session.user.user_metadata?.business_name || 'Mi Negocio',
+              plan_tier: 'free'
+            })
+          })
+          .finally(() => {
+            setLoading(false)
           })
       } else {
         setProfile(null)
+        setLoading(false)
       }
 
-      setLoading(false)
       setError(null)
     })
 
     return () => {
       clearTimeout(forceTimeout)
-      subscription.unsubscribe()
+      if (authData?.subscription) {
+        authData.subscription.unsubscribe()
+      }
     }
   }, [])
 
@@ -80,6 +102,21 @@ export const AuthProvider = ({ children }) => {
     setError(null)
     try {
       const { data, error } = await authService.signIn(email, password)
+      if (error) throw error
+      return { data, error: null }
+    } catch (err) {
+      setError(err.message)
+      return { data: null, error: err }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const signInWithGoogle = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const { data, error } = await authService.signInWithGoogle()
       if (error) throw error
       return { data, error: null }
     } catch (err) {
@@ -144,6 +181,7 @@ export const AuthProvider = ({ children }) => {
     error,
     signUp,
     signIn,
+    signInWithGoogle,
     signOut,
     resetPassword,
     updateProfile,
