@@ -18,7 +18,8 @@
       "Bash(ls -la .env*)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://gbdarpokzbhfuaynfqtk.supabase.co\")",
       "Bash(curl -s \"https://gbdarpokzbhfuaynfqtk.supabase.co/rest/v1/\")",
-      "Bash(.env:*)"
+      "Bash(.env:*)",
+      "Bash(node -c src/components/chat/MagoryaChat.jsx)"
     ]
   },
   "effortLevel": "high"
