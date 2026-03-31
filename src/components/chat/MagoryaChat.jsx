@@ -74,6 +74,7 @@ const MagoryaChat = ({ isOpen, onClose }) => {
   const [isMinimized, setIsMinimized] = useState(false)
   const [conversationState, setConversationState] = useState(null)
   const [activeForm, setActiveForm] = useState(null) // { type: 'contact' | 'product' | 'sale', step: number, data: {} }
+  const [localSales, setLocalSales] = useState([]) // Registro local de ventas creadas
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
 
@@ -252,19 +253,22 @@ ${lowStock > 0 ? `\n🚨 Tienes ${lowStock} productos con stock bajo.` : ''}`
 
   const getSalesInfo = (period) => {
     const today = new Date()
-    let filteredSales = sales || []
+    // Combinar ventas del hook + ventas locales creadas en la sesión
+    const allSales = [...(sales || []), ...localSales]
+
+    let filteredSales = allSales || []
 
     if (period === 'hoy') {
-      filteredSales = sales?.filter(s => {
-        const saleDate = new Date(s.transaction_date || s.created_at)
+      filteredSales = allSales.filter(s => {
+        const saleDate = new Date(s.transaction_date || s.created_at || s.date)
         return saleDate.toDateString() === today.toDateString()
-      }) || []
+      })
     } else if (period === 'semana') {
       const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)
-      filteredSales = sales?.filter(s => {
-        const saleDate = new Date(s.transaction_date || s.created_at)
+      filteredSales = allSales.filter(s => {
+        const saleDate = new Date(s.transaction_date || s.created_at || s.date)
         return saleDate >= weekAgo
-      }) || []
+      })
     }
 
     const total = filteredSales.reduce((sum, s) => sum + (s.total || 0), 0)
@@ -274,7 +278,7 @@ ${lowStock > 0 ? `\n🚨 Tienes ${lowStock} productos con stock bajo.` : ''}`
       setConversationState({ action: 'create_sale' })
       return `💰 **Ventas ${period}:**\n\n• Transacciones: 0\n• Total: $0\n\n¿Quieres registrar una venta?`
     }
-    return `💰 **Ventas ${period}:**\n\n• Transacciones: ${count}\n• Total: $${total.toLocaleString()}\n\n¡Buen trabajo! 🎉`
+    return `💰 **Ventas ${period}:**\n\n• Transacciones: ${count}\n• Total: $${total.toLocaleString()}\n\n${filteredSales.map(s => `  • $${s.total?.toLocaleString() || 'N/A'} - ${s.items?.map(i => i.product?.name || 'Producto').join(', ') || 'Varios'}`).join('\n')}`
   }
 
   const searchProduct = (query) => {
@@ -585,6 +589,19 @@ Escribe el nombre del cliente o "omitir" para no asociar ninguno.`
               }
 
               await createSale(saleData)
+
+              // Agregar al estado local para que se muestre inmediatamente
+              const localSale = {
+                id: Date.now(),
+                total: newData.total,
+                transaction_type: 'sale',
+                payment_method: newData.payment_method,
+                contact_id: contactId,
+                items: newData.items,
+                transaction_date: new Date().toISOString(),
+                created_at: new Date().toISOString(),
+              }
+              setLocalSales(prev => [...prev, localSale])
               setActiveForm(null)
 
               return `✅ ¡Venta registrada exitosamente! 🎉
