@@ -7,12 +7,17 @@ import { renderHook, waitFor, act } from '@testing-library/react'
 import { useContacts } from '../useContacts'
 
 // Mock del servicio de Supabase
+const mockGetContacts = vi.fn()
+const mockCreateContact = vi.fn()
+const mockUpdateContact = vi.fn()
+const mockDeleteContact = vi.fn()
+
 vi.mock('../../services/supabase', () => ({
   contactsService: {
-    getContacts: vi.fn(),
-    createContact: vi.fn(),
-    updateContact: vi.fn(),
-    deleteContact: vi.fn(),
+    getContacts: () => mockGetContacts(),
+    createContact: () => mockCreateContact(),
+    updateContact: () => mockUpdateContact(),
+    deleteContact: () => mockDeleteContact(),
   },
 }))
 
@@ -26,6 +31,10 @@ vi.mock('../useAuth', () => ({
 describe('useContacts Hook', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockGetContacts.mockReset()
+    mockCreateContact.mockReset()
+    mockUpdateContact.mockReset()
+    mockDeleteContact.mockReset()
   })
 
   describe('cargar contactos', () => {

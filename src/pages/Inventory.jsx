@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useInventory } from '../hooks/useInventory'
 import { Card, Button, Modal, PageLoader } from '../components/common'
 import { ProductList, ProductForm, StockAlert } from '../components/inventory'
@@ -30,13 +30,13 @@ const InventoryPage = () => {
   const categories = getCategories()
 
   // Cargar productos con stock bajo
-  useState(() => {
+  useEffect(() => {
     const loadLowStock = async () => {
       const products = await getLowStockProducts()
       setLowStockProducts(products)
     }
     loadLowStock()
-  })
+  }, [])
 
   const handleCreate = () => {
     setEditingProduct(null)

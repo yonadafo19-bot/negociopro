@@ -219,27 +219,27 @@ const LandingPage = () => {
               </a>
             </div>
             <p className="text-sm text-neo-text-muted dark:text-dark-text-muted mt-4">
-              +500 negocios ya confían en la plataforma
+              Comienza gratis hoy y gestiona tu negocio como profesional
             </p>
           </div>
 
-          {/* Stats */}
+          {/* Features Highlight */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20">
             <div className="card-neo p-6 text-center">
-              <p className="text-3xl font-bold text-neo-text dark:text-dark-text">500+</p>
-              <p className="text-neo-text-muted dark:text-dark-text-muted">Establecimientos usando la plataforma</p>
+              <p className="text-3xl font-bold text-neo-text dark:text-dark-text">100%</p>
+              <p className="text-neo-text-muted dark:text-dark-text-muted">Funciona offline</p>
             </div>
             <div className="card-neo p-6 text-center">
-              <p className="text-3xl font-bold text-neo-success dark:text-dark-success">-12%</p>
-              <p className="text-neo-text-muted dark:text-dark-text-muted">Pérdidas de stock</p>
+              <p className="text-3xl font-bold text-neo-success dark:text-dark-success">0</p>
+              <p className="text-neo-text-muted dark:text-dark-text-muted">Costo oculto</p>
             </div>
             <div className="card-neo p-6 text-center">
-              <p className="text-3xl font-bold text-neo-primary dark:text-dark-primary">+31.8%</p>
-              <p className="text-neo-text-muted dark:text-dark-text-muted">Aumento en ventas</p>
+              <p className="text-3xl font-bold text-neo-primary dark:text-dark-primary">∞</p>
+              <p className="text-neo-text-muted dark:text-dark-text-muted">Productos gestionables</p>
             </div>
             <div className="card-neo p-6 text-center">
-              <p className="text-3xl font-bold text-neo-text dark:text-dark-text">24/7</p>
-              <p className="text-neo-text-muted dark:text-dark-text-muted">Soporte disponible</p>
+              <p className="text-3xl font-bold text-neo-text dark:text-dark-text">Gratis</p>
+              <p className="text-neo-text-muted dark:text-dark-text-muted">Para empezar</p>
             </div>
           </div>
         </div>
@@ -296,11 +296,11 @@ const LandingPage = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-neo-text dark:text-dark-text mb-6">
-                Más de 500 negocios ya confían en la plataforma
+                Todo lo que tu negocio necesita en un solo lugar
               </h2>
               <p className="text-lg text-neo-text-muted dark:text-dark-text-muted mb-8">
-                Minimarkets, panaderías, cafeterías y productores ya usan NegociPro para simplificar
-                la operación del día a día
+                Diseñado para minimarkets, panaderías, cafeterías y pequeños negocios que quieren
+                organizarse y crecer
               </p>
               <div className="space-y-4">
                 {[

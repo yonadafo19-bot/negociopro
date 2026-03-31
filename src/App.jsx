@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider } from './context/AuthContext'
 import { ConnectionProvider } from './context/ConnectionContext'
+import { ToastProvider } from './components/common'
 import AppRoutes from './routes'
 import ConnectionStatus from './components/connection/ConnectionStatus'
 import { useEffect } from 'react'
@@ -26,8 +27,10 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <ConnectionProvider>
-            <AppRoutes />
-            <ConnectionStatus />
+            <ToastProvider>
+              <AppRoutes />
+              <ConnectionStatus />
+            </ToastProvider>
           </ConnectionProvider>
         </AuthProvider>
       </ThemeProvider>

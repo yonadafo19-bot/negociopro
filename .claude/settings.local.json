@@ -1,4 +1,5 @@
 {
+  "effortLevel": "high",
   "permissions": {
     "allow": [
       "Bash(gh repo:*)",
@@ -11,7 +12,8 @@
       "Bash(cp \"C:/Users/EQUIPO/negociopro-audit/supabase/migrations/002_rls_policies.sql\" supabase/migrations)",
       "Bash(ls -la \"C:/Users/EQUIPO/Desktop/Antigravity/NegociPro-V4/src/app/\\(main\\)/dashboard\")",
       "Bash(npm install:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

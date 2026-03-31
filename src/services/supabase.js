@@ -389,10 +389,6 @@ export const catalogsService = {
     return { data, error }
   },
 
-  // Generate unique share link
-  generateUniqueShareLink: async () => {
-    return generateUniqueShareLink()
-  },
 }
 
 // Helper function to generate unique share link (cryptographically secure)
