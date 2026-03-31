@@ -71,6 +71,7 @@ const MagoryaChat = ({ isOpen, onClose }) => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
   const [conversationState, setConversationState] = useState(null)
+  const [activeForm, setActiveForm] = useState(null) // { type: 'contact' | 'product', step: number, data: {} }
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
 
@@ -293,6 +294,69 @@ ${lowStock > 0 ? `\n🚨 Tienes ${lowStock} productos con stock bajo.` : ''}`
     setIsProcessing(true)
 
     try {
+      // FORMULARIO CONVERSACIONAL ACTIVO
+      if (activeForm) {
+        const form = activeForm
+        let newData = { ...form.data }
+
+        // Extraer información del input
+        if (form.step === 1) { // Nombre
+          newData.name = userInput
+          setActiveForm({ ...form, step: 2, data: newData })
+          return `¡Perfecto! El nombre es **${userInput}** 👤
+
+Ahora necesito el **tipo** de contacto:
+• cliente
+• proveedor
+• empleado
+
+¿Cuál es?`
+        }
+
+        if (form.step === 2) { // Tipo
+          const typeMap = { 'cliente': 'customer', 'proveedor': 'supplier', 'empleado': 'employee' }
+          newData.contact_type = typeMap[input] || 'customer'
+          setActiveForm({ ...form, step: 3, data: newData })
+          return `Entendido, es ${input}.
+
+Ahora dame el **teléfono** (o escribe "omitir"):`
+        }
+
+        if (form.step === 3) { // Teléfono
+          if (input !== 'omitir' && input !== 'no' && input.length > 3) {
+            newData.phone = userInput
+          }
+          setActiveForm({ ...form, step: 4, data: newData })
+          return `Último dato: el **email** (o escribe "omitir"):`
+        }
+
+        if (form.step === 4) { // Email - FINAL
+          if (input !== 'omitir' && input !== 'no' && input.includes('@')) {
+            newData.email = userInput
+          }
+
+          // Crear el contacto
+          try {
+            await createContact(newData)
+            setActiveForm(null)
+            return `✅ ¡Contacto creado exitosamente!
+
+👤 **Nombre:** ${newData.name}
+📋 **Tipo:** ${newData.contact_type === 'customer' ? 'Cliente' : newData.contact_type === 'supplier' ? 'Proveedor' : 'Empleado'}
+${newData.phone ? `📞 **Teléfono:** ${newData.phone}` : ''}
+${newData.email ? `📧 **Email:** ${newData.email}` : ''}
+
+¿Hay algo más en lo que pueda ayudarte? 😊`
+          } catch (error) {
+            setActiveForm(null)
+            return `❌ Hubo un error al crear el contacto: ${error.message}. ¿Intentamos de nuevo?`
+          }
+        }
+      }
+
+      // COMANDOS PARA INICIAR FORMULARIO CONVERSACIONAL
+      const formTriggers = ['pídeme', 'pideme', 'dame los datos', 'tú créalo', 'tu crealo', 'pide datos', 'crealo tú', 'crealo tu', 'formularios', 'quiero que me preguntes']
+
       // Respuestas afirmativas/negativas
       const affirmative = ['si', 'sí', 'claro', 'yes', 'y', 'ok', 'vale']
       const negative = ['no', 'nop', 'nope']
@@ -392,10 +456,14 @@ ${lowStock > 0 ? `\n🚨 Tienes ${lowStock} productos con stock bajo.` : ''}`
 
       // Contactos
       if (input.includes('contacto') || input.includes('cliente')) {
-        // Crear - PRIMERO
-        if (input.includes('crear') || input.includes('nuevo') || input === 'contacto' || input === 'cliente') {
+        // Verificar si quiere formulario conversacional
+        const useForm = formTriggers.some(t => input.includes(t)) ||
+                        (conversationState?.action === 'create_contact' && isAffirmative)
+
+        // Crear con formulario conversacional
+        if (input.includes('crear') || input.includes('nuevo') || input === 'contacto' || input === 'cliente' || useForm) {
           const nameMatch = input.match(/(?:contacto|cliente)\s+["']?([^"']+)["']?/i)
-          if (nameMatch && nameMatch[1]) {
+          if (nameMatch && nameMatch[1] && !useForm) {
             const contactName = nameMatch[1]
             await createContact({
               name: contactName,
@@ -403,8 +471,12 @@ ${lowStock > 0 ? `\n🚨 Tienes ${lowStock} productos con stock bajo.` : ''}`
             })
             return `✅ Creé el contacto de "${contactName}". 👥`
           }
-          navigate('/app/contacts')
-          return 'Abriendo formulario de contacto... 📝'
+          // Iniciar formulario conversacional
+          setConversationState(null)
+          setActiveForm({ type: 'contact', step: 1, data: {} })
+          return `¡Perfecto! Voy a crear el contacto contigo 📝
+
+Empecemos. ¿Cuál es el **nombre** del contacto?`
         }
         // Buscar - DESPUÉS
         const searchMatch = input.match(/(?:contacto|cliente)\s+(["']?)(.+?)\1$/i)
