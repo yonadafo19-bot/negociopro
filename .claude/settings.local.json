@@ -13,7 +13,12 @@
       "Bash(npm install:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git push:*)",
+      "Bash(ls -la .env*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://gbdarpokzbhfuaynfqtk.supabase.co\")",
+      "Bash(curl -s \"https://gbdarpokzbhfuaynfqtk.supabase.co/rest/v1/\")",
+      "Bash(.env:*)"
     ]
   },
   "effortLevel": "high"

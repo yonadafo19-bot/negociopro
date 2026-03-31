@@ -4,12 +4,21 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
+// Debug: Mostrar valores (sin exponer la key completa)
+if (typeof window !== 'undefined') {
+  console.log('🔍 Supabase Debug:')
+  console.log('URL found:', !!supabaseUrl, supabaseUrl ? supabaseUrl.substring(0, 30) + '...' : 'MISSING')
+  console.log('Key found:', !!supabaseAnonKey, supabaseAnonKey ? supabaseAnonKey.substring(0, 20) + '...' : 'MISSING')
+}
+
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('❌ Supabase credentials not found in .env file')
   console.error('Please copy .env.example to .env and add your credentials')
+  console.error('Required: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY')
+  throw new Error('Missing Supabase credentials. Check your .env file.')
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '')
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Auth service
 export const authService = {

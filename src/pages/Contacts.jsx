@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useContacts } from '../hooks/useContacts'
 import { Card, Button, Modal, Badge, PageLoader, useToast } from '../components/common'
-import { User, UserPlus, Mail, Phone, Building } from 'lucide-react'
+import { User, UserPlus, Mail, Phone, Building, AlertCircle } from 'lucide-react'
 import { ContactForm } from '../components/contacts'
 
 const ContactsPage = () => {
