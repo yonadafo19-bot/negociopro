@@ -1,5 +1,4 @@
 {
-  "effortLevel": "high",
   "permissions": {
     "allow": [
       "Bash(gh repo:*)",
@@ -13,7 +12,9 @@
       "Bash(ls -la \"C:/Users/EQUIPO/Desktop/Antigravity/NegociPro-V4/src/app/\\(main\\)/dashboard\")",
       "Bash(npm install:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)"
     ]
-  }
+  },
+  "effortLevel": "high"
 }

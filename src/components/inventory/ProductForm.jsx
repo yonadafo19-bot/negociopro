@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Input, Button, Card, ImageUpload } from '../common'
 import { validatePrice, validateStock, validateRequired } from '../../utils/validators'
+import { productSchema } from '../../utils/schemas'
 import { Package, DollarSign, Barcode, Hash, AlertCircle } from 'lucide-react'
 
 const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) => {
@@ -52,20 +53,26 @@ const ProductForm = ({ product = null, onSubmit, onCancel, loading = false }) =>
   const validate = () => {
     const newErrors = {}
 
-    const nameError = validateRequired(formData.name, 'Nombre')
-    if (nameError) newErrors.name = nameError
-
-    const costError = validatePrice(formData.cost_price, 'Costo')
-    if (costError) newErrors.cost_price = costError
-
-    const priceError = validatePrice(formData.selling_price, 'Precio de venta')
-    if (priceError) newErrors.selling_price = priceError
-
-    const stockError = validateStock(formData.stock_quantity, 'Stock')
-    if (stockError) newErrors.stock_quantity = stockError
-
-    const minStockError = validateStock(formData.min_stock_alert, 'Stock mínimo')
-    if (minStockError) newErrors.min_stock_alert = minStockError
+    try {
+      productSchema.parse({
+        name: formData.name,
+        description: formData.description,
+        sku: formData.sku,
+        barcode: formData.barcode,
+        category: formData.category,
+        cost_price: parseFloat(formData.cost_price) || 0,
+        selling_price: parseFloat(formData.selling_price) || 0,
+        stock_quantity: parseInt(formData.stock_quantity) || 0,
+        min_stock_alert: parseInt(formData.min_stock_alert) || 0,
+        image_url: formData.image_url,
+      })
+    } catch (error) {
+      if (error.errors) {
+        error.errors.forEach(err => {
+          newErrors[err.path[0]] = err.message
+        })
+      }
+    }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0

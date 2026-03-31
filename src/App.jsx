@@ -3,6 +3,7 @@ import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider } from './context/AuthContext'
 import { ConnectionProvider } from './context/ConnectionContext'
 import { ToastProvider } from './components/common'
+import { GoogleAnalytics } from './components/analytics'
 import AppRoutes from './routes'
 import ConnectionStatus from './components/connection/ConnectionStatus'
 import { useEffect } from 'react'
@@ -28,6 +29,8 @@ function App() {
         <AuthProvider>
           <ConnectionProvider>
             <ToastProvider>
+              {/* Google Analytics - Add your Measurement ID */}
+              <GoogleAnalytics measurementId={import.meta.env.VITE_GA_MEASUREMENT_ID || ''} />
               <AppRoutes />
               <ConnectionStatus />
             </ToastProvider>

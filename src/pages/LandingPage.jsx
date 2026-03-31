@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import {
   ShoppingCart,
   Store,
@@ -147,7 +148,15 @@ const LandingPage = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-neo-bg dark:bg-dark-bg text-neo-text dark:text-dark-text transition-colors duration-300">
+    <>
+      <Helmet>
+        <title>NegociPro - Sistema POS para Pequeños Negocios</title>
+        <meta name="description" content="Sistema POS completo para pequeños negocios. Inventario, ventas, delivery y finanzas. Funciona offline. ¡Prueba gratis 14 días!" />
+        <meta property="og:title" content="NegociPro - Sistema POS para Pequeños Negocios" />
+        <meta property="og:description" content="Gestión completa para tu negocio: inventario, ventas, delivery y más." />
+        <meta name="keywords" content="POS, inventario, ventas, pequeño negocio, tienda, Chile, Latinoamérica" />
+      </Helmet>
+      <div className="min-h-screen bg-neo-bg dark:bg-dark-bg text-neo-text dark:text-dark-text transition-colors duration-300">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-neo-surface/95 dark:bg-dark-surface/95 backdrop-blur-sm z-50 border-b border-neo-border dark:border-dark-border shadow-neo-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
@@ -577,6 +586,7 @@ const LandingPage = () => {
         </div>
       </footer>
     </div>
+    </>
   )
 }
 
