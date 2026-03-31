@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useContacts } from '../hooks/useContacts'
-import { Card, Button, Modal, Badge, PageLoader } from '../components/common'
-import { User, UserPlus, Mail, Phone, Building, AlertCircle } from 'lucide-react'
+import { Card, Button, Modal, Badge, PageLoader, useToast } from '../components/common'
+import { User, UserPlus, Mail, Phone, Building } from 'lucide-react'
 import { ContactForm } from '../components/contacts'
 
 const ContactsPage = () => {
+  const toast = useToast()
+
   const {
     contacts,
     loading,
@@ -20,7 +22,6 @@ const ContactsPage = () => {
   const [editingContact, setEditingContact] = useState(null)
   const [deletingContact, setDeletingContact] = useState(null)
   const [modalLoading, setModalLoading] = useState(false)
-  const [message, setMessage] = useState({ type: '', text: '' })
   const [filterType, setFilterType] = useState('all')
 
   const filteredContacts =
@@ -50,21 +51,16 @@ const ContactsPage = () => {
     setModalLoading(false)
 
     if (error) {
-      setMessage({ type: 'error', text: error.message })
+      toast.error(`Error al eliminar: ${error.message}`)
     } else {
-      setMessage({
-        type: 'success',
-        text: `${deletingContact.name} eliminado correctamente`,
-      })
+      toast.success(`${deletingContact.name} eliminado correctamente`)
     }
 
     setDeletingContact(null)
-    setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
   const handleSubmit = async (contactData) => {
     setModalLoading(true)
-    setMessage({ type: '', text: '' })
 
     let result
 
@@ -77,19 +73,16 @@ const ContactsPage = () => {
     setModalLoading(false)
 
     if (result.error) {
-      setMessage({ type: 'error', text: result.error.message })
+      toast.error(`Error: ${result.error.message}`)
     } else {
-      setMessage({
-        type: 'success',
-        text: editingContact
+      toast.success(
+        editingContact
           ? 'Contacto actualizado correctamente'
-          : 'Contacto creado correctamente',
-      })
+          : 'Contacto creado correctamente'
+      )
       setShowModal(false)
       setEditingContact(null)
     }
-
-    setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
   const getContactTypeLabel = (type) => {
@@ -225,20 +218,6 @@ const ContactsPage = () => {
         </div>
       </Card>
 
-      {/* Message */}
-      {message.text && (
-        <div
-          className={`mb-6 p-4 rounded-neo flex items-start gap-2 border shadow-neo-sm ${
-            message.type === 'success'
-              ? 'bg-neo-success/10 dark:bg-dark-success/10 text-neo-success dark:text-dark-success border-neo-success/30 dark:border-dark-success/30'
-              : 'bg-neo-danger/10 dark:bg-dark-danger/10 text-neo-danger dark:text-dark-danger border-neo-danger/30 dark:border-dark-danger/30'
-          }`}
-        >
-          <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-          <p className="text-sm">{message.text}</p>
-        </div>
-      )}
-
       {/* Contacts list */}
       <Card>
         {loading ? (
@@ -352,7 +331,6 @@ const ContactsPage = () => {
         onClose={() => {
           setShowModal(false)
           setEditingContact(null)
-          setMessage({ type: '', text: '' })
         }}
         title={editingContact ? 'Editar Contacto' : 'Nuevo Contacto'}
         size="lg"
@@ -363,16 +341,9 @@ const ContactsPage = () => {
           onCancel={() => {
             setShowModal(false)
             setEditingContact(null)
-            setMessage({ type: '', text: '' })
           }}
           loading={modalLoading}
         />
-
-        {message.text && (
-          <div className="mt-4 p-3 rounded-neo text-sm text-center border border-neo-border dark:border-dark-border shadow-inner-shadow">
-            {message.text}
-          </div>
-        )}
       </Modal>
 
       {/* Delete confirmation modal */}

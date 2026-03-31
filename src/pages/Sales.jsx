@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSales } from '../hooks/useSales'
-import { Card, Button, Modal, Badge, PageLoader } from '../components/common'
+import { Card, Button, Modal, Badge, PageLoader, useToast } from '../components/common'
 import {
   Plus,
   DollarSign,
@@ -15,6 +15,8 @@ import { SaleForm, ExpenseForm, CashRegisterClosing } from '../components/sales'
 import { EmailButton } from '../components/common'
 
 const SalesPage = () => {
+  const toast = useToast()
+
   const {
     transactions,
     loading,
@@ -29,7 +31,6 @@ const SalesPage = () => {
   const [showExpenseModal, setShowExpenseModal] = useState(false)
   const [showClosingModal, setShowClosingModal] = useState(false)
   const [modalLoading, setModalLoading] = useState(false)
-  const [message, setMessage] = useState({ type: '', text: '' })
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('es-CL', {
@@ -50,44 +51,32 @@ const SalesPage = () => {
 
   const handleSaleSubmit = async (saleData) => {
     setModalLoading(true)
-    setMessage({ type: '', text: '' })
 
     const { error } = await createSale(saleData)
 
     setModalLoading(false)
 
     if (error) {
-      setMessage({ type: 'error', text: error.message })
+      toast.error(`Error al registrar venta: ${error.message}`)
     } else {
-      setMessage({
-        type: 'success',
-        text: 'Venta registrada correctamente',
-      })
+      toast.success('Venta registrada correctamente')
       setShowSaleModal(false)
     }
-
-    setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
   const handleExpenseSubmit = async (expenseData) => {
     setModalLoading(true)
-    setMessage({ type: '', text: '' })
 
     const { error } = await createExpense(expenseData)
 
     setModalLoading(false)
 
     if (error) {
-      setMessage({ type: 'error', text: error.message })
+      toast.error(`Error al registrar gasto: ${error.message}`)
     } else {
-      setMessage({
-        type: 'success',
-        text: 'Gasto registrado correctamente',
-      })
+      toast.success('Gasto registrado correctamente')
       setShowExpenseModal(false)
     }
-
-    setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
   return (
@@ -172,20 +161,6 @@ const SalesPage = () => {
           </div>
         </Card>
       </div>
-
-      {/* Message */}
-      {message.text && (
-        <div
-          className={`mb-6 p-4 rounded-neo flex items-start gap-2 border shadow-neo-sm ${
-            message.type === 'success'
-              ? 'bg-neo-success/10 dark:bg-dark-success/10 text-neo-success dark:text-dark-success border-neo-success/30 dark:border-dark-success/30'
-              : 'bg-neo-danger/10 dark:bg-dark-danger/10 text-neo-danger dark:text-dark-danger border-neo-danger/30 dark:border-dark-danger/30'
-          }`}
-        >
-          <DollarSign className="h-5 w-5 flex-shrink-0 mt-0.5" />
-          <p className="text-sm">{message.text}</p>
-        </div>
-      )}
 
       {/* Recent transactions */}
       <Card>
@@ -322,7 +297,6 @@ const SalesPage = () => {
         isOpen={showSaleModal}
         onClose={() => {
           setShowSaleModal(false)
-          setMessage({ type: '', text: '' })
         }}
         title="Nueva Venta"
         size="xl"
@@ -331,16 +305,9 @@ const SalesPage = () => {
           onSubmit={handleSaleSubmit}
           onCancel={() => {
             setShowSaleModal(false)
-            setMessage({ type: '', text: '' })
           }}
           loading={modalLoading}
         />
-
-        {message.text && (
-          <div className="mt-4 p-3 rounded-neo text-sm text-center border border-neo-border dark:border-dark-border shadow-inner-shadow">
-            {message.text}
-          </div>
-        )}
       </Modal>
 
       {/* Expense modal */}
@@ -348,7 +315,6 @@ const SalesPage = () => {
         isOpen={showExpenseModal}
         onClose={() => {
           setShowExpenseModal(false)
-          setMessage({ type: '', text: '' })
         }}
         title="Registrar Gasto de Caja Chica"
         size="lg"
@@ -357,16 +323,9 @@ const SalesPage = () => {
           onSubmit={handleExpenseSubmit}
           onCancel={() => {
             setShowExpenseModal(false)
-            setMessage({ type: '', text: '' })
           }}
           loading={modalLoading}
         />
-
-        {message.text && (
-          <div className="mt-4 p-3 rounded-neo text-sm text-center border border-neo-border dark:border-dark-border shadow-inner-shadow">
-            {message.text}
-          </div>
-        )}
       </Modal>
 
       {/* Cash register closing modal */}

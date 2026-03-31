@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useInventory } from '../hooks/useInventory'
-import { Card, Button, Modal, PageLoader } from '../components/common'
+import { Card, Button, Modal, PageLoader, useToast } from '../components/common'
 import { ProductList, ProductForm, StockAlert } from '../components/inventory'
 import { Plus, Package, AlertCircle } from 'lucide-react'
 
 const InventoryPage = () => {
+  const toast = useToast()
+
   // PRIMERO: Todos los hooks deben declararse antes de cualquier return
   const {
     products,
@@ -24,7 +26,6 @@ const InventoryPage = () => {
   const [editingProduct, setEditingProduct] = useState(null)
   const [deletingProduct, setDeletingProduct] = useState(null)
   const [modalLoading, setModalLoading] = useState(false)
-  const [message, setMessage] = useState({ type: '', text: '' })
   const [lowStockProducts, setLowStockProducts] = useState([])
 
   const categories = getCategories()
@@ -62,24 +63,19 @@ const InventoryPage = () => {
     setModalLoading(false)
 
     if (error) {
-      setMessage({ type: 'error', text: error.message })
+      toast.error(`Error al eliminar: ${error.message}`)
     } else {
-      setMessage({
-        type: 'success',
-        text: `${deletingProduct.name} eliminado correctamente`,
-      })
+      toast.success(`${deletingProduct.name} eliminado correctamente`)
       // Recargar productos con stock bajo
       const products = await getLowStockProducts()
       setLowStockProducts(products)
     }
 
     setDeletingProduct(null)
-    setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
   const handleSubmit = async (productData) => {
     setModalLoading(true)
-    setMessage({ type: '', text: '' })
 
     let result
 
@@ -92,14 +88,13 @@ const InventoryPage = () => {
     setModalLoading(false)
 
     if (result.error) {
-      setMessage({ type: 'error', text: result.error.message })
+      toast.error(`Error: ${result.error.message}`)
     } else {
-      setMessage({
-        type: 'success',
-        text: editingProduct
+      toast.success(
+        editingProduct
           ? 'Producto actualizado correctamente'
-          : 'Producto creado correctamente',
-      })
+          : 'Producto creado correctamente'
+      )
       setShowModal(false)
       setEditingProduct(null)
 
@@ -107,8 +102,6 @@ const InventoryPage = () => {
       const products = await getLowStockProducts()
       setLowStockProducts(products)
     }
-
-    setTimeout(() => setMessage({ type: '', text: '' }), 3000)
   }
 
   // AHORA los renders condicionales
@@ -214,20 +207,6 @@ const InventoryPage = () => {
         />
       </div>
 
-      {/* Message */}
-      {message.text && (
-        <div
-          className={`mb-6 p-4 rounded-neo flex items-start gap-2 border shadow-neo-sm ${
-            message.type === 'success'
-              ? 'bg-neo-success/10 dark:bg-dark-success/10 text-neo-success dark:text-dark-success border-neo-success/30 dark:border-dark-success/30'
-              : 'bg-neo-danger/10 dark:bg-dark-danger/10 text-neo-danger dark:text-dark-danger border-neo-danger/30 dark:border-dark-danger/30'
-          }`}
-        >
-          <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-          <p className="text-sm">{message.text}</p>
-        </div>
-      )}
-
       {/* Products list */}
       <ProductList
         products={products}
@@ -243,7 +222,6 @@ const InventoryPage = () => {
         onClose={() => {
           setShowModal(false)
           setEditingProduct(null)
-          setMessage({ type: '', text: '' })
         }}
         title={editingProduct ? 'Editar Producto' : 'Nuevo Producto'}
         size="lg"
@@ -257,12 +235,6 @@ const InventoryPage = () => {
           }}
           loading={modalLoading}
         />
-
-        {message.text && (
-          <div className="mt-4 p-3 rounded-neo text-sm text-center border border-neo-border dark:border-dark-border shadow-inner-shadow">
-            {message.text}
-          </div>
-        )}
       </Modal>
 
       {/* Delete confirmation modal */}
