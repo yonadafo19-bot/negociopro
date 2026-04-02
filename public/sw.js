@@ -6,8 +6,6 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/favicon.ico',
-  '/offline.html',
 ]
 
 // Install event - cache assets
@@ -15,7 +13,14 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('Opened cache')
-      return cache.addAll(urlsToCache)
+      // Agregar URLs una por una para no fallar si alguna no existe
+      return Promise.allSettled(
+        urlsToCache.map(url =>
+          cache.add(url).catch(err => {
+            console.warn('Failed to cache:', url, err)
+          })
+        )
+      )
     })
   )
   self.skipWaiting()
@@ -45,6 +50,18 @@ self.addEventListener('fetch', (event) => {
 
   // Ignorar requests a Supabase (siempre red)
   if (url.hostname.includes('supabase.co')) {
+    // No modificar requests de Supabase de ninguna manera
+    event.respondWith(
+      fetch(request).catch(error => {
+        console.error('Supabase fetch error:', error)
+        throw error
+      })
+    )
+    return
+  }
+
+  // Ignorar requests de extensiones del navegador
+  if (url.protocol === 'chrome-extension:' || url.protocol === 'moz-extension:') {
     event.respondWith(fetch(request))
     return
   }
@@ -55,15 +72,19 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          // Cache la respuesta exitosa
-          const clone = response.clone()
-          caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone))
+          // Solo cachear si la URL es HTTP/HTTPS
+          if (request.url.startsWith('http')) {
+            const clone = response.clone()
+            caches.open(RUNTIME_CACHE).then((cache) =>
+              cache.put(request, clone).catch(() => {})
+            )
+          }
           return response
         })
         .catch(() => {
           // Fallback a cache
           return caches.match(request).then((cached) => {
-            return cached || caches.match('/offline.html')
+            return cached || new Response('Offline', { status: 503 })
           })
         })
     )
@@ -72,23 +93,31 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) {
-          // Actualizar en background
-          fetch(request).then((response) => {
-            const clone = response.clone()
-            caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone))
-          })
+          // Actualizar en background (solo para requests HTTP/HTTPS)
+          if (request.url.startsWith('http')) {
+            fetch(request).then((response) => {
+              if (response && response.status === 200) {
+                const clone = response.clone()
+                caches.open(RUNTIME_CACHE).then((cache) =>
+                  cache.put(request, clone).catch(() => {})
+                )
+              }
+            }).catch(() => {})
+          }
           return cached
         }
 
         return fetch(request)
           .then((response) => {
-            // Cache respuestas exitosas
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+            // Solo cachear responses exitosas de HTTP/HTTPS
+            if (!response || response.status !== 200 || !request.url.startsWith('http')) {
               return response
             }
 
             const clone = response.clone()
-            caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone))
+            caches.open(RUNTIME_CACHE).then((cache) =>
+              cache.put(request, clone).catch(() => {})
+            )
             return response
           })
           .catch(() => {

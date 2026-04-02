@@ -58,3 +58,4 @@ build
 # Debug
 debug.log
 *.tgz
+.vercel

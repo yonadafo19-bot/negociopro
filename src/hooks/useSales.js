@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from './useAuth'
 import { transactionsService } from '../services/supabase'
 import { mockSales } from '../data/mockData'
+import { notify } from '../services/notificationsService'
 
 /**
  * Hook personalizado para gestión de ventas y transacciones
@@ -51,15 +52,18 @@ export const useSales = (filters = {}) => {
     setError(null)
 
     try {
-      const { data, error } = await transactionsService.createTransaction({
-        user_id: user.id,
-        transaction_type: 'sale',
-        total_amount: saleData.total,
-        contact_id: saleData.contact_id || null,
-        notes: saleData.notes || null,
-        transaction_date: new Date().toISOString(),
-        items: saleData.items,
-      })
+      const { data, error } = await transactionsService.createTransaction(
+        {
+          user_id: user.id,
+          transaction_type: 'sale',
+          total_amount: saleData.total,
+          contact_id: saleData.contact_id || null,
+          notes: saleData.notes || null,
+          transaction_date: new Date().toISOString(),
+          payment_method: saleData.payment_method || 'cash',
+        },
+        saleData.items
+      )
 
       if (error) throw error
 
@@ -72,12 +76,18 @@ export const useSales = (filters = {}) => {
         total_amount: saleData.total,
         payment_method: saleData.payment_method || 'cash',
         status: 'completed',
-        transaction_items: saleData.items,
+        transaction_items: saleData.items.map(item => ({
+          ...item,
+          products: { name: item.name },
+        })),
         contacts: saleData.contact ? [saleData.contact] : [],
         notes: saleData.notes || '',
       }
 
       setTransactions(prev => [newSale, ...prev])
+
+      // Notificar venta creada
+      await notify.sale.created(user.id, newSale)
 
       return { data: newSale, error: null }
     } catch (err) {
@@ -91,12 +101,19 @@ export const useSales = (filters = {}) => {
         total_amount: saleData.total,
         payment_method: saleData.payment_method || 'cash',
         status: 'completed',
-        transaction_items: saleData.items,
+        transaction_items: saleData.items.map(item => ({
+          ...item,
+          products: { name: item.name },
+        })),
         contacts: saleData.contact ? [saleData.contact] : [],
         notes: saleData.notes || '',
       }
       setTransactions(prev => [newSale, ...prev])
       setIsDemoMode(true)
+
+      // Notificar incluso en modo demo
+      await notify.sale.created(user.id, newSale)
+
       return { data: newSale, error: err }
     } finally {
       setLoading(false)
@@ -111,15 +128,17 @@ export const useSales = (filters = {}) => {
     setError(null)
 
     try {
-      const { data, error } = await transactionsService.createTransaction({
-        user_id: user.id,
-        transaction_type: 'expense',
-        total_amount: expenseData.amount,
-        contact_id: expenseData.supplier_id || null,
-        notes: expenseData.notes || null,
-        transaction_date: new Date().toISOString(),
-        items: [],
-      })
+      const { data, error } = await transactionsService.createTransaction(
+        {
+          user_id: user.id,
+          transaction_type: 'expense',
+          total_amount: expenseData.amount,
+          contact_id: expenseData.supplier_id || null,
+          notes: expenseData.notes || null,
+          transaction_date: new Date().toISOString(),
+        },
+        []
+      )
 
       if (error) throw error
 

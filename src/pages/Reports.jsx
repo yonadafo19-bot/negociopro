@@ -20,6 +20,7 @@ import {
   TopCustomers,
   SalesByCategory,
   PerformanceMetrics,
+  PaymentMethodMetrics,
 } from '../components/reports'
 
 const ReportsPage = () => {
@@ -30,6 +31,7 @@ const ReportsPage = () => {
     topCustomers,
     performanceMetrics,
     comparisons,
+    salesByPaymentMethod,
     exportToExcel,
     exportToPDF,
     hasData,
@@ -44,9 +46,9 @@ const ReportsPage = () => {
   }
 
   const formatCurrency = value => {
-    return new Intl.NumberFormat('es-MX', {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
       minimumFractionDigits: 0,
     }).format(value)
   }
@@ -133,6 +135,14 @@ const ReportsPage = () => {
           {/* Performance Metrics */}
           <div className="mb-6">
             <PerformanceMetrics metrics={performanceMetrics} comparisons={comparisons} />
+          </div>
+
+          {/* Payment Method Metrics */}
+          <div className="mb-6">
+            <PaymentMethodMetrics
+              salesByPaymentMethod={salesByPaymentMethod}
+              totalRevenue={performanceMetrics.totalRevenue}
+            />
           </div>
 
           {/* Charts and Lists */}

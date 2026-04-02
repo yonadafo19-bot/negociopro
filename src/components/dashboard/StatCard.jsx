@@ -10,39 +10,43 @@ const StatCard = ({
   loading = false,
 }) => {
   const colors = {
-    primary: 'bg-neo-primary dark:bg-dark-primary',
-    secondary: 'bg-neo-secondary-500 dark:bg-dark-secondary-500',
-    success: 'bg-neo-success dark:bg-dark-success',
-    warning: 'bg-neo-warning dark:bg-dark-warning',
-    danger: 'bg-neo-danger dark:bg-dark-danger',
-    accent: 'bg-neo-accent dark:bg-dark-accent',
+    primary: 'from-primary-500 to-primary-600',
+    secondary: 'from-gray-500 to-gray-600',
+    success: 'from-success-500 to-success-600',
+    warning: 'from-warning-500 to-warning-600',
+    danger: 'from-danger-500 to-danger-600',
+    accent: 'from-accent-500 to-accent-600',
   }
 
   const changeColors = {
-    positive: 'text-neo-success dark:text-dark-success',
-    negative: 'text-neo-danger dark:text-dark-danger',
-    neutral: 'text-neo-text-muted dark:text-dark-text-muted',
+    positive: 'text-success-600 dark:text-success-400',
+    negative: 'text-danger-600 dark:text-danger-400',
+    neutral: 'text-gray-500 dark:text-gray-400',
   }
 
   return (
-    <Card padding="md" hover>
+    <Card padding="md" variant="hover">
       <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-neo-text-muted dark:text-dark-text-muted mb-1">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
             {title}
           </p>
           {loading ? (
-            <div className="h-8 w-24 bg-neo-bg dark:bg-dark-bg-alt rounded-neo animate-pulse mb-1 shadow-inner-shadow"></div>
+            <div className="h-8 w-24 card-neo-inset-sm animate-pulse mb-1"></div>
           ) : (
-            <p className="text-3xl font-bold text-neo-text dark:text-dark-text mb-1">
+            <p className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-1 truncate">
               {value}
             </p>
           )}
-          {change && <p className={`text-sm ${changeColors[changeType]}`}>{change}</p>}
+          {change && (
+            <p className={`text-sm font-medium ${changeColors[changeType]}`}>
+              {change}
+            </p>
+          )}
         </div>
 
         <div
-          className={`${colors[color]} p-3 rounded-neo shadow-neo hover:shadow-neo-lg transition-all duration-200`}
+          className={`flex-shrink-0 p-3 rounded-neo bg-gradient-to-br ${colors[color]} shadow-neo-primary dark:shadow-neo-primary-dark`}
         >
           <Icon className="h-6 w-6 text-white" />
         </div>

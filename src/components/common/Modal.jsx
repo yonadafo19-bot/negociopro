@@ -42,13 +42,13 @@ const Modal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop-neo"
       onClick={handleBackdropClick}
     >
       <div
         className={twMerge(
           clsx(
-            'bg-white rounded-kawaii-xl shadow-2xl w-full max-h-[90vh] overflow-y-auto',
+            'card-neo-lg w-full max-h-[90vh] overflow-y-auto',
             sizes[size],
             className
           )
@@ -56,15 +56,17 @@ const Modal = ({
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            {title && <h2 className="text-xl font-bold text-gray-900">{title}</h2>}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            {title && (
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{title}</h2>
+            )}
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                className="icon-btn-neo-sm"
                 aria-label="Cerrar modal"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
             )}
           </div>

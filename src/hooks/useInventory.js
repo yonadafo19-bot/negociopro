@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from './useAuth'
 import { productsService } from '../services/supabase'
 import { mockProducts, mockCategories } from '../data/mockData'
+import { notify } from '../services/notificationsService'
 
 /**
  * Hook personalizado para gestión de inventario
@@ -61,6 +62,9 @@ export const useInventory = () => {
       // Actualizar lista localmente
       setProducts(prev => [data, ...prev])
 
+      // Notificar creación de producto
+      await notify.product.created(user.id, data)
+
       return { data, error: null }
     } catch (err) {
       setError(err.message)
@@ -72,6 +76,10 @@ export const useInventory = () => {
       }
       setProducts(prev => [newProduct, ...prev])
       setIsDemoMode(true)
+
+      // Notificar incluso en modo demo
+      await notify.product.created(user.id, newProduct)
+
       return { data: null, error: err }
     } finally {
       setLoading(false)
@@ -89,7 +97,13 @@ export const useInventory = () => {
       if (error) throw error
 
       // Actualizar lista localmente
-      setProducts(prev => prev.map(p => (p.id === productId ? data : p)))
+      setProducts(prev => prev.map(p => (p.id === productId ? { ...p, ...data } : p)))
+
+      // Notificar actualización
+      const product = products.find(p => p.id === productId)
+      if (product) {
+        await notify.product.updated(user.id, { ...product, ...data }, 'Producto actualizado')
+      }
 
       return { data, error: null }
     } catch (err) {
@@ -110,6 +124,12 @@ export const useInventory = () => {
 
       if (error) throw error
 
+      // Notificar eliminación
+      const product = products.find(p => p.id === productId)
+      if (product) {
+        await notify.product.deleted(user.id, product.name)
+      }
+
       // Remover de la lista localmente
       setProducts(prev => prev.filter(p => p.id !== productId))
 
@@ -117,6 +137,10 @@ export const useInventory = () => {
     } catch (err) {
       setError(err.message)
       // En caso de error, también remover de lista mock
+      const product = products.find(p => p.id === productId)
+      if (product) {
+        await notify.product.deleted(user.id, product.name)
+      }
       setProducts(prev => prev.filter(p => p.id !== productId))
       return { error: err }
     } finally {

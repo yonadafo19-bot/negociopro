@@ -27,12 +27,12 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
   }
 
   return (
-    <div className="border border-gray-300 dark:border-gray-600 rounded-kawaii overflow-hidden">
+    <div className="border border-gray-300 dark:border-gray-700 rounded-neo overflow-hidden">
       {/* Search and select all */}
-      <div className="p-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600">
+      <div className="p-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
         <div className="flex items-center gap-3">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
             <Input
               placeholder="Buscar productos..."
               value={searchTerm}
@@ -43,7 +43,7 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
           <button
             type="button"
             onClick={toggleAll}
-            className="px-3 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-kawaii transition-colors"
+            className="px-3 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 bg-white dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-gray-700 rounded-neo transition-colors border border-gray-200 dark:border-gray-600"
           >
             {selectedIds.length === filteredProducts.length ? 'Deseleccionar' : 'Seleccionar'} Todo
           </button>
@@ -51,16 +51,16 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
       </div>
 
       {/* Product list */}
-      <div className="max-h-64 overflow-y-auto">
+      <div className="max-h-64 overflow-y-auto bg-white dark:bg-gray-900">
         {filteredProducts.length === 0 ? (
           <div className="p-8 text-center">
-            <Package className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+            <Package className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
             <p className="text-gray-600 dark:text-gray-400">
               {searchTerm ? 'No se encontraron productos' : 'No hay productos disponibles'}
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="divide-y divide-gray-200 dark:divide-gray-800">
             {filteredProducts.map(product => {
               const isSelected = selectedIds.includes(product.id)
               const isOutOfStock = product.stock_quantity <= 0
@@ -80,7 +80,7 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
                     className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${
                       isSelected
                         ? 'bg-primary-500 border-primary-500'
-                        : 'border-gray-300 dark:border-gray-600'
+                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'
                     }`}
                   >
                     {isSelected && <Check className="h-3 w-3 text-white" />}
@@ -91,17 +91,17 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
                     <img
                       src={product.image_url}
                       alt={product.name}
-                      className="w-10 h-10 object-cover rounded-kawaii"
+                      className="w-10 h-10 object-cover rounded-neo"
                     />
                   ) : (
-                    <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-kawaii flex items-center justify-center">
-                      <Package className="h-5 w-5 text-gray-400" />
+                    <div className="w-10 h-10 bg-gray-200 dark:bg-gray-800 rounded-neo flex items-center justify-center">
+                      <Package className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                     </div>
                   )}
 
                   {/* Product info */}
                   <div className="flex-1 text-left">
-                    <p className="font-medium text-gray-900 dark:text-white text-sm">
+                    <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
                       {product.name}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
@@ -123,8 +123,8 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
 
                   {/* Price */}
                   <div className="text-right">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      ${product.sale_price?.toFixed(2) || '0.00'}
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      ${product.selling_price?.toFixed(2) || '0.00'}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
                       Stock: {product.stock_quantity}
@@ -138,10 +138,10 @@ const ProductSelector = ({ products, selectedIds, onChange }) => {
       </div>
 
       {/* Selected count */}
-      <div className="p-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-300 dark:border-gray-600">
+      <div className="p-3 bg-gray-50 dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          <span className="font-medium text-gray-900 dark:text-white">{selectedIds.length}</span> de{' '}
-          {products.length} productos seleccionados
+          <span className="font-medium text-gray-900 dark:text-gray-100">{selectedIds.length}</span> de{' '}
+          <span className="font-medium text-gray-900 dark:text-gray-100">{products.length}</span> productos seleccionados
         </p>
       </div>
     </div>

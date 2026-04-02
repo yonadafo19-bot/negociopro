@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { Layout } from '../components/layout'
 import LoginPage from '../pages/Auth/LoginPage'
 import RegisterPage from '../pages/Auth/RegisterPage'
+import VerifyEmailPage from '../pages/Auth/VerifyEmailPage'
 import ForgotPasswordPage from '../pages/Auth/ForgotPasswordPage'
 import DashboardPage from '../pages/Dashboard'
 import InventoryPage from '../pages/Inventory'
@@ -76,6 +77,7 @@ const AppRoutes = () => {
           </PublicRoute>
         }
       />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route
         path="/forgot-password"
         element={

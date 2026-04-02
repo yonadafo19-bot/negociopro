@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider } from './context/AuthContext'
 import { ConnectionProvider } from './context/ConnectionContext'
+import { ColorProvider } from './context/ColorContext'
 import { ToastProvider } from './components/common'
 import { GoogleAnalytics } from './components/analytics'
 import AppRoutes from './routes'
@@ -26,16 +27,18 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider>
-        <AuthProvider>
-          <ConnectionProvider>
-            <ToastProvider>
-              {/* Google Analytics - Add your Measurement ID */}
-              <GoogleAnalytics measurementId={import.meta.env.VITE_GA_MEASUREMENT_ID || ''} />
-              <AppRoutes />
-              <ConnectionStatus />
-            </ToastProvider>
-          </ConnectionProvider>
-        </AuthProvider>
+        <ColorProvider>
+          <AuthProvider>
+            <ConnectionProvider>
+              <ToastProvider>
+                {/* Google Analytics - Add your Measurement ID */}
+                <GoogleAnalytics measurementId={import.meta.env.VITE_GA_MEASUREMENT_ID || ''} />
+                <AppRoutes />
+                <ConnectionStatus />
+              </ToastProvider>
+            </ConnectionProvider>
+          </AuthProvider>
+        </ColorProvider>
       </ThemeProvider>
     </BrowserRouter>
   )

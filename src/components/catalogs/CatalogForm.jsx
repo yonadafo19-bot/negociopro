@@ -86,7 +86,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
         <div className="space-y-6">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
               Nombre del Catálogo *
             </label>
             <Input
@@ -99,7 +99,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
               Descripción
             </label>
             <textarea
@@ -107,13 +107,13 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
               onChange={e => handleChange('description', e.target.value)}
               placeholder="Describe tu catálogo..."
               rows={3}
-              className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-kawaii text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-neo text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
           {/* Theme selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
               Tema del Catálogo
             </label>
             <div className="grid grid-cols-5 gap-3">
@@ -122,10 +122,10 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
                   key={theme.value}
                   type="button"
                   onClick={() => handleChange('theme', theme.value)}
-                  className={`relative h-20 bg-gradient-to-br ${theme.color} rounded-kawaii border-2 transition-all ${
+                  className={`relative h-20 bg-gradient-to-br ${theme.color} rounded-neo border-2 transition-all ${
                     formData.theme === theme.value
-                      ? 'border-white dark:border-gray-900 ring-2 ring-primary-500'
-                      : 'border-transparent hover:border-white/50'
+                      ? 'border-white dark:border-white ring-2 ring-primary-500 dark:ring-primary-400 ring-offset-2 dark:ring-offset-gray-800'
+                      : 'border-transparent hover:border-white/50 dark:hover:border-white/30'
                   }`}
                 >
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -134,7 +134,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
                     </span>
                   </div>
                   {formData.theme === theme.value && (
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center">
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-white dark:bg-white rounded-full flex items-center justify-center shadow-lg">
                       <div className="w-4 h-4 bg-green-500 rounded-full" />
                     </div>
                   )}
@@ -144,9 +144,9 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
           </div>
 
           {/* Public toggle */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-kawaii">
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-neo border border-gray-200 dark:border-gray-700">
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">Catálogo Público</p>
+              <p className="font-medium text-gray-900 dark:text-gray-100">Catálogo Público</p>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Permitir que cualquiera con el enlace pueda verlo
               </p>
@@ -159,7 +159,7 @@ const CatalogForm = ({ catalog, onSubmit, onCancel }) => {
 
           {/* Product selector */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
               Productos * ({formData.product_ids.length} seleccionados)
             </label>
             <ProductSelector

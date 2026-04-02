@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from './useAuth'
 import { contactsService } from '../services/supabase'
+import { notify } from '../services/notificationsService'
 
 /**
  * Hook personalizado para gestión de contactos
@@ -52,6 +53,9 @@ export const useContacts = (contactType = null) => {
 
       // Actualizar lista localmente
       setContacts(prev => [data, ...prev])
+
+      // Notificar contacto creado
+      await notify.customer.created(user.id, data)
 
       return { data, error: null }
     } catch (err) {

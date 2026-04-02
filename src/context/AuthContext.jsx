@@ -48,7 +48,8 @@ export const AuthProvider = ({ children }) => {
                 email: session.user.email,
                 full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || 'Usuario',
                 business_name: session.user.user_metadata?.business_name || 'Mi Negocio',
-                plan_tier: 'free'
+                plan_tier: 'free',
+                avatar_url: session.user.user_metadata?.avatar_url || null
               })
             }
           })
@@ -60,7 +61,8 @@ export const AuthProvider = ({ children }) => {
               email: session.user.email,
               full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || 'Usuario',
               business_name: session.user.user_metadata?.business_name || 'Mi Negocio',
-              plan_tier: 'free'
+              plan_tier: 'free',
+              avatar_url: session.user.user_metadata?.avatar_url || null
             })
           })
           .finally(() => {

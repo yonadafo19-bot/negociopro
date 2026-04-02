@@ -113,10 +113,10 @@ const ContactsPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-neo-text dark:text-dark-text mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
             Contactos
           </h1>
-          <p className="text-neo-text-muted dark:text-dark-text-muted">
+          <p className="text-gray-600 dark:text-gray-400">
             Gestiona tus clientes, proveedores y empleados
           </p>
         </div>
@@ -130,36 +130,36 @@ const ContactsPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-success dark:bg-dark-success rounded-neo shadow-neo">
+            <div className="p-3 bg-success-500 dark:bg-success-600 rounded-neo shadow-neo">
               <User className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Clientes</p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">{customersCount}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Clientes</p>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{customersCount}</p>
             </div>
           </div>
         </Card>
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-warning dark:bg-dark-warning rounded-neo shadow-neo">
+            <div className="p-3 bg-warning-500 dark:bg-warning-600 rounded-neo shadow-neo">
               <Building className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Proveedores</p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">{suppliersCount}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Proveedores</p>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{suppliersCount}</p>
             </div>
           </div>
         </Card>
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-primary dark:bg-dark-primary rounded-neo shadow-neo">
+            <div className="p-3 bg-primary-500 dark:bg-primary-600 rounded-neo shadow-neo">
               <User className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Empleados</p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">{employeesCount}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Empleados</p>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{employeesCount}</p>
             </div>
           </div>
         </Card>
@@ -168,15 +168,15 @@ const ContactsPage = () => {
       {/* Filters */}
       <Card padding="md" className="mb-6">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium text-neo-text dark:text-dark-text">Filtrar por:</span>
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-100">Filtrar por:</span>
 
           <div className="flex gap-2">
             <button
               onClick={() => setFilterType('all')}
               className={`px-4 py-2 rounded-neo text-sm font-medium transition-all duration-200 shadow-sm ${
                 filterType === 'all'
-                  ? 'bg-neo-primary dark:bg-dark-primary text-white'
-                  : 'bg-neo-bg dark:bg-dark-bg-alt text-neo-text dark:text-dark-text hover:bg-neo-surface dark:hover:bg-dark-surface'
+                  ? 'bg-primary-500 dark:bg-primary-600 text-white'
+                  : 'bg-light-base dark:bg-dark-bg-alt text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
               Todos ({contacts.length})
@@ -186,8 +186,8 @@ const ContactsPage = () => {
               onClick={() => setFilterType('customer')}
               className={`px-4 py-2 rounded-neo text-sm font-medium transition-all duration-200 shadow-sm ${
                 filterType === 'customer'
-                  ? 'bg-neo-success dark:bg-dark-success text-white'
-                  : 'bg-neo-bg dark:bg-dark-bg-alt text-neo-text dark:text-dark-text hover:bg-neo-surface dark:hover:bg-dark-surface'
+                  ? 'bg-success-500 dark:bg-success-600 text-white'
+                  : 'bg-light-base dark:bg-dark-bg-alt text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
               Clientes ({customersCount})
@@ -197,8 +197,8 @@ const ContactsPage = () => {
               onClick={() => setFilterType('supplier')}
               className={`px-4 py-2 rounded-neo text-sm font-medium transition-all duration-200 shadow-sm ${
                 filterType === 'supplier'
-                  ? 'bg-neo-warning dark:bg-dark-warning text-white'
-                  : 'bg-neo-bg dark:bg-dark-bg-alt text-neo-text dark:text-dark-text hover:bg-neo-surface dark:hover:bg-dark-surface'
+                  ? 'bg-warning-500 dark:bg-warning-600 text-white'
+                  : 'bg-light-base dark:bg-dark-bg-alt text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
               Proveedores ({suppliersCount})
@@ -208,8 +208,8 @@ const ContactsPage = () => {
               onClick={() => setFilterType('employee')}
               className={`px-4 py-2 rounded-neo text-sm font-medium transition-all duration-200 shadow-sm ${
                 filterType === 'employee'
-                  ? 'bg-neo-primary dark:bg-dark-primary text-white'
-                  : 'bg-neo-bg dark:bg-dark-bg-alt text-neo-text dark:text-dark-text hover:bg-neo-surface dark:hover:bg-dark-surface'
+                  ? 'bg-primary-500 dark:bg-primary-600 text-white'
+                  : 'bg-light-base dark:bg-dark-bg-alt text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
               Empleados ({employeesCount})
@@ -222,8 +222,8 @@ const ContactsPage = () => {
       <Card>
         {loading ? (
           <div className="text-center py-8">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-neo-border dark:border-dark-border border-t-neo-primary dark:border-t-dark-primary"></div>
-            <p className="mt-2 text-neo-text-muted dark:text-dark-text-muted">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-gray-300 dark:border-gray-700 border-t-neo-primary dark:border-t-dark-primary"></div>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
               Cargando contactos...
             </p>
           </div>
@@ -231,20 +231,20 @@ const ContactsPage = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-neo-border dark:border-dark-border">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                <tr className="border-b border-gray-300 dark:border-gray-700">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Nombre
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Tipo
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Email
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Teléfono
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Acciones
                   </th>
                 </tr>
@@ -253,19 +253,19 @@ const ContactsPage = () => {
                 {filteredContacts.map((contact) => (
                   <tr
                     key={contact.id}
-                    className="border-b border-neo-border/50 dark:border-dark-border/50 hover:bg-neo-bg dark:hover:bg-dark-bg-alt"
+                    className="border-b border-gray-300/50 dark:border-gray-700/50 hover:bg-light-base dark:hover:bg-dark-bg-alt"
                   >
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-neo-primary dark:bg-dark-primary rounded-neo flex items-center justify-center text-white font-bold shadow-neo">
+                        <div className="w-10 h-10 bg-primary-500 dark:bg-primary-600 rounded-neo flex items-center justify-center text-white font-bold shadow-neo">
                           {contact.name?.charAt(0).toUpperCase() || 'U'}
                         </div>
                         <div>
-                          <p className="font-medium text-neo-text dark:text-dark-text">
+                          <p className="font-medium text-gray-800 dark:text-gray-100">
                             {contact.name}
                           </p>
                           {contact.tax_id && (
-                            <p className="text-xs text-neo-text-light dark:text-dark-text-light">
+                            <p className="text-xs text-gray-500 dark:text-gray-500">
                               {contact.tax_id}
                             </p>
                           )}
@@ -277,10 +277,10 @@ const ContactsPage = () => {
                         {getContactTypeLabel(contact.contact_type)}
                       </Badge>
                     </td>
-                    <td className="py-3 px-4 text-sm text-neo-text-muted dark:text-dark-text-muted">
+                    <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
                       {contact.email || '-'}
                     </td>
-                    <td className="py-3 px-4 text-sm text-neo-text-muted dark:text-dark-text-muted">
+                    <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
                       {contact.phone || '-'}
                     </td>
                     <td className="py-3 px-4">
@@ -296,7 +296,7 @@ const ContactsPage = () => {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDelete(contact)}
-                          className="text-neo-danger dark:text-dark-danger hover:bg-neo-danger/10 dark:hover:bg-dark-danger/10"
+                          className="text-danger-500 dark:text-danger-400 hover:bg-danger-500/10 dark:hover:bg-danger-500/10"
                         >
                           Eliminar
                         </Button>
@@ -309,11 +309,11 @@ const ContactsPage = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <User className="h-16 w-16 text-neo-text-muted dark:text-dark-text-muted mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text mb-2">
+            <User className="h-16 w-16 text-gray-600 dark:text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
               Sin contactos
             </h3>
-            <p className="text-neo-text-muted dark:text-dark-text-muted mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               {filterType !== 'all'
                 ? `No hay ${getContactTypeLabel(filterType).toLowerCase()}s registrados`
                 : 'Empieza agregando tus primeros contactos'}
@@ -354,21 +354,21 @@ const ContactsPage = () => {
         size="sm"
       >
         <div className="text-center">
-          <AlertCircle className="h-16 w-16 text-neo-danger dark:text-dark-danger mx-auto mb-4" />
+          <AlertCircle className="h-16 w-16 text-danger-500 dark:text-danger-400 mx-auto mb-4" />
 
-          <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text mb-2">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
             ¿Estás seguro?
           </h3>
 
-          <p className="text-neo-text-muted dark:text-dark-text-muted mb-2">
+          <p className="text-gray-600 dark:text-gray-400 mb-2">
             Vas a eliminar el contacto:
           </p>
 
-          <p className="font-semibold text-neo-text dark:text-dark-text mb-6">
+          <p className="font-semibold text-gray-800 dark:text-gray-100 mb-6">
             {deletingContact?.name}
           </p>
 
-          <p className="text-sm text-neo-text-light dark:text-dark-text-light mb-6">
+          <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
             Esta acción no se puede deshacer.
           </p>
 

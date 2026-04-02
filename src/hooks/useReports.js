@@ -173,6 +173,37 @@ export const useReports = (filters = {}) => {
     }
   }, [transactions])
 
+  // Ventas por método de pago
+  const salesByPaymentMethod = useMemo(() => {
+    const paymentMethods = {}
+
+    transactions
+      .filter(t => t.transaction_type === 'sale')
+      .forEach(transaction => {
+        const method = transaction.payment_method || 'sin_registro'
+        const methodLabels = {
+          cash: '💵 Efectivo',
+          card: '💳 Tarjeta',
+          transfer: '🏦 Transferencia',
+          sin_registro: '❓ Sin registro'
+        }
+
+        if (!paymentMethods[method]) {
+          paymentMethods[method] = {
+            method,
+            label: methodLabels[method] || method,
+            amount: 0,
+            count: 0,
+          }
+        }
+
+        paymentMethods[method].amount += parseFloat(transaction.total_amount)
+        paymentMethods[method].count += 1
+      })
+
+    return Object.values(paymentMethods).sort((a, b) => b.amount - a.amount)
+  }, [transactions])
+
   // Comparativas
   const comparisons = useMemo(() => {
     const today = new Date()
@@ -311,6 +342,7 @@ export const useReports = (filters = {}) => {
     topCustomers,
     performanceMetrics,
     comparisons,
+    salesByPaymentMethod,
 
     // Métodos
     exportToExcel,

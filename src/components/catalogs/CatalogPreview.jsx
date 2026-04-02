@@ -33,9 +33,9 @@ const CatalogPreview = ({ catalog, onClose }) => {
   }
 
   const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
@@ -80,7 +80,7 @@ const CatalogPreview = ({ catalog, onClose }) => {
                 return (
                   <div
                     key={product.id}
-                    className={`bg-white dark:bg-gray-800 border-2 rounded-kawaii overflow-hidden transition-all hover:shadow-lg ${
+                    className={`bg-white dark:bg-gray-800 border-2 rounded-neo overflow-hidden transition-all hover:shadow-lg ${
                       isOutOfStock
                         ? 'border-gray-200 dark:border-gray-700 opacity-60'
                         : 'border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600'
@@ -127,9 +127,9 @@ const CatalogPreview = ({ catalog, onClose }) => {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-lg font-bold text-primary-600 dark:text-primary-400">
-                            {formatCurrency(product.sale_price)}
+                            {formatCurrency(product.selling_price)}
                           </p>
-                          {product.cost_price && product.cost_price < product.sale_price && (
+                          {product.cost_price && product.cost_price < product.selling_price && (
                             <p className="text-xs text-gray-500 dark:text-gray-500 line-through">
                               {formatCurrency(product.cost_price)}
                             </p>

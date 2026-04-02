@@ -32,7 +32,7 @@ const ReportFilters = ({ onFilter, loading = false }) => {
             <select
               value={dateRange}
               onChange={e => setDateRange(e.target.value)}
-              className="px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+              className="px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-neo text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
             >
               <option value="7days">Últimos 7 días</option>
               <option value="30days">Últimos 30 días</option>
@@ -47,7 +47,7 @@ const ReportFilters = ({ onFilter, loading = false }) => {
             <select
               value={transactionType}
               onChange={e => setTransactionType(e.target.value)}
-              className="px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+              className="px-3 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-neo text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
             >
               <option value="all">Todo</option>
               <option value="sale">Solo ventas</option>

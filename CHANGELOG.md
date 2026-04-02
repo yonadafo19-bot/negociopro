@@ -12,6 +12,29 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Integración con pasarelas de pago
 - Múltiples monedas
 - Exportar a PDF
+- Logo profesional del proyecto
+- Screenshots del dashboard
+- Issue y Pull Request templates
+- GitHub Actions para CI/CD
+- Tests unitarios con Vitest
+- Tests E2E con Playwright
+- Storybook para componentes
+
+### Agregado
+- 📧 Gmail API integration para envío directo de emails
+- 📧 EmailJS service como método alternativo
+- 📧 Sistema de auto-fallback: Gmail API → EmailJS → mailto
+- 📧 Configuración de Gmail en Settings
+- 📧 README mejorado con presentación profesional
+- 📧 Diagramas de estructura del proyecto
+- 📧 Licencia MIT (LICENSE)
+- 🎨 Corrección de estilos CSS (rounded-neo)
+
+### Corregido
+- 🐛 Caracteres especiales JSX no escapados
+- 🐛 Build errors en Vercel
+- 🐛 Errores de estilos en componentes
+- 🐛 Gmail service configuration issues
 
 ## [1.0.0] - 2025-03-13
 

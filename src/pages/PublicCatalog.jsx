@@ -40,9 +40,9 @@ const PublicCatalogPage = () => {
   }
 
   const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
@@ -75,7 +75,7 @@ const PublicCatalogPage = () => {
   if (error || !catalog) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
-        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-kawaii shadow-lg p-8 text-center">
+        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-neo shadow-lg p-8 text-center">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Catálogo no encontrado
@@ -85,7 +85,7 @@ const PublicCatalogPage = () => {
           </p>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-kawaii transition-colors"
+            className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-neo transition-colors"
           >
             Ir al Inicio
           </button>
@@ -148,7 +148,7 @@ const PublicCatalogPage = () => {
                     href={`https://wa.me/${catalog.profiles.phone.replace(/\D/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-kawaii transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-neo transition-colors"
                   >
                     <MessageCircle className="h-4 w-4" />
                     WhatsApp
@@ -156,7 +156,7 @@ const PublicCatalogPage = () => {
                 )}
                 <a
                   href={`mailto:${catalog.profiles.email || ''}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-kawaii transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-neo transition-colors"
                 >
                   <Mail className="h-4 w-4" />
                   Email
@@ -236,9 +236,9 @@ const PublicCatalogPage = () => {
                     <div className="flex items-center justify-between mb-3">
                       <div>
                         <p className="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                          {formatCurrency(product.sale_price)}
+                          {formatCurrency(product.selling_price)}
                         </p>
-                        {product.cost_price && product.cost_price < product.sale_price && (
+                        {product.cost_price && product.cost_price < product.selling_price && (
                           <p className="text-sm text-gray-500 dark:text-gray-500 line-through">
                             {formatCurrency(product.cost_price)}
                           </p>
@@ -254,7 +254,7 @@ const PublicCatalogPage = () => {
                     {!isOutOfStock ? (
                       <button
                         onClick={() => contactViaWhatsApp(product)}
-                        className="w-full py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-kawaii transition-colors flex items-center justify-center gap-2"
+                        className="w-full py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-neo transition-colors flex items-center justify-center gap-2"
                       >
                         <MessageCircle className="h-5 w-5" />
                         Pedir por WhatsApp
@@ -262,7 +262,7 @@ const PublicCatalogPage = () => {
                     ) : (
                       <button
                         disabled
-                        className="w-full py-2 bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-500 font-semibold rounded-kawaii cursor-not-allowed"
+                        className="w-full py-2 bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-500 font-semibold rounded-neo cursor-not-allowed"
                       >
                         Producto agotado
                       </button>

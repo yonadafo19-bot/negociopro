@@ -67,7 +67,6 @@ const LoginPage = () => {
     if (error) {
       setErrors({ general: 'Error al iniciar sesión con Google' })
     }
-    // La redirección se maneja automáticamente por Supabase
   }
 
   const handleChange = e => {
@@ -80,102 +79,124 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Logo and title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-500 rounded-kawaii-lg mb-4">
-            <LogIn className="h-8 w-8 text-white" />
+          <div className="inline-flex items-center justify-center w-20 h-20 card-neo-lg mb-6">
+            <LogIn className="h-10 w-10 text-primary-500 dark:text-primary-400" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Bienvenido a NegociPro</h1>
-          <p className="text-gray-600">Gestiona tu negocio de forma simple y eficiente</p>
-        </div>
-
-        {errors.general && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-kawaii flex items-start gap-2">
-            <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-red-600">{errors.general}</p>
-          </div>
-        )}
-
-        {/* Botón de Google */}
-        <button
-          type="button"
-          onClick={handleGoogleSignIn}
-          disabled={loading}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-300 rounded-kawaii-lg bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
-        >
-          <GoogleIcon />
-          <span className="font-semibold text-gray-700">Continuar con Google</span>
-        </button>
-
-        {/* Separador */}
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white text-gray-500 font-medium">o inicia sesión con tu correo</span>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Correo electrónico"
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            error={errors.email}
-            icon={Mail}
-            placeholder="tu@correo.com"
-            autoComplete="email"
-            required
-          />
-
-          <Input
-            label="Contraseña"
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            error={errors.password}
-            icon={Lock}
-            placeholder="••••••••"
-            autoComplete="current-password"
-            required
-          />
-
-          <div className="flex items-center justify-between">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
-              />
-              <span className="ml-2 text-sm text-gray-700">Recordarme</span>
-            </label>
-
-            <Link
-              to="/forgot-password"
-              className="text-sm text-primary-600 hover:text-primary-700 font-medium"
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>
-          </div>
-
-          <Button type="submit" className="w-full" loading={loading} icon={LogIn}>
-            Iniciar Sesión
-          </Button>
-        </form>
-
-        <div className="mt-6 text-center">
-          <p className="text-gray-600">
-            ¿No tienes cuenta?{' '}
-            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
-              Regístrate gratis
-            </Link>
+          <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-3 gradient-text">
+            NegociPro
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">
+            Gestiona tu negocio con elegancia
           </p>
         </div>
-      </Card>
+
+        {/* Main card */}
+        <Card padding="lg" variant="lg">
+          {errors.general && (
+            <div className="mb-6 p-4 rounded-neo bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-danger-500 dark:text-danger-400 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-danger-700 dark:text-danger-300">{errors.general}</p>
+            </div>
+          )}
+
+          {/* Google sign-in */}
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 card-neo hover:-translate-y-0.5 transition-transform duration-200 disabled:opacity-50 disabled:cursor-not-allowed mb-4"
+          >
+            <GoogleIcon />
+            <span className="font-semibold text-gray-700 dark:text-gray-200">Continuar con Google</span>
+          </button>
+
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-light-base dark:bg-dark-base text-gray-500 dark:text-gray-400 font-medium">
+                o usa tu correo
+              </span>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <Input
+              label="Correo electrónico"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              error={errors.email}
+              icon={Mail}
+              placeholder="tu@correo.com"
+              autoComplete="email"
+              required
+            />
+
+            <Input
+              label="Contraseña"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              error={errors.password}
+              icon={Lock}
+              placeholder="••••••••"
+              autoComplete="current-password"
+              required
+            />
+
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="checkbox-neo"
+                />
+                <span className="text-gray-600 dark:text-gray-400">Recordarme</span>
+              </label>
+
+              <Link
+                to="/forgot-password"
+                className="text-primary-500 dark:text-primary-400 hover:text-primary-600 dark:hover:text-primary-300 font-medium transition-colors"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
+
+            <Button type="submit" className="w-full" loading={loading} icon={LogIn}>
+              Iniciar Sesión
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-600 dark:text-gray-400">
+              ¿No tienes cuenta?{' '}
+              <Link to="/register" className="text-primary-500 dark:text-primary-400 hover:text-primary-600 dark:hover:text-primary-300 font-semibold transition-colors">
+                Regístrate gratis
+              </Link>
+            </p>
+          </div>
+        </Card>
+
+        {/* Footer */}
+        <p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-500">
+          Al iniciar sesión, aceptas nuestros{' '}
+          <Link to="/terms" className="text-primary-500 dark:text-primary-400 hover:underline">
+            términos de servicio
+          </Link>{' '}
+          y{' '}
+          <Link to="/privacy" className="text-primary-500 dark:text-primary-400 hover:underline">
+            política de privacidad
+          </Link>
+        </p>
+      </div>
     </div>
   )
 }

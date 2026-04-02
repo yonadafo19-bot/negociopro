@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import autoTable from 'jspdf-autotable'
 import * as XLSX from 'xlsx'
 
 export const exportToPDF = (data, options = {}) => {
@@ -17,7 +17,7 @@ export const exportToPDF = (data, options = {}) => {
 
   // Table
   if (data.length > 0 && columns.length > 0) {
-    doc.autoTable({
+    autoTable(doc, {
       startY: 35,
       head: [columns.map(col => col.header)],
       body: data.map(row => columns.map(col => row[col.field])),

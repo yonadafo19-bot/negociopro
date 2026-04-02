@@ -1,4 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#ef4444"/>
-  <path d="M30 70 L30 45 L45 55 L45 30 L55 30 L55 55 L70 45 L70 70 Z" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="faviconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="32" cy="32" r="30" fill="url(#faviconGradient)" />
+
+  <!-- Store Icon -->
+  <g fill="#FFFFFF">
+    <!-- Roof -->
+    <path d="M16 30 L32 18 L48 30 L48 35 L16 35 Z" />
+
+    <!-- Body -->
+    <rect x="18" y="35" width="28" height="15" rx="2" />
+
+    <!-- Door -->
+    <rect x="27" y="40" width="10" height="10" rx="1" fill="#8B5CF6" />
+
+    <!-- Windows -->
+    <rect x="20" y="38" width="5" height="8" rx="1" fill="#E0E7FF" />
+    <rect x="39" y="38" width="5" height="8" rx="1" fill="#E0E7FF" />
+  </g>
 </svg>

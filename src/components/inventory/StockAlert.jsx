@@ -29,7 +29,7 @@ const StockAlert = ({ products = [], onViewAll }) => {
               {products.slice(0, 3).map(product => (
                 <div
                   key={product.id}
-                  className="flex items-center justify-between text-xs bg-white dark:bg-gray-800 px-3 py-2 rounded-kawaii"
+                  className="flex items-center justify-between text-xs bg-white dark:bg-gray-800 px-3 py-2 rounded-neo"
                 >
                   <span className="font-medium text-gray-900 dark:text-white">{product.name}</span>
                   <span className="text-yellow-600 dark:text-yellow-400">

@@ -83,14 +83,14 @@ const ContactForm = ({ contact, onSubmit, onCancel, loading = false }) => {
       />
 
       <div>
-        <label className="block text-sm font-medium text-neo-text dark:text-dark-text mb-1">
+        <label className="block text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">
           Tipo de contacto *
         </label>
         <select
           name="contact_type"
           value={formData.contact_type}
           onChange={handleChange}
-          className="w-full px-4 py-2 bg-neo-bg dark:bg-dark-bg-alt border border-neo-border dark:border-dark-border rounded-neo focus:outline-none focus:ring-2 focus:ring-neo-primary dark:focus:ring-dark-primary dark:focus:ring-offset-dark-bg text-neo-text dark:text-dark-text shadow-inner-shadow transition-all duration-200"
+          className="w-full px-4 py-2 bg-light-base dark:bg-dark-bg-alt border border-gray-300 dark:border-gray-700 rounded-neo focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-dark-primary dark:focus:ring-offset-gray-900 text-gray-800 dark:text-gray-100 shadow-neo-light-inset dark:shadow-neo-dark-inset transition-all duration-200"
           required
         >
           <option value="customer">Cliente</option>
@@ -137,7 +137,7 @@ const ContactForm = ({ contact, onSubmit, onCancel, loading = false }) => {
       />
 
       <div>
-        <label className="block text-sm font-medium text-neo-text dark:text-dark-text mb-1">
+        <label className="block text-sm font-medium text-gray-800 dark:text-gray-100 mb-1">
           Notas
         </label>
         <textarea
@@ -146,11 +146,11 @@ const ContactForm = ({ contact, onSubmit, onCancel, loading = false }) => {
           onChange={handleChange}
           placeholder="Notas adicionales..."
           rows={3}
-          className="w-full px-4 py-2 bg-neo-bg dark:bg-dark-bg-alt border border-neo-border dark:border-dark-border rounded-neo focus:outline-none focus:ring-2 focus:ring-neo-primary dark:focus:ring-dark-primary dark:focus:ring-offset-dark-bg text-neo-text dark:text-dark-text shadow-inner-shadow transition-all duration-200 resize-none"
+          className="w-full px-4 py-2 bg-light-base dark:bg-dark-bg-alt border border-gray-300 dark:border-gray-700 rounded-neo focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-dark-primary dark:focus:ring-offset-gray-900 text-gray-800 dark:text-gray-100 shadow-neo-light-inset dark:shadow-neo-dark-inset transition-all duration-200 resize-none"
         />
       </div>
 
-      <div className="flex gap-3 pt-4 border-t border-neo-border dark:border-dark-border">
+      <div className="flex gap-3 pt-4 border-t border-gray-300 dark:border-gray-700">
         <Button
           type="button"
           variant="outline"

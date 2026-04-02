@@ -45,7 +45,7 @@ const CatalogList = ({ catalogs, loading, onEdit, onDelete, onShare, onView, onC
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-kawaii p-4 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-neo p-4 mb-6">
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
@@ -66,7 +66,7 @@ const CatalogList = ({ catalogs, loading, onEdit, onDelete, onShare, onView, onC
             <select
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
-              className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-kawaii text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-neo text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">Todos</option>
               <option value="public">Públicos</option>

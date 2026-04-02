@@ -115,11 +115,11 @@ const InventoryPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="h-16 w-16 text-neo-danger dark:text-dark-danger mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-neo-text dark:text-dark-text mb-2">
+          <AlertCircle className="h-16 w-16 text-danger-500 dark:text-danger-400 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
             Error al cargar el inventario
           </h2>
-          <p className="text-neo-text-muted dark:text-dark-text-muted mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             {error.message || 'Por favor, intenta recargar la página'}
           </p>
           <button
@@ -138,10 +138,10 @@ const InventoryPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-neo-text dark:text-dark-text mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
             Inventario
           </h1>
-          <p className="text-neo-text-muted dark:text-dark-text-muted">
+          <p className="text-gray-600 dark:text-gray-400">
             Gestiona tus productos y controla tu stock
           </p>
         </div>
@@ -155,14 +155,14 @@ const InventoryPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-primary dark:bg-dark-primary rounded-neo shadow-neo">
+            <div className="p-3 bg-primary-500 dark:bg-primary-600 rounded-neo shadow-neo">
               <Package className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Total de productos
               </p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {totalProducts}
               </p>
             </div>
@@ -171,12 +171,12 @@ const InventoryPage = () => {
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-success dark:bg-dark-success rounded-neo shadow-neo">
+            <div className="p-3 bg-success-500 dark:bg-success-600 rounded-neo shadow-neo">
               <Package className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">En stock</p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">
+              <p className="text-sm text-gray-600 dark:text-gray-400">En stock</p>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {products.filter((p) => p.stock_quantity > 0).length}
               </p>
             </div>
@@ -185,12 +185,12 @@ const InventoryPage = () => {
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-warning dark:bg-dark-warning rounded-neo shadow-neo">
+            <div className="p-3 bg-warning-500 dark:bg-warning-600 rounded-neo shadow-neo">
               <AlertCircle className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Stock bajo</p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">{lowStockCount}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Stock bajo</p>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{lowStockCount}</p>
             </div>
           </div>
         </Card>
@@ -245,21 +245,21 @@ const InventoryPage = () => {
         size="sm"
       >
         <div className="text-center">
-          <AlertCircle className="h-16 w-16 text-neo-danger dark:text-dark-danger mx-auto mb-4" />
+          <AlertCircle className="h-16 w-16 text-danger-500 dark:text-danger-400 mx-auto mb-4" />
 
-          <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text mb-2">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
             ¿Estás seguro?
           </h3>
 
-          <p className="text-neo-text-muted dark:text-dark-text-muted mb-2">
+          <p className="text-gray-600 dark:text-gray-400 mb-2">
             Vas a eliminar el producto:
           </p>
 
-          <p className="font-semibold text-neo-text dark:text-dark-text mb-6">
+          <p className="font-semibold text-gray-800 dark:text-gray-100 mb-6">
             {deletingProduct?.name}
           </p>
 
-          <p className="text-sm text-neo-text-light dark:text-dark-text-light mb-6">
+          <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
             Esta acción no se puede deshacer. El producto se marcará como inactivo.
           </p>
 

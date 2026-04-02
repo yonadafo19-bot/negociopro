@@ -84,10 +84,10 @@ const SalesPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-neo-text dark:text-dark-text mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
             Ventas y Gastos
           </h1>
-          <p className="text-neo-text-muted dark:text-dark-text-muted">
+          <p className="text-gray-600 dark:text-gray-400">
             Registra y gestiona tus transacciones
           </p>
         </div>
@@ -117,14 +117,14 @@ const SalesPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-success dark:bg-dark-success rounded-neo shadow-neo">
+            <div className="p-3 bg-success-500 dark:bg-success-600 rounded-neo shadow-neo">
               <TrendingUp className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Ventas totales
               </p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {formatCurrency(totalSales)}
               </p>
             </div>
@@ -133,14 +133,14 @@ const SalesPage = () => {
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-danger dark:bg-dark-danger rounded-neo shadow-neo">
+            <div className="p-3 bg-danger-500 dark:bg-danger-600 rounded-neo shadow-neo">
               <TrendingDown className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Gastos totales
               </p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {formatCurrency(totalExpenses)}
               </p>
             </div>
@@ -149,12 +149,12 @@ const SalesPage = () => {
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-neo-primary dark:bg-dark-primary rounded-neo shadow-neo">
+            <div className="p-3 bg-primary-500 dark:bg-primary-600 rounded-neo shadow-neo">
               <DollarSign className="h-6 w-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">Balance</p>
-              <p className="text-2xl font-bold text-neo-text dark:text-dark-text">
+              <p className="text-sm text-gray-600 dark:text-gray-400">Balance</p>
+              <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {formatCurrency(totalSales - totalExpenses)}
               </p>
             </div>
@@ -165,7 +165,7 @@ const SalesPage = () => {
       {/* Recent transactions */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
             Transacciones Recientes
           </h3>
           <Badge variant="secondary">{salesCount} ventas</Badge>
@@ -173,8 +173,8 @@ const SalesPage = () => {
 
         {loading ? (
           <div className="text-center py-8">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-neo-border dark:border-dark-border border-t-neo-primary dark:border-t-dark-primary"></div>
-            <p className="mt-2 text-neo-text-muted dark:text-dark-text-muted">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-gray-300 dark:border-gray-700 border-t-neo-primary dark:border-t-dark-primary"></div>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
               Cargando transacciones...
             </p>
           </div>
@@ -182,23 +182,23 @@ const SalesPage = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-neo-border dark:border-dark-border">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                <tr className="border-b border-gray-300 dark:border-gray-700">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Fecha
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Tipo
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Monto
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Cliente
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Estado
                   </th>
-                  <th className="text-center py-3 px-4 text-sm font-medium text-neo-text-muted dark:text-dark-text-muted">
+                  <th className="text-center py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                     Acciones
                   </th>
                 </tr>
@@ -207,9 +207,9 @@ const SalesPage = () => {
                 {transactions.slice(0, 10).map((transaction) => (
                   <tr
                     key={transaction.id}
-                    className="border-b border-neo-border/50 dark:border-dark-border/50 hover:bg-neo-bg dark:hover:bg-dark-bg-alt"
+                    className="border-b border-gray-300/50 dark:border-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
-                    <td className="py-3 px-4 text-sm text-neo-text dark:text-dark-text">
+                    <td className="py-3 px-4 text-sm text-gray-800 dark:text-gray-100">
                       {formatDate(transaction.transaction_date)}
                     </td>
                     <td className="py-3 px-4">
@@ -230,10 +230,10 @@ const SalesPage = () => {
                             : 'Ingreso'}
                       </Badge>
                     </td>
-                    <td className="py-3 px-4 text-sm font-medium text-neo-text dark:text-dark-text">
+                    <td className="py-3 px-4 text-sm font-medium text-gray-800 dark:text-gray-100">
                       {formatCurrency(transaction.total_amount)}
                     </td>
-                    <td className="py-3 px-4 text-sm text-neo-text-muted dark:text-dark-text-muted">
+                    <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
                       {transaction.contacts?.name || '-'}
                     </td>
                     <td className="py-3 px-4">
@@ -268,7 +268,7 @@ const SalesPage = () => {
                             <Mail className="h-4 w-4" />
                           </EmailButton>
                         ) : (
-                          <span className="text-neo-text-light dark:text-dark-text-light text-xs">-</span>
+                          <span className="text-gray-500 dark:text-gray-500 text-xs">-</span>
                         )}
                     </td>
                   </tr>
@@ -278,11 +278,11 @@ const SalesPage = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Calendar className="h-16 w-16 text-neo-text-muted dark:text-dark-text-muted mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text mb-2">
+            <Calendar className="h-16 w-16 text-gray-600 dark:text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
               Sin transacciones
             </h3>
-            <p className="text-neo-text-muted dark:text-dark-text-muted mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Empieza registrando tu primera venta
             </p>
             <Button onClick={() => setShowSaleModal(true)} icon={Plus}>

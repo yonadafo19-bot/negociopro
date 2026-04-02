@@ -3,9 +3,9 @@ import { Trophy, Package, TrendingUp } from 'lucide-react'
 
 const TopProducts = ({ products = [], loading = false }) => {
   const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
@@ -36,7 +36,7 @@ const TopProducts = ({ products = [], loading = false }) => {
             {products.map((product, index) => (
               <div
                 key={product.product_id}
-                className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-kawaii"
+                className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-neo"
               >
                 {/* Position */}
                 <div

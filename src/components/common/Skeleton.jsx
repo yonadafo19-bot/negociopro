@@ -27,9 +27,9 @@ export const Skeleton = ({ className = '', variant = 'default', ...props }) => {
  * Skeleton para tarjeta de producto
  */
 export const ProductCardSkeleton = () => (
-  <div className="bg-white dark:bg-gray-800 rounded-kawaii-lg border-2 border-gray-200 dark:border-gray-700 p-4">
+  <div className="bg-white dark:bg-gray-800 rounded-neo-lg border-2 border-gray-200 dark:border-gray-700 p-4">
     <div className="flex gap-4">
-      <Skeleton className="w-20 h-20 rounded-kawaii flex-shrink-0" />
+      <Skeleton className="w-20 h-20 rounded-neo flex-shrink-0" />
       <div className="flex-1 space-y-2">
         <Skeleton className="h-4 w-3/4" />
         <Skeleton className="h-3 w-1/2" />
@@ -43,7 +43,7 @@ export const ProductCardSkeleton = () => (
  * Skeleton para tarjeta de estadística
  */
 export const StatCardSkeleton = () => (
-  <div className="bg-white dark:bg-gray-800 rounded-kawaii-lg border-2 border-gray-200 dark:border-gray-700 p-6">
+  <div className="bg-white dark:bg-gray-800 rounded-neo-lg border-2 border-gray-200 dark:border-gray-700 p-6">
     <div className="flex items-center gap-3">
       <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
       <div className="flex-1 space-y-2">
@@ -91,7 +91,7 @@ export const ListSkeleton = ({ items = 3 }) => (
  * Skeleton para gráfico
  */
 export const ChartSkeleton = ({ height = 200 }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-kawaii-lg p-6">
+  <div className="bg-white dark:bg-gray-800 rounded-neo-lg p-6">
     <Skeleton className="h-6 w-48 mb-4" />
     <Skeleton className="w-full" style={{ height: `${height}px` }} />
   </div>
@@ -116,7 +116,7 @@ export const FormSkeleton = ({ fields = 4 }) => (
  * Skeleton para tarjeta completa
  */
 export const CardSkeleton = ({ showHeader = true, showFooter = false, lines = 3 }) => (
-  <div className="bg-white dark:bg-gray-800 rounded-kawaii-lg border-2 border-gray-200 dark:border-gray-700 p-6">
+  <div className="bg-white dark:bg-gray-800 rounded-neo-lg border-2 border-gray-200 dark:border-gray-700 p-6">
     {showHeader && (
       <div className="space-y-2 mb-4">
         <Skeleton className="h-6 w-48" />

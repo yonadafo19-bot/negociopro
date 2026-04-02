@@ -87,7 +87,7 @@ const SyncSettingsPage = () => {
           </CardHeader>
           <CardContent>
             <div
-              className={`p-6 rounded-kawaii flex items-center gap-4 ${
+              className={`p-6 rounded-neo flex items-center gap-4 ${
                 isOnline ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'
               }`}
             >
@@ -120,7 +120,7 @@ const SyncSettingsPage = () => {
               </div>
             </div>
 
-            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-kawaii">
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-neo">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600 dark:text-gray-400">Última sincronización:</span>
                 <span className="font-medium text-gray-900 dark:text-white">
@@ -140,7 +140,7 @@ const SyncSettingsPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-kawaii mb-4">
+            <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-neo mb-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
@@ -157,7 +157,7 @@ const SyncSettingsPage = () => {
             </div>
 
             {pendingSync > 0 && (
-              <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-kawaii mb-4">
+              <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-neo mb-4">
                 <div className="flex items-start gap-2">
                   <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
                   <div>
@@ -207,7 +207,7 @@ const SyncSettingsPage = () => {
                 {syncLog.map((log, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-kawaii text-sm"
+                    className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-neo text-sm"
                   >
                     <span className="text-xs text-gray-500 dark:text-gray-500 font-mono flex-shrink-0">
                       {log.timestamp}
@@ -227,7 +227,7 @@ const SyncSettingsPage = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-kawaii">
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-neo">
                 <div className="text-2xl mb-2">📱</div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
                   Funciona Offline
@@ -237,7 +237,7 @@ const SyncSettingsPage = () => {
                 </p>
               </div>
 
-              <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-kawaii">
+              <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-neo">
                 <div className="text-2xl mb-2">💾</div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Guardado Local</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -245,7 +245,7 @@ const SyncSettingsPage = () => {
                 </p>
               </div>
 
-              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-kawaii">
+              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-neo">
                 <div className="text-2xl mb-2">🔄</div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Auto Sync</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">

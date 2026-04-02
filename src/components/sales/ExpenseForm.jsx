@@ -84,9 +84,9 @@ const ExpenseForm = ({ onSubmit, onCancel, loading = false }) => {
 
   const formatCurrency = amount => {
     if (!amount) return ''
-    return new Intl.NumberFormat('es-MX', {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(parseFloat(amount))
   }
 
@@ -109,7 +109,7 @@ const ExpenseForm = ({ onSubmit, onCancel, loading = false }) => {
             placeholder="0.00"
             step="0.01"
             min="0"
-            className={`w-full pl-12 pr-4 py-3 text-2xl font-bold border-2 rounded-kawaii focus:outline-none focus:ring-2 ${
+            className={`w-full pl-12 pr-4 py-3 text-2xl font-bold border-2 rounded-neo focus:outline-none focus:ring-2 ${
               errors.amount
                 ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
                 : 'border-primary-300 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-700 dark:bg-gray-800'
@@ -139,7 +139,7 @@ const ExpenseForm = ({ onSubmit, onCancel, loading = false }) => {
               key={category.value}
               type="button"
               onClick={() => setFormData(prev => ({ ...prev, category: category.value }))}
-              className={`p-3 rounded-kawaii border-2 text-center transition-all ${
+              className={`p-3 rounded-neo border-2 text-center transition-all ${
                 formData.category === category.value
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
                   : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
@@ -171,7 +171,7 @@ const ExpenseForm = ({ onSubmit, onCancel, loading = false }) => {
           onChange={handleChange}
           placeholder="Describe el gasto (ej: Compra de suministros de limpieza)"
           rows={3}
-          className={`w-full px-4 py-3 border-2 rounded-kawaii focus:outline-none focus:ring-2 ${
+          className={`w-full px-4 py-3 border-2 rounded-neo focus:outline-none focus:ring-2 ${
             errors.description
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
               : 'border-gray-300 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800'
@@ -193,7 +193,7 @@ const ExpenseForm = ({ onSubmit, onCancel, loading = false }) => {
             name="supplier_id"
             value={formData.supplier_id}
             onChange={handleChange}
-            className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+            className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-neo focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
           >
             <option value="">Sin proveedor</option>
             {suppliers.map(supplier => (
@@ -219,7 +219,7 @@ const ExpenseForm = ({ onSubmit, onCancel, loading = false }) => {
               value={formData.invoice}
               onChange={handleChange}
               placeholder="FAC-001"
-              className="w-full pl-10 pr-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-kawaii focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+              className="w-full pl-10 pr-4 py-2 border-2 border-gray-300 dark:border-gray-600 rounded-neo focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
             />
           </div>
         </Card>
@@ -236,7 +236,7 @@ const ExpenseForm = ({ onSubmit, onCancel, loading = false }) => {
               key={method.value}
               type="button"
               onClick={() => setFormData(prev => ({ ...prev, payment_method: method.value }))}
-              className={`flex-1 p-3 rounded-kawaii border-2 text-center transition-all ${
+              className={`flex-1 p-3 rounded-neo border-2 text-center transition-all ${
                 formData.payment_method === method.value
                   ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
                   : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'

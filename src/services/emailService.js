@@ -278,11 +278,11 @@ PRODUCTOS DISPONIBLES:
       new Intl.NumberFormat('es-MX', {
         style: 'currency',
         currency: 'MXN',
-      }).format(product.sale_price || product.selling_price || 0)
+      }).format(product.selling_price || 0)
 
     body += `${index + 1}. ${product.name}
    ${product.sku ? `SKU: ${product.sku}` : ''}
-   Precio: ${formatCurrency(product.sale_price || product.selling_price)}
+   Precio: ${formatCurrency(product.selling_price)}
    Stock: ${product.stock_quantity} unidades
 
 `

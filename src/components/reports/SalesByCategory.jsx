@@ -15,9 +15,9 @@ const COLORS = [
 
 const SalesByCategory = ({ data = [], loading = false }) => {
   const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
       minimumFractionDigits: 0,
     }).format(amount)
   }

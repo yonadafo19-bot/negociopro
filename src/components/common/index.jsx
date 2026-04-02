@@ -12,6 +12,7 @@ export { default as Modal } from './Modal'
 export { default as Badge } from './Badge'
 export { default as Toggle } from './Toggle'
 export { default as EmailButton } from './EmailButton'
+export { default as Notifications } from './Notifications'
 export { default as ErrorBoundary } from './ErrorBoundary'
 export {
   default as Skeleton,

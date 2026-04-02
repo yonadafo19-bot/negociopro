@@ -28,20 +28,20 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
             <img
               src={product.image_url}
               alt={product.name}
-              className="w-16 h-16 object-cover rounded-neo border border-neo-border dark:border-dark-border shadow-neo-sm mb-2"
+              className="w-16 h-16 object-cover rounded-neo border border-gray-300 dark:border-gray-700 shadow-neo-sm mb-2"
             />
           ) : (
-            <div className="w-16 h-16 bg-neo-bg dark:bg-dark-bg-alt rounded-neo flex items-center justify-center mb-2 border border-neo-border dark:border-dark-border shadow-inner-shadow">
-              <Package className="h-8 w-8 text-neo-text-muted dark:text-dark-text-muted" />
+            <div className="w-16 h-16 bg-light-base dark:bg-dark-bg-alt rounded-neo flex items-center justify-center mb-2 border border-gray-300 dark:border-gray-700 shadow-neo-light-inset dark:shadow-neo-dark-inset">
+              <Package className="h-8 w-8 text-gray-600 dark:text-gray-400" />
             </div>
           )}
 
-          <h3 className="font-semibold text-neo-text dark:text-dark-text mb-1 line-clamp-2">
+          <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-1 line-clamp-2">
             {product.name}
           </h3>
 
           {product.sku && (
-            <p className="text-xs text-neo-text-light dark:text-dark-text-light">
+            <p className="text-xs text-gray-500 dark:text-gray-500">
               SKU: {product.sku}
             </p>
           )}
@@ -68,7 +68,7 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
             size="sm"
             onClick={() => onDelete(product)}
             title="Eliminar"
-            className="text-neo-danger dark:text-dark-danger hover:bg-neo-danger/10 dark:hover:bg-dark-danger/10"
+            className="text-danger-500 dark:text-danger-400 hover:bg-danger-500/10 dark:hover:bg-danger-500/10"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -78,12 +78,12 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
       {/* Stock */}
       <div className="mb-3">
         <div className="flex items-center justify-between text-sm mb-1">
-          <span className="text-neo-text-muted dark:text-dark-text-muted">Stock:</span>
+          <span className="text-gray-600 dark:text-gray-400">Stock:</span>
           <span
             className={`font-semibold ${
               isLowStock
-                ? 'text-neo-warning dark:text-dark-warning'
-                : 'text-neo-text dark:text-dark-text'
+                ? 'text-warning-500 dark:text-warning-400'
+                : 'text-gray-800 dark:text-gray-100'
             }`}
           >
             {product.stock_quantity} unidades
@@ -91,21 +91,21 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
         </div>
 
         {isLowStock && (
-          <div className="flex items-center gap-1 text-xs text-neo-warning dark:text-dark-warning">
+          <div className="flex items-center gap-1 text-xs text-warning-500 dark:text-warning-400">
             <AlertTriangle className="h-3 w-3" />
             <span>Stock bajo (mín: {product.min_stock_alert})</span>
           </div>
         )}
 
         {/* Progress bar */}
-        <div className="w-full bg-neo-bg dark:bg-dark-bg-alt rounded-neo h-2 mt-1 shadow-inner-shadow">
+        <div className="w-full bg-light-base dark:bg-dark-bg-alt rounded-neo h-2 mt-1 shadow-neo-light-inset dark:shadow-neo-dark-inset">
           <div
             className={`h-2 rounded-neo transition-all shadow-neo-sm ${
               isLowStock
-                ? 'bg-neo-warning dark:bg-dark-warning'
+                ? 'bg-warning-500 dark:bg-warning-600'
                 : product.stock_quantity > product.min_stock_alert * 2
-                  ? 'bg-neo-success dark:bg-dark-success'
-                  : 'bg-neo-primary dark:bg-dark-primary'
+                  ? 'bg-success-500 dark:bg-success-600'
+                  : 'bg-primary-500 dark:bg-primary-600'
             }`}
             style={{
               width: `${Math.min(
@@ -119,16 +119,16 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
 
       {/* Prices */}
       <div className="grid grid-cols-2 gap-2 mb-3">
-        <div className="bg-neo-bg dark:bg-dark-bg-alt p-2 rounded-neo border border-neo-border dark:border-dark-border shadow-inner-shadow">
-          <p className="text-xs text-neo-text-muted dark:text-dark-text-muted">Costo</p>
-          <p className="font-semibold text-neo-text dark:text-dark-text">
+        <div className="bg-light-base dark:bg-dark-bg-alt p-2 rounded-neo border border-gray-300 dark:border-gray-700 shadow-neo-light-inset dark:shadow-neo-dark-inset">
+          <p className="text-xs text-gray-600 dark:text-gray-400">Costo</p>
+          <p className="font-semibold text-gray-800 dark:text-gray-100">
             {formatCurrency(product.cost_price)}
           </p>
         </div>
 
-        <div className="bg-neo-success/10 dark:bg-dark-success/10 p-2 rounded-neo border border-neo-success/30 dark:border-dark-success/30">
-          <p className="text-xs text-neo-text-muted dark:text-dark-text-muted">Venta</p>
-          <p className="font-semibold text-neo-success dark:text-dark-success">
+        <div className="bg-success-500/10 dark:bg-success-500/10 p-2 rounded-neo border border-success-500/30 dark:border-success-500/30">
+          <p className="text-xs text-gray-600 dark:text-gray-400">Venta</p>
+          <p className="font-semibold text-success-500 dark:text-success-400">
             {formatCurrency(product.selling_price)}
           </p>
         </div>
@@ -136,8 +136,8 @@ const ProductCard = ({ product, onEdit, onDelete, lowStock = false }) => {
 
       {/* Profit margin */}
       {product.cost_price > 0 && (
-        <div className="flex items-center gap-1 text-xs text-neo-text-muted dark:text-dark-text-muted">
-          <TrendingUp className="h-3 w-3 text-neo-primary dark:text-dark-primary" />
+        <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
+          <TrendingUp className="h-3 w-3 text-primary-500 dark:text-primary-400" />
           <span>
             Margen:{' '}
             {(((product.selling_price - product.cost_price) / product.cost_price) *

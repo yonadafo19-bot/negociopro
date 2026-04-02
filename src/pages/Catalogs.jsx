@@ -3,8 +3,10 @@ import { useCatalogs } from '../hooks/useCatalogs'
 import { CatalogList, CatalogForm, ShareDialog, CatalogPreview } from '../components/catalogs'
 import { Card, CardContent, PageLoader } from '../components/common'
 import { BookOpen, Eye, Share2 } from 'lucide-react'
+import { useToast } from '../components/common/Toast'
 
 const CatalogsPage = () => {
+  const { success, error: showError } = useToast()
   const {
     catalogs,
     loading,
@@ -27,19 +29,37 @@ const CatalogsPage = () => {
   }
 
   const handleCreate = async catalogData => {
-    await createCatalog(catalogData)
-    setShowForm(false)
+    try {
+      await createCatalog(catalogData)
+      success('Catálogo creado exitosamente')
+      setShowForm(false)
+    } catch (err) {
+      console.error('Error creating catalog:', err)
+      showError(err.message || 'Error al crear el catálogo. Por favor intenta nuevamente.')
+    }
   }
 
   const handleEdit = async catalogData => {
-    await updateCatalog(editingCatalog.id, catalogData)
-    await updateCatalogProducts(editingCatalog.id, catalogData.product_ids)
-    setEditingCatalog(null)
+    try {
+      await updateCatalog(editingCatalog.id, catalogData)
+      await updateCatalogProducts(editingCatalog.id, catalogData.product_ids)
+      success('Catálogo actualizado exitosamente')
+      setEditingCatalog(null)
+    } catch (err) {
+      console.error('Error updating catalog:', err)
+      showError(err.message || 'Error al actualizar el catálogo. Por favor intenta nuevamente.')
+    }
   }
 
   const handleDelete = async catalog => {
     if (window.confirm(`¿Eliminar el catálogo "${catalog.name}"?`)) {
-      await deleteCatalog(catalog.id)
+      try {
+        await deleteCatalog(catalog.id)
+        success('Catálogo eliminado exitosamente')
+      } catch (err) {
+        console.error('Error deleting catalog:', err)
+        showError(err.message || 'Error al eliminar el catálogo. Por favor intenta nuevamente.')
+      }
     }
   }
 

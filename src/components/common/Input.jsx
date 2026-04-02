@@ -11,29 +11,38 @@ const Input = forwardRef(
       icon: Icon,
       className = '',
       containerClassName = '',
+      size = 'md',
       ...props
     },
     ref
   ) => {
+    const sizeClasses = {
+      sm: 'input-neo-sm',
+      md: 'input-neo',
+      lg: 'input-neo-lg',
+    }
+
     const inputClasses = twMerge(
       clsx(
-        'w-full px-4 py-2 bg-neo-bg dark:bg-dark-bg-alt border rounded-neo transition-all duration-200',
-        'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neo-primary dark:focus:ring-dark-primary dark:focus:ring-offset-dark-bg focus:border-transparent',
-        'disabled:bg-neo-bg-alt dark:disabled:bg-dark-bg disabled:cursor-not-allowed',
-        'shadow-inner-shadow',
-        error
-          ? 'border-neo-danger dark:border-dark-danger focus:ring-neo-danger dark:focus:ring-dark-danger'
-          : 'border-neo-border dark:border-dark-border',
+        sizeClasses[size],
+        error && 'ring-2 ring-danger-500 dark:ring-danger-400',
         Icon && 'pl-11',
         className
       )
     )
 
     const labelClasses = clsx(
-      'block text-sm font-medium mb-1',
+      'block text-sm font-medium mb-2 transition-colors',
       error
-        ? 'text-neo-danger dark:text-dark-danger'
-        : 'text-neo-text dark:text-dark-text'
+        ? 'text-danger-500 dark:text-danger-400'
+        : 'text-gray-700 dark:text-gray-200'
+    )
+
+    const iconClasses = clsx(
+      'absolute left-4 top-1/2 transform -translate-y-1/2 transition-colors',
+      error
+        ? 'text-danger-500 dark:text-danger-400'
+        : 'text-gray-400 dark:text-gray-500'
     )
 
     return (
@@ -42,15 +51,18 @@ const Input = forwardRef(
 
         <div className="relative">
           {Icon && (
-            <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-neo-text-muted dark:text-dark-text-muted" />
+            <Icon
+              className={iconClasses}
+              style={{ left: size === 'sm' ? '0.75rem' : size === 'lg' ? '1.25rem' : '1rem' }}
+            />
           )}
           <input ref={ref} className={inputClasses} {...props} />
         </div>
 
-        {error && <p className="mt-1 text-sm text-neo-danger dark:text-dark-danger">{error}</p>}
+        {error && <p className="mt-1.5 text-sm text-danger-500 dark:text-danger-400">{error}</p>}
 
         {helperText && !error && (
-          <p className="mt-1 text-sm text-neo-text-muted dark:text-dark-text-muted">{helperText}</p>
+          <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">{helperText}</p>
         )}
       </div>
     )

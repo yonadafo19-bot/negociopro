@@ -167,6 +167,19 @@ Democratizar el acceso a herramientas de gestión empresarial para emprendedores
 |------|-------|------------|
 | Usuario | `demo@negoci.pro` | `Demo123!` |
 
+### 📸 Screenshots
+
+<div align="center">
+
+![Dashboard](public/screenshots/dashboard.png "Dashboard Principal")
+![Inventario](public/screenshots/inventory.png "Gestión de Inventario")
+![Ventas](public/screenshots/sales.png "Punto de Venta (POS)")
+![Contactos](public/screenshots/contacts.png "Gestión de Contactos")
+![Reportes](public/screenshots/reports.png "Analytics y Reportes")
+![Catálogos](public/screenshots/catalogs.png "Catálogos Virtuales")
+
+</div>
+
 ---
 
 ## 📦 Instalación

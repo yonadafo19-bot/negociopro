@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../context/ThemeContext'
-import { Button, Badge } from '../common'
+import { Badge, Notifications } from '../common'
 import {
   Menu,
   X,
@@ -40,18 +40,18 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-neo-surface dark:bg-dark-surface border-b border-neo-border dark:border-dark-border shadow-neo-sm sticky top-0 z-40">
+    <header className="sticky top-0 z-40 backdrop-blur-md bg-white/70 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <Link to="/app/dashboard" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-neo-primary dark:bg-dark-primary rounded-neo flex items-center justify-center shadow-neo">
+            <Link to="/app/dashboard" className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-neo bg-gradient-to-br from-primary-500 to-primary-600 shadow-neo-primary dark:shadow-neo-primary-dark flex items-center justify-center">
                 <Package className="h-6 w-6 text-white" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold text-neo-text dark:text-dark-text">NegociPro</h1>
-                <p className="text-xs text-neo-text-muted dark:text-dark-text-muted">
+              <div className="hidden sm:block">
+                <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">NegociPro</h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[150px]">
                   {profile?.business_name || 'Mi Negocio'}
                 </p>
               </div>
@@ -59,12 +59,12 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden lg:flex items-center gap-1">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className="px-3 py-2 text-sm font-medium text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-sm hover:shadow-neo-sm"
+                className="btn-neo-sm text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400"
               >
                 <span className="flex items-center gap-2">
                   <item.icon className="h-4 w-4" />
@@ -76,42 +76,51 @@ const Header = () => {
 
           {/* Right side actions */}
           <div className="flex items-center gap-2">
+            {/* Notifications */}
+            <Notifications />
+
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-neo-sm"
+              className="icon-btn-neo-sm"
               title={isDark ? 'Modo claro' : 'Modo oscuro'}
               aria-label="Cambiar tema"
             >
-              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
 
             {/* Settings */}
             <Link
               to="/app/settings"
-              className="hidden sm:flex p-2 text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-neo-sm"
+              className="icon-btn-neo-sm hidden sm:flex"
               title="Configuración"
             >
-              <Settings className="h-5 w-5" />
+              <Settings className="h-4 w-4" />
             </Link>
 
             {/* User menu */}
             <div className="relative hidden sm:block">
-              <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neo-text dark:text-dark-text hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-neo-sm">
-                <div className="w-8 h-8 bg-neo-accent dark:bg-dark-accent rounded-neo flex items-center justify-center text-white font-bold shadow-neo-sm">
-                  {profile?.full_name?.charAt(0).toUpperCase() || 'U'}
+              <button className="flex items-center gap-2 px-3 py-2 btn-neo-sm">
+                <div className="w-7 h-7 rounded-neo-sm bg-gradient-to-br from-accent-500 to-accent-600 shadow-neo-accent dark:shadow-neo-accent-dark flex items-center justify-center text-white font-bold text-sm overflow-hidden">
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    profile?.full_name?.charAt(0).toUpperCase() || 'U'
+                  )}
                 </div>
-                <span className="hidden lg:inline">{profile?.full_name || 'Usuario'}</span>
+                <span className="hidden lg:inline text-sm font-medium text-gray-700 dark:text-gray-200">
+                  {profile?.full_name?.split(' ')[0] || 'Usuario'}
+                </span>
               </button>
             </div>
 
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200 shadow-neo-sm"
+              className="icon-btn-neo-sm lg:hidden"
               aria-label="Menu"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
@@ -119,50 +128,50 @@ const Header = () => {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-neo-border dark:border-dark-border py-2 bg-neo-surface dark:bg-dark-surface">
-          <div className="px-4 space-y-1">
+        <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 py-2 backdrop-blur-md bg-white/95 dark:bg-gray-900/95">
+          <div className="px-4 space-y-2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200"
+                className="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400 card-neo-sm"
               >
                 <item.icon className="h-5 w-5" />
                 {item.name}
               </Link>
             ))}
 
-            <div className="border-t border-neo-border dark:border-dark-border pt-2 mt-2">
-              <Link
-                to="/app/settings"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200"
-              >
-                <Settings className="h-5 w-5" />
-                Configuración
-              </Link>
+            <div className="divider-neo my-3" />
 
-              <Link
-                to="/app/sync"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 text-base font-medium text-neo-text dark:text-dark-text hover:text-neo-primary dark:hover:text-dark-primary hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200"
-              >
-                <RefreshCw className="h-5 w-5" />
-                Sincronización
-              </Link>
+            <Link
+              to="/app/settings"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400 card-neo-sm"
+            >
+              <Settings className="h-5 w-5" />
+              Configuración
+            </Link>
 
-              <button
-                onClick={() => {
-                  handleSignOut()
-                  setMobileMenuOpen(false)
-                }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-base font-medium text-neo-danger dark:text-dark-danger hover:bg-neo-bg dark:hover:bg-dark-bg-alt rounded-neo transition-all duration-200"
-              >
-                <LogOut className="h-5 w-5" />
-                Cerrar Sesión
-              </button>
-            </div>
+            <Link
+              to="/app/sync"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary-500 dark:hover:text-primary-400 card-neo-sm"
+            >
+              <RefreshCw className="h-5 w-5" />
+              Sincronización
+            </Link>
+
+            <button
+              onClick={() => {
+                handleSignOut()
+                setMobileMenuOpen(false)
+              }}
+              className="w-full flex items-center gap-3 px-4 py-3 text-base font-medium text-danger-600 dark:text-danger-400 card-neo-sm"
+            >
+              <LogOut className="h-5 w-5" />
+              Cerrar Sesión
+            </button>
           </div>
         </div>
       )}

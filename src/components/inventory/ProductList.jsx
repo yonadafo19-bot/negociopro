@@ -55,7 +55,7 @@ const ProductList = ({
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-4 py-2 bg-neo-bg dark:bg-dark-bg-alt border border-neo-border dark:border-dark-border rounded-neo focus:outline-none focus:ring-2 focus:ring-neo-primary dark:focus:ring-dark-primary dark:focus:ring-offset-dark-bg text-neo-text dark:text-dark-text shadow-inner-shadow transition-all duration-200"
+              className="w-full px-4 py-2 bg-light-base dark:bg-dark-bg-alt border border-gray-300 dark:border-gray-700 rounded-neo focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-dark-primary dark:focus:ring-offset-gray-900 text-gray-800 dark:text-gray-100 shadow-neo-light-inset dark:shadow-neo-dark-inset transition-all duration-200"
             >
               <option value="all">Todas las categorías</option>
               {categories.map((cat) => (
@@ -84,15 +84,15 @@ const ProductList = ({
 
         {/* Active filters */}
         {(searchTerm || selectedCategory !== 'all' || showLowStockOnly) && (
-          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-neo-border dark:border-dark-border flex-wrap">
-            <span className="text-sm text-neo-text-muted dark:text-dark-text-muted">
+          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-300 dark:border-gray-700 flex-wrap">
+            <span className="text-sm text-gray-600 dark:text-gray-400">
               Filtros activos:
             </span>
 
             {searchTerm && (
               <Badge
                 variant="secondary"
-                className="cursor-pointer hover:bg-neo-surface dark:hover:bg-dark-surface"
+                className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setSearchTerm('')}
               >
                 "{searchTerm}" ✕
@@ -102,7 +102,7 @@ const ProductList = ({
             {selectedCategory !== 'all' && (
               <Badge
                 variant="secondary"
-                className="cursor-pointer hover:bg-neo-surface dark:hover:bg-dark-surface"
+                className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setSelectedCategory('all')}
               >
                 {selectedCategory} ✕
@@ -112,7 +112,7 @@ const ProductList = ({
             {showLowStockOnly && (
               <Badge
                 variant="warning"
-                className="cursor-pointer hover:bg-neo-surface dark:hover:bg-dark-surface"
+                className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setShowLowStockOnly(false)}
               >
                 Stock bajo ✕
@@ -125,7 +125,7 @@ const ProductList = ({
                 setSelectedCategory('all')
                 setShowLowStockOnly(false)
               }}
-              className="text-sm text-neo-primary dark:text-dark-primary hover:text-neo-primary-light dark:hover:text-dark-primary-light ml-2"
+              className="text-sm text-primary-500 dark:text-primary-400 hover:text-neo-primary-light dark:hover:text-dark-primary-light ml-2"
             >
               Limpiar todos
             </button>
@@ -135,13 +135,13 @@ const ProductList = ({
 
       {/* Results count */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-neo-text-muted dark:text-dark-text-muted">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Mostrando{' '}
-          <span className="font-semibold text-neo-text dark:text-dark-text">
+          <span className="font-semibold text-gray-800 dark:text-gray-100">
             {filteredProducts.length}
           </span>{' '}
           de{' '}
-          <span className="font-semibold text-neo-text dark:text-dark-text">
+          <span className="font-semibold text-gray-800 dark:text-gray-100">
             {products.length}
           </span>{' '}
           productos
@@ -150,7 +150,7 @@ const ProductList = ({
         {lowStockCount > 0 && !showLowStockOnly && (
           <button
             onClick={() => setShowLowStockOnly(true)}
-            className="text-sm text-neo-warning dark:text-dark-warning hover:text-neo-warning-light dark:hover:text-dark-warning-light flex items-center gap-1"
+            className="text-sm text-warning-500 dark:text-warning-400 hover:text-neo-warning-light dark:hover:text-dark-warning-light flex items-center gap-1"
           >
             <AlertTriangle className="h-4 w-4" />
             Ver {lowStockCount} con stock bajo
@@ -163,9 +163,9 @@ const ProductList = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <Card key={i} padding="md" className="animate-pulse">
-              <div className="h-32 bg-neo-bg dark:bg-dark-bg-alt rounded-neo mb-3 shadow-inner-shadow"></div>
-              <div className="h-4 bg-neo-bg dark:bg-dark-bg-alt rounded mb-2 shadow-inner-shadow"></div>
-              <div className="h-4 bg-neo-bg dark:bg-dark-bg-alt rounded w-2/3 shadow-inner-shadow"></div>
+              <div className="h-32 bg-light-base dark:bg-dark-bg-alt rounded-neo mb-3 shadow-neo-light-inset dark:shadow-neo-dark-inset"></div>
+              <div className="h-4 bg-light-base dark:bg-dark-bg-alt rounded mb-2 shadow-neo-light-inset dark:shadow-neo-dark-inset"></div>
+              <div className="h-4 bg-light-base dark:bg-dark-bg-alt rounded w-2/3 shadow-neo-light-inset dark:shadow-neo-dark-inset"></div>
             </Card>
           ))}
         </div>
@@ -184,13 +184,13 @@ const ProductList = ({
       ) : (
         <Card padding="lg">
           <div className="text-center py-8">
-            <Package className="h-16 w-16 text-neo-text-muted dark:text-dark-text-muted mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-neo-text dark:text-dark-text mb-2">
+            <Package className="h-16 w-16 text-gray-600 dark:text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
               {searchTerm || selectedCategory !== 'all' || showLowStockOnly
                 ? 'No se encontraron productos'
                 : 'No hay productos aún'}
             </h3>
-            <p className="text-neo-text-muted dark:text-dark-text-muted">
+            <p className="text-gray-600 dark:text-gray-400">
               {searchTerm || selectedCategory !== 'all' || showLowStockOnly
                 ? 'Intenta con otros filtros'
                 : 'Empieza agregando tu primer producto'}

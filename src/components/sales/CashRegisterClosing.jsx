@@ -70,9 +70,9 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
   }, [daysTransactions])
 
   const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
@@ -153,7 +153,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card padding="md" className="border-green-200 dark:border-green-800">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-green-500 rounded-kawaii">
+            <div className="p-3 bg-green-500 rounded-neo">
               <TrendingUp className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -170,7 +170,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
 
         <Card padding="md" className="border-red-200 dark:border-red-800">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-red-500 rounded-kawaii">
+            <div className="p-3 bg-red-500 rounded-neo">
               <TrendingDown className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -187,7 +187,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
 
         <Card padding="md" className="border-primary-200 dark:border-primary-800">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-primary-500 rounded-kawaii">
+            <div className="p-3 bg-primary-500 rounded-neo">
               <Calculator className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -210,7 +210,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
 
         <Card padding="md">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-gray-500 rounded-kawaii">
+            <div className="p-3 bg-gray-500 rounded-neo">
               <Clock className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -231,7 +231,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
           Ventas por Método de Pago
         </h3>
         <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-kawaii">
+          <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-neo">
             <div className="flex items-center gap-2">
               <span>💵</span>
               <span className="font-medium text-gray-900 dark:text-white">Efectivo</span>
@@ -240,7 +240,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
               {formatCurrency(summary.salesByMethod.cash)}
             </span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-kawaii">
+          <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-neo">
             <div className="flex items-center gap-2">
               <span>💳</span>
               <span className="font-medium text-gray-900 dark:text-white">Tarjeta</span>
@@ -249,7 +249,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
               {formatCurrency(summary.salesByMethod.card)}
             </span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-kawaii">
+          <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-neo">
             <div className="flex items-center gap-2">
               <span>🏦</span>
               <span className="font-medium text-gray-900 dark:text-white">Transferencia</span>
@@ -271,7 +271,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
             {Object.entries(summary.expensesByCategory).map(([category, amount]) => (
               <div
                 key={category}
-                className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-kawaii"
+                className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-neo"
               >
                 <span className="font-medium text-gray-900 dark:text-white capitalize">
                   {category}
@@ -340,7 +340,7 @@ const CashRegisterClosing = ({ transactions, onClose, onPrint }) => {
             icon={Mail}
           />
 
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-kawaii">
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-neo">
             <p className="text-sm text-blue-800 dark:text-blue-400">💡 El reporte incluirá:</p>
             <ul className="text-sm text-blue-700 dark:text-blue-500 mt-2 space-y-1">
               <li>• Resumen de ventas totales</li>

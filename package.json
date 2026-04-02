@@ -21,8 +21,10 @@
     "postinstall": "echo 'NegociPro installed successfully'"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@supabase/supabase-js": "^2.48.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",
     "lucide-react": "^0.475.0",

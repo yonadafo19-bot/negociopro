@@ -3,9 +3,9 @@ import { FileSpreadsheet, Download } from 'lucide-react'
 
 const PerformanceMetrics = ({ metrics = {}, comparisons = {}, loading = false }) => {
   const formatCurrency = amount => {
-    return new Intl.NumberFormat('es-MX', {
+    return new Intl.NumberFormat('es-CL', {
       style: 'currency',
-      currency: 'MXN',
+      currency: 'CLP',
     }).format(amount)
   }
 
@@ -103,7 +103,7 @@ const PerformanceMetrics = ({ metrics = {}, comparisons = {}, loading = false })
             {comparisonsData.map((item, index) => (
               <div
                 key={index}
-                className={`p-4 rounded-kawaii ${
+                className={`p-4 rounded-neo ${
                   item.color === 'green'
                     ? 'bg-green-50 dark:bg-green-900/20'
                     : 'bg-red-50 dark:bg-red-900/20'
