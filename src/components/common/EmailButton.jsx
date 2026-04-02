@@ -93,7 +93,7 @@ const EmailButton = ({
       <button
         onClick={handleClick}
         disabled={loading}
-        className={`inline-flex items-center gap-2 px-4 py-2 border-2 rounded-kawaii font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+        className={`inline-flex items-center gap-2 px-4 py-2 border-2 rounded-neo font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
           message?.type === 'success'
             ? 'border-green-500 bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
             : message?.type === 'error'
