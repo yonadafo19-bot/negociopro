@@ -26,18 +26,23 @@ self.addEventListener('install', (event) => {
   self.skipWaiting()
 })
 
-// Activate event - clean old caches
+// Activate event - clean old caches AND clear entire storage
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName)
-            return caches.delete(cacheName)
-          }
+          // Borrar TODOS los caches para forzar actualización
+          console.log('Deleting cache:', cacheName)
+          return caches.delete(cacheName)
         })
       )
+    }).then(() => {
+      // También borrar caches individuales por seguridad
+      return caches.delete(CACHE_NAME)
+    }).then(() => {
+      // Borrar runtime cache también
+      return caches.delete(RUNTIME_CACHE)
     })
   )
   self.clients.claim()
