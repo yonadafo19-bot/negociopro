@@ -262,7 +262,7 @@ ${shareUrl}
                     <div>
                       <p className="font-medium">Conecta tu Gmail para envío directo</p>
                       <p className="text-xs mt-1">
-                        Ve a Settings > Gmail para conectar tu cuenta. O usaremos tu cliente de correo.
+                        Ve a Settings &gt; Gmail para conectar tu cuenta. O usaremos tu cliente de correo.
                       </p>
                     </div>
                   </div>

@@ -213,7 +213,7 @@ const GmailConfig = () => {
                       Habilitar Gmail API
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      En "APIs & Services" > "Library" busca "Gmail API"
+                      En "APIs & Services" &gt; "Library" busca "Gmail API"
                     </p>
                   </div>
                 </div>
