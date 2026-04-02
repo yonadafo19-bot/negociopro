@@ -3,57 +3,111 @@
 <div align="center">
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
-![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite)
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=646CFF)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=3ECF8E)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-**Sistema completo de gestión para pequeños negocios y emprendedores en Latinoamérica**
+**Sistema completo de gestión empresarial para pequeños negocios y emprendedores en Latinoamérica**
 
-[Características](#-características) • [Demo](#-demo-en-vivo) • [Instalación](#-instalación) • [Documentación](#-documentación) • [Contribuir](#-contribuir)
+[![Demo](https://img.shields.io/badge/Demo-En%20Vivo-success.svg?style=for-the-badge)](https://negociopro.vercel.app)
+
+[Features](#-características) • [Demo](#-demo-en-vivo) • [Installation](#-instalación) • [Documentation](#-documentación) • [Contributing](#-contributing)
 
 </div>
 
 ---
 
+## 📖 Sobre el Proyecto
+
+**NegociPro** es una plataforma SaaS completa diseñada para pequeños negocios que necesitan gestionar su inventario, ventas, clientes y catálogos de productos de manera simple y eficiente.
+
+### 💡 Nuestra Misión
+
+Democratizar el acceso a herramientas de gestión empresarial para emprendedores latinos, permitiéndoles llevar su negocio al siguiente nivel sin complicaciones técnicas.
+
+### 🎯 Público Objetivo
+
+- ✅ Tiendas pequeñas y medianas
+- ✅ Emprendedores y freelancers
+- ✅ Negocios de retail
+- ✅ Comercios locales
+- ✅ Vendedores ambulantes que necesitan un sistema
+
+---
+
 ## ✨ Características
 
-### 💼 Gestión de Negocio
+### 💼 Gestión Integral del Negocio
 
-- **📦 Inventario Completo**: Control de stock, alertas de bajo inventario, categorías, SKU, precios de costo y venta
-- **💰 Punto de Venta (POS)**: Registro de ventas, carrito de compras, múltiples métodos de pago, cálculo automático de IVA
-- **👥 Gestión de Contactos**: Clientes, proveedores y empleados con información detallada
-- **📊 Dashboard en Tiempo Real**: Métricas clave, gráficos de ventas, alertas de stock, resumen financiero
+| Característica | Descripción |
+|----------------|-------------|
+| 📦 **Inventario Completo** | Control de stock en tiempo real, alertas de bajo inventario, categorías, SKU, precios de costo y venta |
+| 💰 **Punto de Venta (POS)** | Registro rápido de ventas, carrito de compras, múltiples métodos de pago, cálculo automático de impuestos |
+| 👥 **Gestión de Contactos** | Base de datos de clientes, proveedores y empleados con información detallada |
+| 📊 **Dashboard en Tiempo Real** | Métricas clave, gráficos de ventas, alertas de stock, resumen financiero |
 
-### 📈 Analytics y Reportes
+### 📈 Analytics y Reportes Avanzados
 
-- **📉 Reportes Avanzados**: Ventas por período, productos más vendidos, mejores clientes, márgenes de ganancia
-- **📊 Gráficos Interactivos**: Tendencias, comparativas, distribuciones con Recharts
-- **📥 Exportar a Excel**: Reportes completos descargables para análisis externo
-- **🎯 Comparativas**: Hoy vs ayer, esta semana vs semana pasada, este mes vs mes pasado
+```
+📉 Reportes Detallados
+├── Ventas por período
+├── Productos más vendidos
+├── Mejores clientes
+├── Márgenes de ganancia
+└── Análisis de tendencias
+
+📊 Visualizaciones Interactivas
+├── Gráficos de ventas (Recharts)
+├── Comparativas temporales
+├── Desglose por categorías
+└── Métricas de rendimiento
+
+📥 Exportación de Datos
+├── Excel (.xlsx)
+├── PDF (jsPDF)
+└── CSV
+```
 
 ### 🛒 Catálogos Virtuales
 
-- **🔗 Links Compartibles**: Genera catálogos públicos con URL única
-- **🎨 5 Temas de Color**: Personaliza la apariencia de tus catálogos
-- **📱 Vista Pública Optimizada**: Perfecta para compartir por WhatsApp o redes sociales
-- **👁️ Contador de Vistas**: Monitorea la popularidad de tus catálogos
-- **🛍️ Contacto Directo**: Los clientes pueden pedir por WhatsApp directamente
+| Funcionalidad | Beneficio |
+|---------------|-----------|
+| 🔗 **Links Compartibles** | Genera catálogos públicos con URL única |
+| 🎨 **5 Temas de Color** | Personaliza la apariencia de tus catálogos |
+| 📱 **Vista Pública Optimizada** | Perfecta para compartir por WhatsApp o redes sociales |
+| 👁️ **Contador de Vistas** | Monitorea la popularidad de tus catálogos |
+| 🛍️ **Contacto Directo** | Los clientes pueden pedir por WhatsApp directamente |
 
-### 📱 Modo Offline
+### 📱 Modo Offline First
 
-- **💾 Funciona Sin Internet**: Opera completamente offline usando Service Workers
-- **🔄 Sincronización Automática**: Los cambios se sincronizan al volver la conexión
-- **📊 Cola de Operaciones**: IndexedDB para guardar cambios pendientes
-- **🔔 Indicador de Estado**: Notificaciones visuales de conexión y sincronización
+```
+💾 Funciona Sin Internet
+├── Service Worker cachea la app
+├── IndexedDB para datos offline
+└── Operaciones se encolan
 
-### 🎨 UI/UX
+🔄 Sincronización Automática
+├── Cambios se guardan localmente
+├── Se sincronizan al volver la conexión
+├── Indicador visual de estado
+└── Manejo de conflictos
 
-- **🌓 Modo Oscuro/Claro**: Toggle de tema con persistencia
-- **📱 Diseño Responsive**: Optimizado para móvil, tablet y desktop
-- **♿ Accesible**: WCAG AA compliant con alto contraste
-- **⚡ Rápido**: Code splitting, lazy loading, optimizado para performance
-- **🎭 Animaciones Suaves**: Transiciones y micro-interacciones agradables
+🔔 Estado de Conexión
+├── Notificaciones de conexión
+├── Cola de operaciones pendientes
+└── Confirmación de sincronización
+```
+
+### 🎨 UI/UX Moderna
+
+| Aspecto | Implementación |
+|----------|----------------|
+| 🌓 **Tema Claro/Oscuro** | Toggle con persistencia local |
+| 📱 **Responsive Design** | Optimizado para móvil, tablet y desktop |
+| ♿ **Accesibilidad** | WCAG AA compliant |
+| ⚡ **Performance** | Code splitting, lazy loading |
+| 🎭 **Animaciones** | Transiciones suaves y micro-interacciones |
 
 ---
 
@@ -62,51 +116,56 @@
 ### Frontend
 
 ```
-React 19          - UI Library
-Vite 5            - Build Tool & Dev Server
-React Router 6    - Client-side Routing
-TailwindCSS 3     - Styling
-Zustand           - State Management
-Recharts          - Charts & Graphs
-Lucide React      - Icons
-XLSX              - Excel Export
-UUID              - Unique IDs
+┌─────────────────────────────────────────────────────────────┐
+│                     REACT ECOSYSTEM                       │
+├─────────────────────────────────────────────────────────────┤
+│ React 19          - UI Library                          │
+│ Vite 6            - Build Tool & Dev Server              │
+│ React Router 6     - Client-side Routing                  │
+│ TailwindCSS 3     - Utility-first CSS                   │
+│ Zustand           - State Management                     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Backend
+### Backend as a Service
 
 ```
-Supabase          - BaaS (Backend as a Service)
-├── PostgreSQL    - Database
-├── Auth          - Authentication
-├── Storage       - File Storage
-└── RLS           - Row Level Security
+┌─────────────────────────────────────────────────────────────┐
+│                   SUPABASE STACK                          │
+├─────────────────────────────────────────────────────────────┤
+│ PostgreSQL        - Database Engine                       │
+│ Auth             - Authentication (OAuth, Email)          │
+│ Storage          - File Storage (Avatares, Imágenes)      │
+│ RLS              - Row Level Security                   │
+│ Realtime          - WebSocket subscriptions               │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### DevOps
+### Librerías Principales
 
-```
-Vercel            - Hosting & CI/CD
-GitHub            - Version Control
-ESLint            - Linting
-Vitest            - Unit Testing
-Playwright        - E2E Testing
-```
+| Paquete | Uso | Versión |
+|---------|------|---------|
+| `@supabase/supabase-js` | Cliente Supabase | ^2.48.0 |
+| `recharts` | Gráficos y visualizaciones | ^2.15.0 |
+| `lucide-react` | Iconos SVG | ^0.475.0 |
+| `jspdf` | Generación de PDF | ^4.2.1 |
+| `xlsx` | Exportación a Excel | ^0.18.5 |
+| `date-fns` | Manipulación de fechas | ^4.1.0 |
+| `zod` | Validación de esquemas | ^4.3.6 |
 
 ---
 
 ## 🎥 Demo en Vivo
 
+### 🌐 Aplicación
+
 [![NegociPro Demo](https://img.shields.io/badge/Demo-En%20Vivo-success.svg?style=for-the-badge)](https://negociopro.vercel.app)
 
-Prueba la aplicación en: **[negociopro.vercel.app](https://negociopro.vercel.app)**
+### 👤 Credenciales de Demo
 
-### Credenciales de Demo
-
-```
-Email: demo@negoci.pro
-Password: Demo123!
-```
+| Tipo | Email | Contraseña |
+|------|-------|------------|
+| Usuario | `demo@negoci.pro` | `Demo123!` |
 
 ---
 
@@ -114,40 +173,67 @@ Password: Demo123!
 
 ### Requisitos Previos
 
-- Node.js 18+ y npm/yarn
-- Cuenta en [Supabase](https://supabase.com)
-- Git instalado
+```
+✅ Node.js 18+ y npm/yarn
+✅ Cuenta en [Supabase](https://supabase.com)
+✅ Git instalado
+✅ Editor de código (VS Code recomendado)
+```
 
-### 1. Clonar el Repositorio
+### Paso 1: Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/negociopro.git
+git clone https://github.com/yonadafo19-bot/negociopro.git
 cd negociopro
 ```
 
-### 2. Instalar Dependencias
+### Paso 2: Instalar Dependencias
 
 ```bash
 npm install
 ```
 
-### 3. Configurar Supabase
+### Paso 3: Configurar Supabase
 
-1. Crea un proyecto nuevo en [Supabase](https://supabase.com)
-2. Ve a **SQL Editor** y ejecuta `supabase/migrations/001_initial_schema.sql`
-3. Ejecuta `supabase/migrations/002_rls_policies.sql`
-4. Copia tu **Project URL** y **anon key** desde **Settings → API**
+1. **Crear proyecto en Supabase**
+   - Ve a [supabase.com](https://supabase.com)
+   - Crea un nuevo proyecto
 
-### 4. Configurar Variables de Entorno
+2. **Ejecutar migraciones SQL**
+   - Ve a **SQL Editor** en el dashboard de Supabase
+   - Ejecuta los archivos en `supabase/migrations/` en orden:
+     ```
+     001_initial_schema.sql
+     002_rls_policies.sql
+     ```
 
-Crea un archivo `.env` en la raíz:
+3. **Copiar credenciales**
+   - Ve a **Settings → API**
+   - Copia tu **Project URL** y **anon key**
 
-```env
-VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
-VITE_SUPABASE_ANON_KEY=tu-anon-key
+### Paso 4: Configurar Variables de Entorno
+
+```bash
+# Copiar el archivo de ejemplo
+cp .env.example .env
+
+# Editar el archivo .env con tus credenciales
 ```
 
-### 5. Iniciar Desarrollo
+```env
+# Supabase Configuration
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+VITE_SUPABASE_ANON_KEY=tu-anon-key-here
+
+# Google Gmail API (opcional, para envío de emails)
+VITE_GOOGLE_CLIENT_ID=tu-client-id-here
+VITE_GOOGLE_API_KEY=tu-api-key-here
+
+# Google Analytics (opcional)
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+### Paso 5: Iniciar Desarrollo
 
 ```bash
 npm run dev
@@ -161,66 +247,76 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
 ```
 negociopro/
-├── public/
-│   ├── sw.js                 # Service Worker para offline
-│   ├── manifest.json         # PWA Manifest
-│   ├── offline.html          # Página offline
-│   └── favicon.svg           # Favicon
-├── src/
-│   ├── components/           # Componentes React
-│   │   ├── common/          # Botones, inputs, modales, etc.
-│   │   ├── layout/          # Header, Sidebar, Layout
-│   │   ├── dashboard/       # Componentes del dashboard
-│   │   ├── inventory/       # Componentes de inventario
-│   │   ├── sales/           # Componentes de ventas
-│   │   ├── contacts/        # Componentes de contactos
-│   │   ├── reports/         # Componentes de reportes
-│   │   ├── catalogs/        # Componentes de catálogos
-│   │   └── connection/      # Componentes de conexión
-│   ├── context/             # Context API
-│   │   ├── AuthContext.jsx  # Contexto de autenticación
-│   │   ├── ThemeContext.jsx # Contexto de tema
-│   │   └── ConnectionContext.jsx # Contexto de conexión
-│   ├── hooks/               # Custom Hooks
-│   │   ├── useAuth.js       # Hook de autenticación
-│   │   ├── useInventory.js  # Hook de inventario
-│   │   ├── useSales.js      # Hook de ventas
-│   │   ├── useContacts.js   # Hook de contactos
-│   │   ├── useReports.js    # Hook de reportes
-│   │   ├── useCatalogs.js   # Hook de catálogos
-│   │   └── useOfflineMutation.js # Hook offline
-│   ├── pages/               # Páginas principales
-│   │   ├── Auth/            # Login, registro, etc.
-│   │   ├── Dashboard.jsx    # Dashboard principal
-│   │   ├── Inventory.jsx    # Página de inventario
-│   │   ├── Sales.jsx        # Página de ventas
-│   │   ├── Contacts.jsx     # Página de contactos
-│   │   ├── Reports.jsx      # Página de reportes
-│   │   ├── Catalogs.jsx     # Página de catálogos
-│   │   ├── Settings.jsx     # Configuración
-│   │   ├── SyncSettings.jsx # Configuración de sync
-│   │   └── PublicCatalog.jsx # Catálogo público
-│   ├── routes/              # Configuración de rutas
-│   ├── services/            # Servicios API
-│   │   └── supabase.js     # Cliente de Supabase
-│   ├── utils/               # Utilidades
-│   │   └── validators.js   # Validadores de formularios
-│   ├── App.jsx              # Componente principal
-│   └── main.jsx             # Entry point
-├── supabase/
-│   └── migrations/          # Migraciones SQL
+├── 📁 public/                    # Archivos estáticos
+│   ├── sw.js                     # Service Worker para offline
+│   ├── manifest.json              # PWA Manifest
+│   ├── offline.html               # Página offline
+│   └── favicon.svg               # Favicon
+│
+├── 📁 src/
+│   ├── 📁 components/            # Componentes React
+│   │   ├── 📁 common/          # Componentes compartidos
+│   │   │   ├── Button.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   └── ...
+│   │   ├── 📁 layout/          # Layout components
+│   │   │   ├── Header.jsx
+│   │   │   └── Sidebar.jsx
+│   │   ├── 📁 dashboard/       # Componentes del dashboard
+│   │   ├── 📁 inventory/       # Componentes de inventario
+│   │   ├── 📁 sales/           # Componentes de ventas
+│   │   ├── 📁 contacts/        # Componentes de contactos
+│   │   ├── 📁 reports/         # Componentes de reportes
+│   │   ├── 📁 catalogs/        # Componentes de catálogos
+│   │   ├── 📁 settings/        # Componentes de settings
+│   │   └── 📁 connection/      # Componentes de conexión
+│   │
+│   ├── 📁 context/              # React Context API
+│   │   ├── AuthContext.jsx      # Contexto de autenticación
+│   │   ├── ThemeContext.jsx     # Contexto de tema
+│   │   └── ConnectionContext.jsx
+│   │
+│   ├── 📁 hooks/               # Custom Hooks
+│   │   ├── useAuth.js
+│   │   ├── useInventory.js
+│   │   ├── useSales.js
+│   │   └── ...
+│   │
+│   ├── 📁 pages/               # Páginas principales
+│   │   ├── Dashboard.jsx
+│   │   ├── Inventory.jsx
+│   │   ├── Sales.jsx
+│   │   ├── Contacts.jsx
+│   │   ├── Reports.jsx
+│   │   ├── Catalogs.jsx
+│   │   └── Settings.jsx
+│   │
+│   ├── 📁 services/            # Servicios API
+│   │   ├── supabase.js         # Cliente de Supabase
+│   │   ├── emailService.js     # Servicio de email
+│   │   └── gmailService.js     # Gmail API
+│   │
+│   ├── 📁 routes/              # Configuración de rutas
+│   ├── App.jsx                 # Componente principal
+│   └── main.jsx                # Entry point
+│
+├── 📁 supabase/                # Migraciones SQL
+│   └── 📁 migrations/
 │       ├── 001_initial_schema.sql
 │       └── 002_rls_policies.sql
-├── docs/                    # Documentación
-│   ├── DEPLOYMENT_GUIDE.md  # Guía de despliegue
-│   ├── TESTING_GUIDE.md     # Guía de testing
-│   └── OFFLINE_DOCUMENTATION.md # Docs de offline
-├── .eslintrc.json          # Configuración de ESLint
-├── vite.config.js          # Configuración de Vite
-├── tailwind.config.js      # Configuración de Tailwind
-├── vercel.json             # Configuración de Vercel
-├── package.json            # Dependencias y scripts
-└── README.md               # Este archivo
+│
+├── 📁 docs/                    # Documentación
+│   ├── DEPLOYMENT_GUIDE.md
+│   ├── TESTING_GUIDE.md
+│   └── OFFLINE_DOCUMENTATION.md
+│
+├── 📄 .eslintrc.json          # Configuración de ESLint
+├── 📄 vite.config.js           # Configuración de Vite
+├── 📄 tailwind.config.js       # Configuración de Tailwind
+├── 📄 vercel.json              # Configuración de Vercel
+├── 📄 package.json             # Dependencias y scripts
+└── 📄 README.md                # Este archivo
 ```
 
 ---
@@ -230,8 +326,6 @@ negociopro/
 ```bash
 # Desarrollo
 npm run dev              # Inicia servidor de desarrollo
-
-# Build
 npm run build            # Build para producción
 npm run preview          # Preview del build local
 
@@ -244,7 +338,6 @@ npm run format           # Formatear código con Prettier
 npm run test             # Ejecutar tests unitarios
 npm run test:ui          # Tests con UI de Vitest
 npm run test:coverage    # Tests con coverage report
-npm run test:e2e         # Ejecutar tests E2E con Playwright
 
 # Deploy
 npm run predeploy        # Build + tests antes de deploy
@@ -255,41 +348,23 @@ npm run deploy:vercel    # Deploy a Vercel
 
 ## 📚 Documentación
 
-- **[Guía de Despliegue](./DEPLOYMENT_GUIDE.md)** - Instrucciones completas de despliegue a producción
-- **[Guía de Testing](./TESTING_GUIDE.md)** - Estrategias de testing y ejemplos
-- **[Documentación Offline](./OFFLINE_DOCUMENTATION.md)** - Sistema offline y sincronización
-
----
-
-## 🧪 Testing
-
-### Unit Tests
-
-```bash
-npm run test
-```
-
-### E2E Tests
-
-```bash
-npm run test:e2e
-```
-
-### Coverage
-
-```bash
-npm run test:coverage
-```
+| Documento | Descripción |
+|-----------|-------------|
+| [Guía de Despliegue](./docs/DEPLOYMENT_GUIDE.md) | Instrucciones completas de despliegue a producción |
+| [Guía de Testing](./docs/TESTING_GUIDE.md) | Estrategias de testing y ejemplos |
+| [Documentación Offline](./docs/OFFLINE_DOCUMENTATION.md) | Sistema offline y sincronización |
 
 ---
 
 ## 🌐 Deploy
 
-### Vercel (Recomendado)
+### Vercel (Recomendado) 🚀
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/tu-usuario/negociopro)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yonadafo19-bot/negociopro)
 
-1. Haz clic en el botón de arriba
+**Pasos:**
+
+1. Click en el botón de arriba
 2. Conecta tu repositorio de GitHub
 3. Configura las variables de entorno
 4. ¡Deploy automático en cada push!
@@ -301,93 +376,98 @@ npm run build
 vercel --prod
 ```
 
-Ver [Guía de Despliegue](./DEPLOYMENT_GUIDE.md) para más detalles.
-
 ---
 
-## 🤝 Contribuir
+## 🤝 Contributing
 
-Las contribuciones son bienvenidas! Por favor:
+¡Las contribuciones son bienvenidas! Por favor sigue estas guías:
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+### Proceso de Contribución
 
-### Guías de Contribución
+```mermaid
+graph LR
+    A[Fork el proyecto] --> B[Crear rama feature]
+    B --> C[Hacer cambios]
+    C --> D[Commits descriptivos]
+    D --> E[Push a tu fork]
+    E --> F[Crear Pull Request]
+    F --> G[Revisión]
+    G --> H[Merge]
+```
+
+### Guías de Código
 
 - Sigue el estilo de código existente
+- Usa ESLint y Prettier
 - Escribe tests para nuevas features
-- Actualiza la documentación
+- Documenta funciones complejas
 - Mantén los commits pequeños y enfocados
+
+### Commit Messages
+
+```
+tipo(alcance): descripción
+
+[opcional cuerpo]
+
+[opcional pie]
+```
+
+**Tipos:**
+- `feat`: Nueva funcionalidad
+- `fix`: Corrección de bug
+- `docs`: Cambios en documentación
+- `style`: Formato de código
+- `refactor`: Refactorización
+- `test`: Agregar o modificar tests
+- `chore`: Tareas de mantenimiento
+
+**Ejemplo:**
+```
+feat(gmail): add Gmail API integration for sending emails
+
+Users can now connect their Gmail account to send catalogs
+and receipts directly from their Gmail account.
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+```
 
 ---
 
 ## 📝 Roadmap
 
-### Versión 1.1 (Próximas features)
+### Versión 1.1 (Próximo lanzamiento) 🔜
 
 - [ ] Sistema de facturación electrónica
 - [ ] Integración con pasarelas de pago (Stripe, MercadoPago)
 - [ ] Múltiples monedas y idiomas
-- [ ] Exportar a PDF
+- [ ] Exportar a PDF mejorado
 - [ ] Modo multi-sucursal
 - [ ] Backup y restore de datos
 
-### Versión 2.0 (Futuro)
+### Versión 2.0 (Futuro) 🚀
 
 - [ ] App móvil nativa (React Native)
 - [ ] Sincronización en tiempo real con WebSockets
 - [ ] Análisis predictivo con IA
 - [ ] Integración con contabilidad electrónica
 - [ ] Marketplace de integraciones
+- [ ] Sistema de fidelización de clientes
 
 ---
 
-## 🐛 Problemas Conocidos
-
-Consulta los [issues](https://github.com/tu-usuario/negociopro/issues) para ver problemas conocidos y reportar nuevos.
-
----
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
-
----
-
-## 👨‍💻 Autor
-
-**Tu Nombre**
-
-- Twitter: [@tuusuario](https://twitter.com/tuusuario)
-- GitHub: [@tuusuario](https://github.com/tuusuario)
-
----
-
-## 🙏 Agradecimientos
-
-- [Supabase](https://supabase.com) - Backend as a Service increíble
-- [Vercel](https://vercel.com) - Hosting y deploy fantástico
-- [Vite](https://vitejs.dev) - Herramienta de build super rápida
-- [React](https://react.dev) - Librería UI revolucionaria
-
----
-
-## 📞 Soporte
-
-- 📧 Email: support@negoci.pro
-- 💬 Discord: [Únete a nuestra comunidad](https://discord.gg/negociopro)
-- 📖 Docs: [negoci.pro/docs](https://negoci.pro/docs)
-
----
+## 🏆 Creado con ❤️ por el equipo de NegociPro
 
 <div align="center">
 
-**Hecho con ❤️ para emprendedores latinos**
+**Democratizando la gestión empresarial para todos los emprendedores**
 
-⭐ Si te gusta este proyecto, dale una estrella en GitHub!
+[![GitHub stars](https://img.shields.io/github/stars/yonadafo19-bot/negociopro?style=social)](https://github.com/yonadafo19-bot/negociopro/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/yonadafo19-bot/negociopro?style=social)](https://github.com/yonadafo19-bot/negociopro/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/yonadafo19-bot/negociopro)](https://github.com/yonadafo19-bot/negociopro/issues)
+[![GitHub license](https://img.shields.io/github/license/yonadafo19-bot/negociopro)](https://github.com/yonadafo19-bot/negociopro/blob/main/LICENSE)
+
+**⭐ Si te gusta este proyecto, dale una estrella en GitHub!**
 
 [⬆ Volver al inicio](#-negociopro)
 
