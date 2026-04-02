@@ -1,5 +1,6 @@
-const CACHE_NAME = 'negociopro-v2'
-const RUNTIME_CACHE = 'negociopro-runtime-v2'
+const SW_VERSION = '2.1.0'
+const CACHE_NAME = `negociopro-v${SW_VERSION}`
+const RUNTIME_CACHE = `negociopro-runtime-v${SW_VERSION}`
 
 // Archivos estáticos a precachear
 const urlsToCache = [
