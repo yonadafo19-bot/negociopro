@@ -1,4 +1,4 @@
-const SW_VERSION = '2.2.0'
+const SW_VERSION = '2.2.1'
 const CACHE_NAME = `negociopro-v${SW_VERSION}`
 const RUNTIME_CACHE = `negociopro-runtime-v${SW_VERSION}`
 
