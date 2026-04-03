@@ -35,13 +35,17 @@ export const authService = {
   },
 
   // Sign in user
-  signIn: async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    return { data, error }
-  },
+  signUp: async (email, password, userData) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: userData,
+      emailRedirectTo: undefined,
+    },
+  })
+  return { data, error }
+}, 
 
   // Sign in with Google
   signInWithGoogle: async () => {
