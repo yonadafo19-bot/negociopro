@@ -70,7 +70,7 @@ const RegisterPage = () => {
       setErrors({ general: error.message })
     } else {
       // Redirect to email verification page
-      navigate('/verify-email', { state: { email: formData.email } })
+      navigate('/app/dashboard')
     }
   }
 
