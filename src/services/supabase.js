@@ -170,7 +170,8 @@ export const productsService = {
       .update(updates)
       .eq('id', productId)
       .select()
-      .single()
+      .maybeSingle()
+
     return { data, error }
   },
 
