@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './useAuth'
-import { notificationService, notify } from '../services/notificationsService'
+import { notificationService } from '../services/notificationsService'
+import { notify } from '../services/notificationService'
 
 export const useNotifications = () => {
   const { user } = useAuth()

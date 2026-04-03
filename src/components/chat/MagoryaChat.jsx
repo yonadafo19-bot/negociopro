@@ -7,7 +7,7 @@ import { useSales } from '../../hooks/useSales'
 import { useContacts } from '../../hooks/useContacts'
 import { useAuth } from '../../hooks/useAuth'
 import { useCatalogs } from '../../hooks/useCatalogs'
-import { notify } from '../../services/notificationsService'
+import { notify } from '../../services/notificationService'
 
 const STORAGE_KEY = 'magorya_chat_history'
 

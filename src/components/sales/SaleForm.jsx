@@ -5,7 +5,7 @@ import { CartItem, SaleSummary, ProductSelector } from '.'
 import { useInventory } from '../../hooks/useInventory'
 import { useContacts } from '../../hooks/useContacts'
 import { useAuth } from '../../hooks/useAuth'
-import { notify } from '../../services/notificationsService'
+import { notify } from '../../services/notificationService'
 
 const SaleForm = ({ onSubmit, onCancel, loading = false }) => {
   const { user } = useAuth()

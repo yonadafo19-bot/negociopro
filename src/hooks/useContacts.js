@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from './useAuth'
 import { contactsService } from '../services/supabase'
-import { notify } from '../services/notificationsService'
+import { notify } from '../services/notificationService'
 
 /**
  * Hook personalizado para gestión de contactos

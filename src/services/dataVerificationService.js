@@ -116,10 +116,6 @@ export const clearProductCache = (productId) => {
   dataCache.delete(productId)
 }
 
-export const clearDataCache = () => {
-  clearDataCache()
-}
-
 export default {
   productExists,
   contactExists,
@@ -129,5 +125,4 @@ export default {
   clearDataCache,
   updateProductCache,
   clearProductCache,
-  clearDataCache,
 }

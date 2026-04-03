@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from './useAuth'
 import { transactionsService } from '../services/supabase'
 import { mockSales } from '../data/mockData'
-import { notify } from '../services/notificationsService'
+import { notify } from '../services/notificationService'
 
 /**
  * Hook personalizado para gestión de ventas y transacciones
