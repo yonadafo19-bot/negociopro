@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from './useAuth'
 import { productsService } from '../services/supabase'
 import { mockProducts, mockCategories } from '../data/mockData'
-import { notify } from '../services/notificationService'
+import { notify } from '../services/notificationsService'
 
 /**
  * Hook personalizado para gestión de inventario
