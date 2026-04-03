@@ -143,7 +143,17 @@ export const productsService = {
 
   // Get single product
   getProduct: async productId => {
-    const { data, error } = await supabase.from('products').select('*').eq('id', productId).single()
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', productId)
+      .maybeSingle()
+
+    // MaybeSingle returns null instead of throwing when no rows found
+    if (!data) {
+      return { data: null, error: { message: 'Producto no encontrado' } }
+    }
+
     return { data, error }
   },
 
